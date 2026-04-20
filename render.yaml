@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: hungrydeal-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false          # lo pones manualmente en el dashboard de Render
+      - key: SECRET_KEY
+        generateValue: true  # Render genera uno automaticamente
+      - key: APP_ENV
+        value: production
+      - key: DEBUG
+        value: "false"
+      - key: ALLOWED_ORIGINS
+        value: "https://hungrydeal.netlify.app,https://localhost:3000"
+      - key: PYTHONPATH
+        value: "."

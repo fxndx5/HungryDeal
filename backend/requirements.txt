@@ -1,0 +1,30 @@
+# HungryDeal — Backend dependencies
+# Versiones fijadas para garantizar reproducibilidad
+
+# Framework y servidor
+fastapi==0.115.12
+uvicorn[standard]==0.34.0
+
+# Base de datos
+sqlalchemy[asyncio]==2.0.40
+alembic==1.15.2
+asyncpg>=0.30.0
+
+# Configuracion y validacion
+pydantic-settings==2.9.1
+email-validator==2.2.0
+python-dotenv==1.1.0
+
+# Autenticacion
+python-jose[cryptography]==3.3.0
+bcrypt==4.3.0
+
+# HTTP client (para adapters de scraping)
+httpx==0.28.1
+
+# Testing
+pytest==8.3.5
+pytest-asyncio==0.26.0
+
+# Scraping (fase 3)
+# playwright==1.51.0  # descomentar cuando se implemente GlovoAdapter

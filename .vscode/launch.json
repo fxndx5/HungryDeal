@@ -1,0 +1,42 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "HungryDeal: Servidor",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "app.main:app",
+                "--reload",
+                "--port",
+                "8000"
+            ],
+            "cwd": "${workspaceFolder}/backend",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/backend"
+            },
+            "jinja": true,
+            "justMyCode": false,
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "HungryDeal: Tests Auth",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/test_auth.py",
+            "cwd": "${workspaceFolder}/backend",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/backend"
+            },
+            "console": "integratedTerminal"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "HungryDeal: Servidor + Tests",
+            "configurations": ["HungryDeal: Servidor", "HungryDeal: Tests Auth"],
+            "stopAll": true
+        }
+    ]
+}
