@@ -1,14 +1,3 @@
-/**
- * app/compare/[id]/page.tsx
- * --------------------------
- * Página de comparación de precios de un restaurante.
- *
- * Intenta obtener datos del backend (GET /api/v1/compare/{id}).
- * Si el backend no está disponible, usa datos mock de desarrollo.
- *
- * La lógica de ordenación y cálculo del ganador está en el backend,
- * pero el frontend recalcula el ahorro para mostrarlo correctamente.
- */
 
 import type { Metadata } from 'next'
 import Link from 'next/link'
@@ -16,10 +5,6 @@ import { PlatformPriceCard } from '@/components/PlatformPriceCard'
 import { MOCK_COMPARISON, MOCK_RESTAURANTS } from '@/lib/mock-data'
 import { getComparison } from '@shared/api/compare'
 import type { ComparisonResult } from '@shared/types'
-
-// ---------------------------------------------------------------------------
-// Metadata dinámica
-// ---------------------------------------------------------------------------
 
 export async function generateMetadata({
   params,
@@ -32,10 +17,6 @@ export async function generateMetadata({
   }
 }
 
-// ---------------------------------------------------------------------------
-// Fetch con fallback a mock
-// ---------------------------------------------------------------------------
-
 async function fetchComparison(
   id: string
 ): Promise<{ data: ComparisonResult | null; fromApi: boolean }> {
@@ -43,15 +24,11 @@ async function fetchComparison(
     const data = await getComparison(id)
     return { data, fromApi: true }
   } catch {
-    // Backend no disponible — intentar con mock
     if (id === 'mcdonalds-gran-via-madrid') {
       return { data: MOCK_COMPARISON, fromApi: false }
     }
-
-    // Ver si el restaurante existe en el mock aunque no tenga comparación detallada
     const restaurant = MOCK_RESTAURANTS.find((r) => r.id === id)
     if (restaurant) {
-      // Devolver comparación genérica de ejemplo
       return {
         data: {
           ...MOCK_COMPARISON,
@@ -65,10 +42,6 @@ async function fetchComparison(
   }
 }
 
-// ---------------------------------------------------------------------------
-// Página
-// ---------------------------------------------------------------------------
-
 export default async function ComparePage({
   params,
 }: {
@@ -76,8 +49,6 @@ export default async function ComparePage({
 }) {
   const { id } = await params
   const { data, fromApi } = await fetchComparison(id)
-
-  // Restaurante no encontrado
   if (!data) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center">
@@ -109,8 +80,6 @@ export default async function ComparePage({
       </div>
     )
   }
-
-  // Ordenar: disponibles primero (por precio asc), no disponibles al final
   const sorted = [...data.comparison].sort((a, b) => {
     if (!a.available && b.available) return 1
     if (a.available && !b.available) return -1

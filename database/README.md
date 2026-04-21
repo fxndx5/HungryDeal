@@ -24,7 +24,6 @@ alembic upgrade head
 
 La carpeta `migrations/` de aquí se reserva para scripts SQL manuales de referencia o seeds de datos.
 
-## Esquema esperado
 
 ```sql
 -- Tabla de usuarios

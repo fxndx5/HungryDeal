@@ -1,12 +1,3 @@
-/**
- * app/search/page.tsx
- * --------------------
- * Página de resultados de búsqueda.
- *
- * Intenta obtener datos del backend (GET /api/v1/search?q=...).
- * Si el backend no está disponible (desarrollo sin backend levantado),
- * cae en fallback a datos mock para que el frontend siempre funcione.
- */
 
 import type { Metadata } from 'next'
 import { SearchBar } from '@/components/SearchBar'
@@ -26,26 +17,17 @@ export async function generateMetadata({
   }
 }
 
-// ---------------------------------------------------------------------------
-// Fetch con fallback a mock
-// ---------------------------------------------------------------------------
-
 async function fetchResults(query: string): Promise<{ results: Restaurant[]; fromApi: boolean }> {
   try {
     const response = await searchRestaurants({ q: query })
     return { results: response.results, fromApi: true }
   } catch {
-    // Backend no disponible → usar mock (modo desarrollo)
     const filtered = MOCK_RESTAURANTS.filter((r) =>
       r.name.toLowerCase().includes(query.toLowerCase())
     )
     return { results: filtered, fromApi: false }
   }
 }
-
-// ---------------------------------------------------------------------------
-// Página
-// ---------------------------------------------------------------------------
 
 export default async function SearchPage({
   searchParams,
@@ -130,11 +112,10 @@ export default async function SearchPage({
         </div>
       )}
 
-      {/* Banner de estado */}
-      {!fromApi && query && (
+      {/* Banner de estado — solo visible en desarrollo */}
+      {!fromApi && query && process.env.NODE_ENV === 'development' && (
         <div className="mt-8 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs text-amber-700">
-          <strong>Modo offline:</strong> Backend no conectado — mostrando datos de ejemplo.
-          Levanta el backend con <code className="bg-amber-100 px-1 rounded">docker compose up</code>.
+          <strong>Modo desarrollo:</strong> Mostrando datos de ejemplo. Arranca el backend para ver datos reales.
         </div>
       )}
     </div>

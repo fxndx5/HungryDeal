@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest",
+    "test:ci": "jest --forceExit"
   },
   "dependencies": {
     "clsx": "^2.1.0",
@@ -24,6 +26,8 @@
     "eslint-config-next": "^16.2.2",
     "postcss": "^8",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.0"
   }
 }

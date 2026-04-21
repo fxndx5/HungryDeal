@@ -12,8 +12,8 @@ on:
       - "frontend/**"
 
 jobs:
-  build:
-    name: Next.js build
+  test:
+    name: Type check + Tests + Build
     runs-on: ubuntu-latest
 
     steps:
