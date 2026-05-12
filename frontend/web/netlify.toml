@@ -1,4 +1,5 @@
 [build]
+  base      = "Hungrydeal-code/frontend/web"
   command   = "npm install --legacy-peer-deps && npm run build"
   publish   = ".next"
 
