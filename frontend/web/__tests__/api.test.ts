@@ -2,12 +2,16 @@
  * __tests__/api.test.ts
  * ----------------------
  * Tests de integracion para la API de HungryDeal.
- * Verifican que los endpoints del backend responden correctamente.
- * 
- * Ejecutar con: npx jest  (requiere backend corriendo en localhost:8000)
+ * Apunta a produccion (Render). El servidor puede tardar hasta 60 s
+ * en despertar si lleva inactivo — el timeout global esta ajustado.
+ *
+ * Ejecutar con: npx jest
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+// Timeout global de 90 s por test (Render cold-start puede tardar 60 s)
+jest.setTimeout(90_000)
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'https://hungrydeal.onrender.com'
 
 const TEST_EMAIL = `test_frontend_${Date.now()}@hungrydeal.es`
 const TEST_PASSWORD = 'Demo1234!'
@@ -84,7 +88,7 @@ describe('HungryDeal API', () => {
   })
 
   // ── Busqueda ─────────────────────────────────────────────────────
-  test("GET /search?q=McDonald — devuelve resultados", async () => {
+  test('GET /search?q=McDonald — devuelve resultados', async () => {
     const res = await fetch(`${BASE_URL}/api/v1/search?q=McDonald`)
     expect(res.status).toBe(200)
     const data = await res.json()
