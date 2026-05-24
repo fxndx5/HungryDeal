@@ -120,15 +120,66 @@
   nav#sidebar::-webkit-scrollbar { width: 4px; }
   nav#sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 2px; }
 
+  /* CAROUSEL */
+  .carousel { position: relative; overflow: hidden; border-radius: 10px; margin: 20px 0; background: var(--white); border: 1px solid var(--gray-300); }
+  .carousel-track { display: flex; transition: transform .4s ease; }
+  .carousel-slide { min-width: 100%; padding: 0; }
+  .carousel-slide img { width: 100%; display: block; border-radius: 10px 10px 0 0; }
+  .carousel-caption { padding: 14px 20px; background: var(--white); }
+  .carousel-caption .slide-num { font-size: .7rem; font-weight: 600; color: var(--teal-500); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 4px; }
+  .carousel-caption h4 { font-size: .95rem; font-weight: 600; color: var(--gray-900); margin: 0 0 4px; }
+  .carousel-caption p { font-size: .82rem; color: var(--gray-500); margin: 0; }
+  .carousel-controls { display: flex; align-items: center; justify-content: center; gap: 16px; padding: 14px; background: var(--gray-100); border-radius: 0 0 10px 10px; }
+  .carousel-btn { background: var(--teal-800); color: white; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+  .carousel-btn:hover { background: var(--teal-700); }
+  .carousel-btn:disabled { background: var(--gray-300); cursor: default; }
+  .carousel-dots { display: flex; gap: 6px; }
+  .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gray-300); border: none; cursor: pointer; padding: 0; transition: background .15s; }
+  .carousel-dot.active { background: var(--teal-700); }
+  .carousel-placeholder { min-height: 200px; background: var(--teal-50); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--teal-500); border-radius: 10px 10px 0 0; }
+  .carousel-placeholder span { font-size: 2rem; }
+  .carousel-placeholder p { font-size: .8rem; color: var(--gray-500); margin: 0; }
+
+  /* HAMBURGER */
+  .hamburger { display: none; position: fixed; top: 14px; left: 14px; z-index: 200; background: var(--teal-800); border: none; border-radius: 8px; width: 42px; height: 42px; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+  .hamburger span { display: block; width: 20px; height: 2px; background: white; border-radius: 2px; transition: all .25s; }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 99; }
+  .sidebar-overlay.show { display: block; }
+
   @media (max-width: 900px) {
-    nav#sidebar { transform: translateX(-100%); }
+    nav#sidebar { transform: translateX(-100%); transition: transform .3s ease; }
+    nav#sidebar.open { transform: translateX(0); z-index: 150; }
     main { margin-left: 0; }
-    .cover-inner { grid-template-columns: 1fr; }
+    .hamburger { display: flex; }
+    .cover { padding: 70px 24px 40px; }
+    .cover-inner { grid-template-columns: 1fr; gap: 20px; }
+    .cover-title { font-size: 2.2rem; }
+    .cover-qr img { width: 90px; height: 90px; }
+    .section { padding: 40px 20px 0; }
     .stats-row { grid-template-columns: 1fr 1fr; }
+    pre { font-size: .72rem; }
+    .tech-grid { grid-template-columns: 1fr 1fr; }
+    h2.section-title { font-size: 1.5rem; }
+    .table-wrap { font-size: .78rem; }
+    .diagram svg { max-width: 100%; height: auto; }
+  }
+  @media (max-width: 480px) {
+    .stats-row { grid-template-columns: 1fr; }
+    .tech-grid { grid-template-columns: 1fr; }
+    .cover-title { font-size: 1.8rem; }
+    .section { padding: 32px 16px 0; }
   }
 </style>
 </head>
 <body>
+
+<button class="hamburger" id="menuBtn" aria-label="Menu">
+  <span></span><span></span><span></span>
+</button>
+<div class="sidebar-overlay" id="overlay"></div>
 
 <nav id="sidebar">
   <div class="nav-logo">
@@ -151,6 +202,7 @@
   <span class="nav-section">Implementacion</span>
   <a href="#backend">10. Backend con FastAPI</a>
   <a href="#frontend">11. Frontend con Next.js</a>
+  <a href="#registro-demo">11b. Demo Registro</a>
   <a href="#despliegue">12. Despliegue</a>
   <a href="#pruebas">13. Pruebas</a>
   <a href="#conclusiones">14. Conclusiones</a>
@@ -725,7 +777,23 @@
 ├── requirements.txt
 └── test_integration.py</code></pre>
 
-  <h3>10.2 Variables de entorno</h3>
+  <h3>10.2 Entornos: local (Docker) vs produccion (Supabase)</h3>
+  <div class="info-box" style="border-left-color:#2D6F6F;">
+    <strong>En local (Docker Compose):</strong> el backend arranca junto a un contenedor PostgreSQL y otro Redis. La <code>DATABASE_URL</code> apunta al contenedor <code>db</code> interno. Los datos son locales y efimeros (se pierden si se borra el volumen).<br><br>
+    <strong>En produccion (Render + Supabase):</strong> el backend corre como servicio Docker en Render. La <code>DATABASE_URL</code> apunta al cluster PostgreSQL de Supabase, que persiste los datos en la nube y es accesible desde cualquier lugar. Redis corre como servicio adicional en el mismo docker-compose.prod.yml.
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Variable</th><th>Local (Docker)</th><th>Produccion (Render)</th></tr></thead>
+      <tbody>
+        <tr><td><code>DATABASE_URL</code></td><td>postgresql+asyncpg://hungryapp:pass@db:5432/hungrydb</td><td>postgresql+asyncpg://user:pass@db.supabase.co:6543/postgres</td></tr>
+        <tr><td><code>REDIS_URL</code></td><td>redis://redis:6379/0</td><td>redis://redis:6379/0</td></tr>
+        <tr><td><code>SECRET_KEY</code></td><td>clave local (cualquier string)</td><td>generada por Render automaticamente</td></tr>
+        <tr><td><code>APP_ENV</code></td><td>development</td><td>production</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>10.3 Variables de entorno</h3>
   <pre><code>DATABASE_URL=postgresql+asyncpg://user:pass@db.supabase.co/postgres
 SECRET_KEY=clave-secreta-256-bits
 REDIS_URL=redis://localhost:6379/0
@@ -785,6 +853,80 @@ CACHE_TTL_SECONDS=900</code></pre>
   </div>
   <div class="screenshot">
     <img src="capturas/registrarse.png" alt="Formulario de registro de usuario">
+  </div>
+</div>
+
+<!-- DEMO REGISTRO -->
+<div id="registro-demo" class="section">
+  <div class="chapter-label">Demo interactiva</div>
+  <h2 class="section-title">Flujo de registro: de la app a Supabase</h2>
+  <div class="section-divider"></div>
+  <p>Este carrusel muestra el flujo completo de registro de un nuevo usuario: desde el formulario en la aplicacion, hasta la aparicion del registro en la tabla <code>users</code> de Supabase, y la primera carga del perfil con estadisticas iniciales.</p>
+  <div class="info-box">
+    <strong>Que muestra este flujo:</strong> el usuario rellena el formulario de registro en la app → el frontend hace <code>POST /api/v1/auth/register</code> → el backend valida, hashea la contrasena con bcrypt y persiste en Supabase → se devuelve un JWT → el usuario queda autenticado y su perfil es visible en tiempo real.
+  </div>
+
+  <div class="carousel" id="regCarousel">
+    <div class="carousel-track" id="regTrack">
+
+      <!-- Slide 1: Formulario de registro -->
+      <div class="carousel-slide">
+        <div class="carousel-placeholder" id="slide1-img">
+          <span>📝</span>
+          <p>Captura pendiente de subir</p>
+        </div>
+        <div class="carousel-caption">
+          <div class="slide-num">Paso 1 de 4</div>
+          <h4>Formulario de registro</h4>
+          <p>El usuario introduce email, contrasena y nombre. El frontend valida el formato antes de enviar la peticion al backend.</p>
+        </div>
+      </div>
+
+      <!-- Slide 2: Supabase tabla users con nuevo registro -->
+      <div class="carousel-slide">
+        <div class="carousel-placeholder" id="slide2-img">
+          <span>🗄️</span>
+          <p>Captura pendiente de subir</p>
+        </div>
+        <div class="carousel-caption">
+          <div class="slide-num">Paso 2 de 4</div>
+          <h4>Registro en Supabase</h4>
+          <p>La tabla <code>users</code> en Supabase muestra el nuevo registro con UUID generado, email, password_hash (bcrypt) y timestamp de creacion.</p>
+        </div>
+      </div>
+
+      <!-- Slide 3: Perfil del usuario recien registrado -->
+      <div class="carousel-slide">
+        <div class="carousel-placeholder" id="slide3-img">
+          <span>👤</span>
+          <p>Captura pendiente de subir</p>
+        </div>
+        <div class="carousel-caption">
+          <div class="slide-num">Paso 3 de 4</div>
+          <h4>Perfil del usuario</h4>
+          <p>Tras el registro, el usuario es redirigido a su perfil. Las estadisticas comienzan en cero: 0 comparaciones, 0 euros ahorrados.</p>
+        </div>
+      </div>
+
+      <!-- Slide 4: Historial vacio -->
+      <div class="carousel-slide">
+        <div class="carousel-placeholder" id="slide4-img">
+          <span>📊</span>
+          <p>Captura pendiente de subir</p>
+        </div>
+        <div class="carousel-caption">
+          <div class="slide-num">Paso 4 de 4</div>
+          <h4>Historial inicial</h4>
+          <p>El tab de historial esta vacio. Cada comparacion que el usuario realice quedara registrada con la plataforma ganadora y el ahorro conseguido.</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-btn" id="regPrev" onclick="regSlide(-1)" disabled>&#8592;</button>
+      <div class="carousel-dots" id="regDots"></div>
+      <button class="carousel-btn" id="regNext" onclick="regSlide(1)">&#8594;</button>
+    </div>
   </div>
 </div>
 
@@ -913,6 +1055,7 @@ redis-cli ttl  "hd:compare:mcdonalds-gran-via-madrid"</code></pre>
 </main>
 
 <script>
+  /* ── Sidebar active link ── */
   const sections = document.querySelectorAll('[id]');
   const links    = document.querySelectorAll('nav#sidebar a');
   const obs = new IntersectionObserver(entries => {
@@ -925,6 +1068,64 @@ redis-cli ttl  "hd:compare:mcdonalds-gran-via-madrid"</code></pre>
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
   sections.forEach(s => obs.observe(s));
+
+  /* ── Hamburger menu ── */
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  function closeSidebar() {
+    sidebar.classList.remove('open');
+    menuBtn.classList.remove('open');
+    overlay.classList.remove('show');
+  }
+  menuBtn.addEventListener('click', () => {
+    const open = sidebar.classList.toggle('open');
+    menuBtn.classList.toggle('open', open);
+    overlay.classList.toggle('show', open);
+  });
+  overlay.addEventListener('click', closeSidebar);
+  sidebar.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSidebar));
+
+  /* ── Carousel de registro ── */
+  let regIdx = 0;
+  const regTrack = document.getElementById('regTrack');
+  const regDotsEl = document.getElementById('regDots');
+  const regPrev = document.getElementById('regPrev');
+  const regNext = document.getElementById('regNext');
+  const regSlides = regTrack ? regTrack.querySelectorAll('.carousel-slide') : [];
+  const regTotal = regSlides.length;
+
+  function buildDots() {
+    if (!regDotsEl) return;
+    regDotsEl.innerHTML = '';
+    for (let i = 0; i < regTotal; i++) {
+      const d = document.createElement('button');
+      d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', 'Ir a slide ' + (i+1));
+      d.addEventListener('click', () => goToSlide(i));
+      regDotsEl.appendChild(d);
+    }
+  }
+  function goToSlide(n) {
+    regIdx = Math.max(0, Math.min(n, regTotal - 1));
+    if (regTrack) regTrack.style.transform = 'translateX(-' + (regIdx * 100) + '%)';
+    if (regPrev) regPrev.disabled = regIdx === 0;
+    if (regNext) regNext.disabled = regIdx === regTotal - 1;
+    regDotsEl.querySelectorAll('.carousel-dot').forEach((d, i) =>
+      d.classList.toggle('active', i === regIdx));
+  }
+  function regSlide(dir) { goToSlide(regIdx + dir); }
+  buildDots();
+
+  /* ── Touch/swipe on carousel ── */
+  let touchX = 0;
+  if (regTrack) {
+    regTrack.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+    regTrack.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchX;
+      if (Math.abs(dx) > 40) regSlide(dx < 0 ? 1 : -1);
+    }, { passive: true });
+  }
 </script>
 </body>
 </html>
