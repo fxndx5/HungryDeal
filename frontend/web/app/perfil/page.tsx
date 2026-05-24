@@ -388,19 +388,34 @@ function PerfilContent() {
                     {stats.total_comparisons > 0 ? (
                       <div className="grid grid-cols-3 gap-4 mb-6">
                         <ActivityCard
-                          icon="🔍"
+                          icon={
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                          }
                           value={stats.total_comparisons}
                           label="comparaciones realizadas"
                           color="brand"
                         />
                         <ActivityCard
-                          icon="💰"
+                          icon={
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                          }
                           value={`${stats.total_savings.toFixed(2)} €`}
                           label="ahorro total acumulado"
                           color="green"
                         />
                         <ActivityCard
-                          icon="🍽️"
+                          icon={
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                            </svg>
+                          }
                           value={stats.unique_restaurants}
                           label="restaurantes distintos"
                           color="amber"
@@ -649,17 +664,18 @@ function ActivityCard({
   label,
   color,
 }: {
-  icon: string
+  icon: React.ReactNode
   value: string | number
   label: string
   color: 'brand' | 'green' | 'amber'
 }) {
   const bg = { brand: 'bg-brand-50', green: 'bg-green-50', amber: 'bg-amber-50' }[color]
   const text = { brand: 'text-brand-700', green: 'text-green-700', amber: 'text-amber-700' }[color]
+  const iconColor = { brand: 'text-brand-500', green: 'text-green-500', amber: 'text-amber-500' }[color]
 
   return (
     <div className={`${bg} rounded-2xl p-4 flex flex-col items-center text-center gap-1`}>
-      <span className="text-2xl">{icon}</span>
+      <span className={`${iconColor} mb-1`}>{icon}</span>
       <span className={`text-xl font-bold ${text}`}>{value}</span>
       <span className="text-xs text-slate-500">{label}</span>
     </div>
