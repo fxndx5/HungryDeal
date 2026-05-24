@@ -867,6 +867,28 @@ CACHE_TTL_SECONDS=900</code></pre>
   <div class="screenshot">
     <img src="capturas/registrarse.png" alt="Formulario de registro de usuario">
   </div>
+  <div class="screenshot" style="margin-top:12px;">
+    <img src="capturas/registrarte_error.png" alt="Validacion de error en registro">
+  </div>
+  <h4>Menu de usuario autenticado</h4>
+  <div class="screenshot">
+    <img src="capturas/barra_perfil.png" alt="Dropdown de usuario en la barra de navegacion">
+  </div>
+  <h4>Perfil de usuario — KPIs y actividad</h4>
+  <div class="screenshot">
+    <img src="capturas/kpis_perfil.png" alt="Perfil con KPIs: 10 comparaciones, 11.42 euros ahorrados, 6 restaurantes">
+  </div>
+  <div class="screenshot" style="margin-top:12px;">
+    <img src="capturas/perfil_actividades.png" alt="Tab actividad con logros y ultimas comparaciones">
+  </div>
+  <h4>Perfil — Tab historial completo</h4>
+  <div class="screenshot">
+    <img src="capturas/perfil_historial.png" alt="Historial de 10 comparaciones con plataforma ganadora y ahorro">
+  </div>
+  <h4>Perfil — Configuracion de cuenta</h4>
+  <div class="screenshot">
+    <img src="capturas/perfil_configuracion.png" alt="Tab configuracion con edicion de nombre y zona de peligro">
+  </div>
 </div>
 
 <!-- DEMO REGISTRO -->
@@ -884,53 +906,41 @@ CACHE_TTL_SECONDS=900</code></pre>
 
       <!-- Slide 1: Formulario de registro -->
       <div class="carousel-slide">
-        <div class="carousel-placeholder" id="slide1-img">
-          <span>[img]</span>
-          <p>Captura pendiente de subir</p>
-        </div>
+        <img src="capturas/registrarte.png" alt="Formulario de registro en HungryDeal">
         <div class="carousel-caption">
           <div class="slide-num">Paso 1 de 4</div>
           <h4>Formulario de registro</h4>
-          <p>El usuario introduce email, contrasena y nombre. El frontend valida el formato antes de enviar la peticion al backend.</p>
+          <p>El usuario introduce nombre, apellido, email y contrasena. El frontend valida el formato y muestra el estado "Creando cuenta..." mientras espera la respuesta del backend.</p>
         </div>
       </div>
 
       <!-- Slide 2: Supabase tabla users con nuevo registro -->
       <div class="carousel-slide">
-        <div class="carousel-placeholder" id="slide2-img">
-          <span>[img]</span>
-          <p>Captura pendiente de subir</p>
-        </div>
+        <img src="capturas/supabase_prueba_registro_correcto.png" alt="Tabla users en Supabase con el nuevo registro">
         <div class="carousel-caption">
           <div class="slide-num">Paso 2 de 4</div>
           <h4>Registro en Supabase</h4>
-          <p>La tabla <code>users</code> en Supabase muestra el nuevo registro con UUID generado, email, password_hash (bcrypt) y timestamp de creacion.</p>
+          <p>La tabla <code>users</code> en Supabase muestra el nuevo registro con UUID generado, email, password_hash (bcrypt) y timestamps de creacion. El registro <code>test@test.com</code> aparece resaltado en la ultima fila.</p>
         </div>
       </div>
 
       <!-- Slide 3: Perfil del usuario recien registrado -->
       <div class="carousel-slide">
-        <div class="carousel-placeholder" id="slide3-img">
-          <span>[img]</span>
-          <p>Captura pendiente de subir</p>
-        </div>
+        <img src="capturas/perfil.png" alt="Perfil del usuario recien registrado con stats en cero">
         <div class="carousel-caption">
           <div class="slide-num">Paso 3 de 4</div>
           <h4>Perfil del usuario</h4>
-          <p>Tras el registro, el usuario es redirigido a su perfil. Las estadisticas comienzan en cero: 0 comparaciones, 0 euros ahorrados.</p>
+          <p>Tras el registro, el usuario accede a su perfil. Las estadisticas parten en cero: 0 comparaciones, 0,00 euros ahorrados, 0 restaurantes distintos.</p>
         </div>
       </div>
 
-      <!-- Slide 4: Historial vacio -->
+      <!-- Slide 4: Historial con datos -->
       <div class="carousel-slide">
-        <div class="carousel-placeholder" id="slide4-img">
-          <span>[img]</span>
-          <p>Captura pendiente de subir</p>
-        </div>
+        <img src="capturas/perfil_historial.png" alt="Tab historial con 10 comparaciones registradas">
         <div class="carousel-caption">
           <div class="slide-num">Paso 4 de 4</div>
-          <h4>Historial inicial</h4>
-          <p>El tab de historial esta vacio. Cada comparacion que el usuario realice quedara registrada con la plataforma ganadora y el ahorro conseguido.</p>
+          <h4>Historial de comparaciones</h4>
+          <p>Cada vez que el usuario compara precios, el backend guarda la entrada en <code>search_history</code>. El tab Historial muestra las 10 comparaciones realizadas, la plataforma ganadora y el ahorro conseguido en cada pedido.</p>
         </div>
       </div>
 
@@ -1027,9 +1037,12 @@ cd backend &amp;&amp; python test_integration.py
 <span class="cm"># Verificar cache Redis</span>
 redis-cli keys "hd:*"
 redis-cli ttl  "hd:compare:mcdonalds-gran-via-madrid"</code></pre>
+  <h4>Consulta de verificacion en Supabase SQL Editor</h4>
   <div class="screenshot">
-    <img src="capturas/captura-tests.png" alt="Tests"
-         onerror="this.parentElement.innerHTML='<p>[ Captura pendiente: subir captura-tests.png con la salida de test_integration.py ]</p>'">
+    <img src="capturas/query_consulta.png" alt="Consulta SQL select en Supabase SQL Editor">
+  </div>
+  <div class="screenshot" style="margin-top:12px;">
+    <img src="capturas/supabase_users_tabla.png" alt="Tabla users con UUIDs, emails y password hashes bcrypt">
   </div>
 </div>
 
