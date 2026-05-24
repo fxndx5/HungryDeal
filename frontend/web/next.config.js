@@ -6,19 +6,22 @@
 
 const nextConfig = {
   images: {
-    // Dominios de los que cargaremos imágenes de restaurantes
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**.cloudfront.net', // imágenes de Just Eat
+        hostname: 'images.unsplash.com',
       },
       {
         protocol: 'https',
-        hostname: '**.uber.com', // imágenes de Uber Eats
+        hostname: '**.cloudfront.net',
       },
       {
         protocol: 'https',
-        hostname: '**.glovoapp.com', // imágenes de Glovo
+        hostname: '**.uber.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.glovoapp.com',
       },
     ],
   },

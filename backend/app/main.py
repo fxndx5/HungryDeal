@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import get_settings
 from app.core.database import engine, Base
+from app.core.cache import cache
 import app.models  # noqa: F401
 
 settings = get_settings()
@@ -14,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Inicializar base de datos
     try:
         async with engine.begin() as conn:
             if settings.APP_ENV == "development":
@@ -21,7 +23,14 @@ async def lifespan(app: FastAPI):
         logger.info("Base de datos conectada")
     except Exception as exc:
         logger.warning("BD no disponible al arrancar: %s", exc)
+
+    # Inicializar Redis (falla silenciosamente si no está disponible)
+    await cache.connect(settings.REDIS_URL)
+
     yield
+
+    # Cerrar conexiones al apagar
+    await cache.disconnect()
     await engine.dispose()
 
 
@@ -43,10 +52,12 @@ app.add_middleware(
 from app.api.routes.auth import router as auth_router
 from app.api.routes.search import router as search_router
 from app.api.routes.compare import router as compare_router
+from app.api.routes.users import router as users_router
 
 app.include_router(auth_router)
 app.include_router(search_router)
 app.include_router(compare_router)
+app.include_router(users_router)
 
 
 @app.get("/health", tags=["health"])

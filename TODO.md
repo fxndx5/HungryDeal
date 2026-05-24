@@ -38,8 +38,8 @@
 ### 1.2 Adapter pattern (scraping)
 - [x] Crear `app/adapters/base.py` con clase abstracta `DeliveryAdapter` y dataclass `PlatformPrice`
 - [x] Crear `app/adapters/mock.py` con datos mock para desarrollo (6 restaurantes, 3 plataformas)
-- [ ] Crear `app/adapters/justeat.py` (scraping con httpx, API interna de Just Eat)
-- [ ] Tests unitarios para el adapter de Just Eat
+- [x] Crear `app/adapters/justeat.py` (httpx, API interna de Just Eat ES — api.just-eat.es)
+- [x] Tests unitarios para el adapter de Just Eat (test_justeat.py — 4 tests)
 - [x] Crear `app/services/price_comparator.py` (orquesta los adapters, devuelve comparación)
 - [x] Crear `app/services/price_normalizer.py` (normaliza diferencias entre plataformas)
 
@@ -49,7 +49,7 @@
 - [x] Registrar routers en `main.py` con prefijo `/api/v1`
 - [x] Crear schemas Pydantic: `SearchResponse`, `ComparisonResponse`, `PlatformPriceSchema`
 - [x] Frontend conectado a la API real con fallback a mock automático
-- [ ] Tests de integración para endpoints search y compare
+- [x] Tests de integración para endpoints search y compare
 
 ---
 
@@ -80,7 +80,7 @@
 - [ ] Crear `app/adapters/ubereats.py` (scraping o datos mock iniciales)
 - [ ] Normalización de precios entre plataformas (Glovo infla producto, Uber Eats Small Order Fee, Just Eat envío variable)
 - [ ] Manejo de errores: si un adapter falla, devolver `available: false` sin romper la respuesta
-- [ ] Caché de precios en PostgreSQL con TTL de 15 minutos
+- [x] Caché de precios en Redis con TTL de 15 minutos
 - [ ] Tarea de limpieza de precios expirados (`DELETE WHERE expires_at < NOW() - INTERVAL '1 day'`)
 - [ ] Tests unitarios para cada adapter
 
@@ -89,18 +89,22 @@
 ## Fase 4 — Sistema de Usuarios (Semanas 9–10)
 
 ### 4.1 Autenticación JWT
-- [ ] Crear `app/core/security.py` (create_access_token, verify_password, get_password_hash, decode_token)
-- [ ] Crear `app/api/deps.py` (dependency get_current_user con OAuth2PasswordBearer)
-- [ ] Crear `app/api/routes/auth.py` — `POST /api/v1/auth/register` y `POST /api/v1/auth/login`
-- [ ] Crear schemas Pydantic: `UserCreate`, `UserLogin`, `TokenResponse`
-- [ ] Hashing con bcrypt (coste 12)
-- [ ] Tokens con expiración de 30 días
+- [x] Crear `app/services/auth.py` (create_access_token, verify_password, get_password_hash, decode_access_token)
+- [x] Dependencia `get_current_user` en `app/api/routes/auth.py`
+- [x] Crear `app/api/routes/auth.py` — `POST /api/v1/auth/register` y `POST /api/v1/auth/login`
+- [x] Crear schemas Pydantic: `UserCreate`, `UserLogin`, `TokenResponse` (en `schemas/auth.py`)
+- [x] Hashing con bcrypt
+- [x] Tokens con expiración configurada en Settings
 
 ### 4.2 Perfil y historial
-- [ ] Crear `app/api/routes/users.py` — `GET /api/v1/users/me` y `GET /api/v1/users/me/history`
-- [ ] Guardar búsquedas en search_history cuando el usuario hace una comparación
-- [ ] Frontend: pantalla de historial de búsquedas
-- [ ] Frontend: mostrar ahorro total del usuario (último mes)
+- [x] Crear `app/api/routes/users.py` — `GET /api/v1/users/me/history` con stats
+- [x] Guardar busquedas en search_history cuando el usuario hace una comparacion (auth opcional)
+- [x] Frontend: pagina /perfil con banner, stats, tabs y configuracion
+- [x] Frontend: Navbar con dropdown al estilo TripAdvisor (Perfil, Historial, Config, Salir)
+- [x] Frontend: cargar historial real desde GET /users/me/history en tab Historial del perfil
+- [x] Frontend: mostrar stats reales (comparaciones, ahorro, restaurantes) en el perfil
+- [x] Backend: PUT /api/v1/users/me — editar nombre/apellido desde el perfil
+- [x] Frontend: conectar formulario de configuracion con PUT /users/me
 
 ---
 
@@ -112,13 +116,13 @@
 - [ ] Tests E2E básicos del frontend
 
 ### 5.2 Optimización
-- [ ] Redis como caché opcional (acelerar consultas de precios frecuentes)
+- [x] Redis como caché opcional (acelerar consultas de precios frecuentes)
 - [ ] Optimización de queries SQL (revisar EXPLAIN de queries de comparación)
 - [ ] Rate limiting por IP en FastAPI
 
 ### 5.3 Documentación y deploy
 - [ ] Verificar documentación Swagger autogenerada está completa
-- [ ] Docker Compose de producción (sin --reload, sin volúmenes de desarrollo)
+- [x] Docker Compose de producción (sin --reload, sin volúmenes de desarrollo)
 - [ ] Nginx como reverse proxy (opcional)
 - [ ] Deploy a servidor/cloud
 

@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HungryDeal · Memoria Tecnica TFG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Caveat:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-900: #0f2e2e;
+    --teal-800: #1d4949;
+    --teal-700: #2D6F6F;
+    --teal-500: #4d9090;
+    --teal-200: #b0d4d4;
+    --teal-100: #dff0f0;
+    --teal-50:  #F2F7F7;
+    --gray-900: #111827;
+    --gray-700: #374151;
+    --gray-500: #6B7280;
+    --gray-300: #D1D5DB;
+    --gray-100: #F3F4F6;
+    --white: #ffffff;
+    --sidebar-w: 260px;
+    --content-max: 820px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body { font-family: 'Inter', sans-serif; background: var(--gray-100); color: var(--gray-900); display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  nav#sidebar {
+    position: fixed; top: 0; left: 0; width: var(--sidebar-w);
+    height: 100vh; background: var(--teal-800); overflow-y: auto;
+    display: flex; flex-direction: column; z-index: 100;
+  }
+  .nav-logo { padding: 28px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.12); }
+  .nav-logo h1 { font-size: 1.35rem; font-weight: 700; color: var(--white); letter-spacing: -.3px; }
+  .nav-logo p  { font-size: .72rem; color: var(--teal-200); margin-top: 3px; font-weight: 300; }
+  .nav-section { padding: 18px 0 6px 20px; font-size: .65rem; font-weight: 600; color: var(--teal-500); letter-spacing: .08em; text-transform: uppercase; }
+  nav#sidebar a { display: block; padding: 7px 20px; font-size: .8rem; color: rgba(255,255,255,.72); text-decoration: none; border-left: 3px solid transparent; transition: all .15s; }
+  nav#sidebar a:hover, nav#sidebar a.active { color: var(--white); background: rgba(255,255,255,.07); border-left-color: var(--teal-200); }
+  nav#sidebar a.active { font-weight: 500; }
+
+  /* MAIN */
+  main { margin-left: var(--sidebar-w); flex: 1; padding: 0 0 80px; }
+  .section { max-width: var(--content-max); margin: 0 auto; padding: 60px 40px 0; }
+
+  /* COVER */
+  .cover { background: linear-gradient(135deg, var(--teal-800) 0%, var(--teal-700) 100%); color: var(--white); padding: 80px 60px; max-width: 100%; }
+  .cover-inner { max-width: var(--content-max); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
+  .cover-title { font-size: 3rem; font-weight: 700; letter-spacing: -1px; line-height: 1.1; }
+  .cover-subtitle { font-size: 1.1rem; color: var(--teal-200); margin-top: 10px; font-weight: 300; }
+  .cover-meta { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .cover-badge { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); border-radius: 6px; padding: 6px 14px; font-size: .78rem; font-weight: 500; }
+  .cover-qr { text-align: center; }
+  .cover-qr img { width: 120px; height: 120px; border-radius: 8px; border: 3px solid rgba(255,255,255,.3); }
+  .cover-qr p { font-size: .7rem; color: var(--teal-200); margin-top: 8px; line-height: 1.4; }
+
+  /* TYPOGRAPHY */
+  .chapter-label { font-size: .7rem; font-weight: 600; color: var(--teal-500); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+  h2.section-title { font-size: 1.9rem; font-weight: 700; color: var(--gray-900); letter-spacing: -.5px; margin-bottom: 6px; }
+  .section-divider { height: 3px; width: 48px; background: var(--teal-700); border-radius: 2px; margin-bottom: 28px; }
+  h3 { font-size: 1.05rem; font-weight: 600; color: var(--teal-800); margin: 32px 0 10px; }
+  h4 { font-size: .9rem; font-weight: 600; color: var(--gray-700); margin: 20px 0 8px; }
+  p  { font-size: .9rem; line-height: 1.75; color: var(--gray-700); margin-bottom: 14px; }
+  ul, ol { padding-left: 20px; margin-bottom: 14px; }
+  li { font-size: .9rem; line-height: 1.7; color: var(--gray-700); margin-bottom: 4px; }
+
+  /* CARDS */
+  .card { background: var(--white); border-radius: 10px; border: 1px solid var(--gray-300); padding: 24px 28px; margin-bottom: 20px; }
+  .info-box { background: var(--teal-50); border-left: 4px solid var(--teal-700); border-radius: 0 8px 8px 0; padding: 14px 18px; margin-bottom: 16px; font-size: .85rem; color: var(--gray-700); line-height: 1.6; }
+  .info-box strong { color: var(--teal-800); }
+
+  /* CODE */
+  pre { background: var(--gray-900); color: #e2e8f0; border-radius: 8px; padding: 18px 20px; font-family: 'JetBrains Mono', monospace; font-size: .78rem; line-height: 1.65; overflow-x: auto; margin-bottom: 16px; }
+  code { font-family: 'JetBrains Mono', monospace; font-size: .82em; background: var(--gray-100); padding: 2px 6px; border-radius: 4px; color: var(--teal-800); border: 1px solid var(--gray-300); }
+  pre code { background: none; padding: 0; border: none; color: inherit; font-size: inherit; }
+  .kw  { color: #93c5fd; }
+  .str { color: #86efac; }
+  .cm  { color: #64748b; font-style: italic; }
+  .fn  { color: #fde68a; }
+  .num { color: #f9a8d4; }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; margin-bottom: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: .83rem; }
+  thead th { background: var(--teal-800); color: var(--white); padding: 10px 14px; text-align: left; font-weight: 500; font-size: .78rem; }
+  thead th:first-child { border-radius: 8px 0 0 0; }
+  thead th:last-child  { border-radius: 0 8px 0 0; }
+  tbody td { padding: 9px 14px; border-bottom: 1px solid var(--gray-300); color: var(--gray-700); vertical-align: top; }
+  tbody tr:hover { background: var(--teal-50); }
+  .method { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: .72rem; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .get    { background: #dcfce7; color: #166534; }
+  .post   { background: #dbeafe; color: #1e40af; }
+  .put    { background: #fef9c3; color: #854d0e; }
+  .delete { background: #fee2e2; color: #991b1b; }
+
+  /* DIAGRAMS */
+  .diagram { background: var(--white); border: 1px solid var(--gray-300); border-radius: 10px; padding: 24px; margin: 20px 0; overflow-x: auto; text-align: center; }
+  .diagram-caption { text-align: center; font-size: .75rem; color: var(--gray-500); margin-top: 10px; font-style: italic; }
+
+  /* SCREENSHOTS */
+  .screenshot { background: var(--gray-100); border: 2px dashed var(--gray-300); border-radius: 8px; padding: 32px; text-align: center; margin: 16px 0; min-height: 80px; display: flex; align-items: center; justify-content: center; }
+  .screenshot p { color: var(--gray-500); font-size: .82rem; margin: 0; }
+  .screenshot img { max-width: 100%; border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,.12); }
+
+  /* TECH GRID */
+  .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .tech-card { background: var(--white); border: 1px solid var(--gray-300); border-radius: 8px; padding: 14px 16px; }
+  .tech-card .tech-name { font-size: .85rem; font-weight: 600; color: var(--gray-900); margin-bottom: 4px; }
+  .tech-card .tech-role { font-size: .75rem; color: var(--gray-500); line-height: 1.4; }
+
+  /* STATS */
+  .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-box { background: var(--white); border: 1px solid var(--gray-300); border-radius: 10px; padding: 20px; text-align: center; }
+  .stat-num { font-size: 2rem; font-weight: 700; color: var(--teal-800); }
+  .stat-label { font-size: .75rem; color: var(--gray-500); margin-top: 4px; }
+
+  nav#sidebar::-webkit-scrollbar { width: 4px; }
+  nav#sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 2px; }
+
+  @media (max-width: 900px) {
+    nav#sidebar { transform: translateX(-100%); }
+    main { margin-left: 0; }
+    .cover-inner { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="sidebar">
+  <div class="nav-logo">
+    <h1>HungryDeal</h1>
+    <p>Memoria Tecnica TFG · 2026</p>
+  </div>
+  <span class="nav-section">Inicio</span>
+  <a href="#portada">Portada y Resumen</a>
+  <span class="nav-section">Proyecto</span>
+  <a href="#introduccion">1. Introduccion</a>
+  <a href="#objetivos">2. Objetivos</a>
+  <a href="#estado-arte">3. Estado del Arte</a>
+  <span class="nav-section">Diseno Tecnico</span>
+  <a href="#arquitectura">4. Arquitectura</a>
+  <a href="#base-datos">5. Base de Datos</a>
+  <a href="#api">6. API REST</a>
+  <a href="#casos-uso">7. Casos de Uso</a>
+  <a href="#adapter">8. Patron Adapter</a>
+  <a href="#cache">9. Cache Redis</a>
+  <span class="nav-section">Implementacion</span>
+  <a href="#backend">10. Backend con FastAPI</a>
+  <a href="#frontend">11. Frontend con Next.js</a>
+  <a href="#despliegue">12. Despliegue</a>
+  <a href="#pruebas">13. Pruebas</a>
+  <a href="#conclusiones">14. Conclusiones</a>
+</nav>
+
+<main>
+
+<!-- PORTADA -->
+<div id="portada" class="cover">
+  <div class="cover-inner">
+    <div>
+      <div style="font-size:.75rem;color:var(--teal-200);font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Trabajo de Fin de Grado</div>
+      <div class="cover-title">HungryDeal</div>
+      <div class="cover-subtitle">Comparador de precios de delivery en tiempo real</div>
+      <div style="margin-top:20px;font-size:.9rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:520px;">
+        Plataforma web que compara el coste total de realizar un mismo pedido en Uber Eats, Glovo y Just Eat, identificando la opcion mas economica mediante el patron Adapter, cache Redis y autenticacion JWT.
+      </div>
+      <div class="cover-meta">
+        <span class="cover-badge">FastAPI 0.111</span>
+        <span class="cover-badge">Next.js 14</span>
+        <span class="cover-badge">Supabase PostgreSQL</span>
+        <span class="cover-badge">Redis</span>
+        <span class="cover-badge">Mayo 2026</span>
+      </div>
+    </div>
+    <div class="cover-qr">
+      <img src="qr_app.png" alt="QR aplicacion" onerror="this.style.display='none'">
+      <p>Aplicacion en linea<br>hungrydeal.netlify.app</p>
+    </div>
+  </div>
+</div>
+
+<!-- RESUMEN -->
+<div class="section">
+  <div class="chapter-label">Resumen ejecutivo</div>
+  <h2 class="section-title">Resumen</h2>
+  <div class="section-divider"></div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">Plataformas comparadas</div></div>
+    <div class="stat-box"><div class="stat-num">7</div><div class="stat-label">Endpoints REST</div></div>
+    <div class="stat-box"><div class="stat-num">4</div><div class="stat-label">Tablas en Supabase</div></div>
+  </div>
+  <p>HungryDeal es una aplicacion web que resuelve un problema concreto del mercado del delivery en Espana: la opacidad de precios entre plataformas. Un mismo restaurante puede tener precios de producto, tarifa de envio y tarifa de servicio distintos en Uber Eats, Glovo y Just Eat. El usuario actualmente debe abrir tres aplicaciones distintas y comparar mentalmente el coste total. HungryDeal automatiza este proceso.</p>
+  <p>La arquitectura esta dividida en un backend REST con FastAPI (Python 3.11) desplegado en Render, y un frontend SPA con Next.js 14 desplegado en Netlify. La persistencia se gestiona con PostgreSQL alojado en Supabase. El sistema implementa el patron Adapter para abstraer cada plataforma, un sistema de cache Redis con TTL de 15 minutos, y autenticacion JWT.</p>
+  <p><strong>Abstract:</strong> HungryDeal is a web application that compares in real time the total cost of ordering from the same restaurant across Spain's three main delivery platforms. It implements the Adapter design pattern, a Redis cache layer, JWT authentication, and comparison history tracking, deployed on Netlify and Render with a Supabase PostgreSQL database.</p>
+</div>
+
+<!-- 1. INTRODUCCION -->
+<div id="introduccion" class="section">
+  <div class="chapter-label">Capitulo 1</div>
+  <h2 class="section-title">Introduccion y motivacion</h2>
+  <div class="section-divider"></div>
+  <h3>1.1 Contexto</h3>
+  <p>El mercado de delivery de comida en Espana mueve mas de 2.500 millones de euros anuales. Uber Eats, Glovo y Just Eat compiten por los mismos restaurantes y usuarios, pero con estructuras de precios diferentes y en muchos casos opacas. La tarifa de servicio varia entre el 5% y el 15% del valor del pedido y raramente aparece destacada en la interfaz hasta el momento de confirmar el pago.</p>
+  <p>Esta asimetria de informacion perjudica al consumidor: quien pide con frecuencia podria ahorrar entre 2 y 6 euros por pedido eligiendo la plataforma correcta.</p>
+  <h3>1.2 Motivacion</h3>
+  <p>El proyecto nace de la observacion directa de este problema. La solucion debe: (a) obtener precios reales de cada plataforma para un restaurante especifico, (b) calcular el coste total incluyendo todos los cargos, (c) presentar la comparacion de forma clara y accionable, y (d) recordar las comparaciones pasadas para mostrar tendencias al usuario.</p>
+  <h3>1.3 Alcance</h3>
+  <div class="info-box">
+    <strong>Plataformas cubiertas:</strong> Uber Eats (mock API), Glovo (mock API), Just Eat Espana (API interna real en <code>api.just-eat.es</code>). La integracion real de Uber Eats y Glovo requeriria acuerdos comerciales fuera del alcance academico de este TFG.
+  </div>
+  <ul>
+    <li>Busqueda de restaurantes por nombre o ciudad</li>
+    <li>Comparacion de precios con desglose por tarifa</li>
+    <li>Identificacion automatica de la plataforma mas barata</li>
+    <li>Historial de comparaciones por usuario autenticado</li>
+    <li>Mapa de restaurantes cercanos con filtros</li>
+    <li>Pagina de ofertas ordenada por maximo ahorro potencial</li>
+  </ul>
+</div>
+
+<!-- 2. OBJETIVOS -->
+<div id="objetivos" class="section">
+  <div class="chapter-label">Capitulo 2</div>
+  <h2 class="section-title">Objetivos</h2>
+  <div class="section-divider"></div>
+  <h3>2.1 Objetivo principal</h3>
+  <p>Desarrollar una aplicacion web funcional que compare el coste total de un pedido entre Uber Eats, Glovo y Just Eat para un restaurante dado, mostrando el desglose de cargos y la opcion mas economica.</p>
+  <h3>2.2 Objetivos tecnicos</h3>
+  <ul>
+    <li>Implementar el patron de diseno <strong>Adapter</strong> para desacoplar la logica de negocio de cada plataforma</li>
+    <li>Disenar una API REST con <strong>FastAPI</strong> que respete los principios REST y OpenAPI</li>
+    <li>Persistir datos en <strong>PostgreSQL (Supabase)</strong> usando SQLAlchemy async con asyncpg</li>
+    <li>Implementar cache con <strong>Redis</strong> para reducir llamadas externas y mejorar latencia</li>
+    <li>Autenticacion segura con <strong>JWT</strong> (tokens con expiracion)</li>
+    <li>Despliegue en produccion con <strong>CI/CD automatico</strong></li>
+  </ul>
+</div>
+
+<!-- 3. ESTADO DEL ARTE -->
+<div id="estado-arte" class="section">
+  <div class="chapter-label">Capitulo 3</div>
+  <h2 class="section-title">Estado del Arte</h2>
+  <div class="section-divider"></div>
+  <h3>3.1 Soluciones existentes</h3>
+  <p>No existe en Espana ninguna herramienta publica que compare precios entre plataformas de delivery de forma automatizada.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Herramienta</th><th>Enfoque</th><th>Limitacion</th></tr></thead>
+      <tbody>
+        <tr><td>Comparacion manual</td><td>Abrir 3 apps</td><td>Lento, sin historial</td></tr>
+        <tr><td>Articulos de blog</td><td>Comparativas estaticas</td><td>Desactualizadas rapidamente</td></tr>
+        <tr><td>Extensiones de navegador</td><td>Solapan precios en web</td><td>Solo funcionan en web</td></tr>
+        <tr><td>HungryDeal</td><td>API propia + Adapter Pattern</td><td>Alcance academico (mocks en 2 de 3)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>3.2 Tecnologias evaluadas</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Componente</th><th>Elegido</th><th>Alternativas</th><th>Motivo</th></tr></thead>
+      <tbody>
+        <tr><td>Backend</td><td>FastAPI</td><td>Django REST, NestJS</td><td>Alto rendimiento async, OpenAPI automatico</td></tr>
+        <tr><td>Frontend</td><td>Next.js 14</td><td>Vite+React, Remix</td><td>App Router, SSR/SSG, ecosistema maduro</td></tr>
+        <tr><td>Base de datos</td><td>PostgreSQL (Supabase)</td><td>MongoDB, PlanetScale</td><td>Dashboard gratuito, auth integrada, realtime</td></tr>
+        <tr><td>Cache</td><td>Redis</td><td>Memcached, cache en memoria</td><td>TTL nativo, persistencia, soporte async</td></tr>
+        <tr><td>Backend deploy</td><td>Render</td><td>Railway, Fly.io</td><td>Docker nativo, free tier 750h/mes</td></tr>
+        <tr><td>Frontend deploy</td><td>Netlify</td><td>Vercel, Cloudflare Pages</td><td>Plugin oficial Next.js, CDN global, CI/CD</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 4. ARQUITECTURA -->
+<div id="arquitectura" class="section">
+  <div class="chapter-label">Capitulo 4</div>
+  <h2 class="section-title">Arquitectura del Sistema</h2>
+  <div class="section-divider"></div>
+  <p>El sistema sigue una arquitectura de <strong>tres capas</strong> con separacion clara entre presentacion, logica de negocio y persistencia. Los componentes se comunican exclusivamente mediante HTTP/JSON, permitiendo desplegar cada capa de forma independiente.</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 740 290" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
+      <defs>
+        <marker id="a1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0,8 3,0 6" fill="#2D6F6F"/>
+        </marker>
+        <filter id="sh"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="#00000018"/></filter>
+      </defs>
+      <!-- Browser -->
+      <rect x="20" y="100" width="130" height="70" rx="10" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="2" filter="url(#sh)"/>
+      <text x="85" y="128" text-anchor="middle" font-size="14" font-weight="600" fill="#1d4949">Navegador</text>
+      <text x="85" y="148" text-anchor="middle" font-size="12" fill="#4d9090">Chrome / Safari</text>
+      <text x="85" y="164" text-anchor="middle" font-size="11" fill="#6B7280">Usuario final</text>
+      <line x1="152" y1="135" x2="196" y2="135" stroke="#2D6F6F" stroke-width="2" marker-end="url(#a1)"/>
+      <text x="174" y="127" text-anchor="middle" font-size="11" fill="#4d9090">HTTPS</text>
+      <!-- Next.js -->
+      <rect x="198" y="80" width="155" height="110" rx="10" fill="#dff0f0" stroke="#1d4949" stroke-width="2.5" filter="url(#sh)"/>
+      <text x="275" y="108" text-anchor="middle" font-size="15" font-weight="600" fill="#1d4949">Next.js 14</text>
+      <text x="275" y="127" text-anchor="middle" font-size="12" fill="#4d9090">App Router · TypeScript</text>
+      <text x="275" y="145" text-anchor="middle" font-size="11" fill="#6B7280">Tailwind CSS</text>
+      <rect x="213" y="158" width="125" height="18" rx="4" fill="#1d4949"/>
+      <text x="275" y="171" text-anchor="middle" font-size="11" fill="white">Netlify CDN Global</text>
+      <line x1="354" y1="135" x2="396" y2="135" stroke="#2D6F6F" stroke-width="2" marker-end="url(#a1)"/>
+      <text x="375" y="127" text-anchor="middle" font-size="11" fill="#4d9090">REST/JSON</text>
+      <!-- FastAPI -->
+      <rect x="398" y="80" width="155" height="110" rx="10" fill="#dff0f0" stroke="#1d4949" stroke-width="2.5" filter="url(#sh)"/>
+      <text x="475" y="108" text-anchor="middle" font-size="15" font-weight="600" fill="#1d4949">FastAPI</text>
+      <text x="475" y="127" text-anchor="middle" font-size="12" fill="#4d9090">Python 3.11 · Async</text>
+      <text x="475" y="145" text-anchor="middle" font-size="11" fill="#6B7280">SQLAlchemy · Pydantic</text>
+      <rect x="413" y="158" width="125" height="18" rx="4" fill="#1d4949"/>
+      <text x="475" y="171" text-anchor="middle" font-size="11" fill="white">Render via Docker</text>
+      <!-- Redis -->
+      <line x1="475" y1="192" x2="475" y2="218" stroke="#2D6F6F" stroke-width="1.8" marker-end="url(#a1)"/>
+      <rect x="390" y="220" width="170" height="50" rx="8" fill="#fef9c3" stroke="#d97706" stroke-width="2" filter="url(#sh)"/>
+      <text x="475" y="243" text-anchor="middle" font-size="14" font-weight="600" fill="#92400e">Redis Cache</text>
+      <text x="475" y="259" text-anchor="middle" font-size="11" fill="#b45309">TTL 15 min · hd:compare:*</text>
+      <!-- Supabase -->
+      <line x1="555" y1="155" x2="600" y2="185" stroke="#2D6F6F" stroke-width="1.8" marker-end="url(#a1)"/>
+      <rect x="600" y="185" width="130" height="65" rx="8" fill="#dbeafe" stroke="#1d4e89" stroke-width="2" filter="url(#sh)"/>
+      <text x="665" y="208" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a8a">PostgreSQL</text>
+      <text x="665" y="226" text-anchor="middle" font-size="13" fill="#3b82f6">Supabase</text>
+      <text x="665" y="242" text-anchor="middle" font-size="11" fill="#6B7280">4 tablas · asyncpg</text>
+    </svg>
+    <div class="diagram-caption">Figura 4.1. Arquitectura de tres capas del sistema HungryDeal</div>
+  </div>
+
+  <h3>4.1 Comunicacion entre capas</h3>
+  <p>El frontend se comunica exclusivamente con el backend a traves de llamadas HTTP al prefijo <code>/api/v1/</code>. El backend no expone directamente la base de datos; todo el acceso pasa por SQLAlchemy y los modelos ORM. La cache Redis actua como capa intermedia en el endpoint de comparacion, reduciendo la latencia de ~800 ms a ~15 ms para peticiones cacheadas.</p>
+</div>
+
+<!-- 5. BASE DE DATOS -->
+<div id="base-datos" class="section">
+  <div class="chapter-label">Capitulo 5</div>
+  <h2 class="section-title">Base de Datos en Supabase</h2>
+  <div class="section-divider"></div>
+  <div class="info-box">
+    <strong>Supabase</strong> es un Backend-as-a-Service basado en PostgreSQL que proporciona base de datos relacional gestionada, autenticacion integrada, API REST automatica y un dashboard web. HungryDeal utiliza exclusivamente la capa de base de datos de Supabase a traves de una conexion asyncpg directa con SQLAlchemy.
+  </div>
+
+  <h3>5.1 Diagrama entidad-relacion</h3>
+  <div class="diagram">
+    <svg viewBox="0 0 720 420" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
+      <defs>
+        <marker id="fk" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0,8 3,0 6" fill="#374151"/>
+        </marker>
+      </defs>
+      <!-- USERS -->
+      <rect x="20" y="20" width="165" height="195" rx="8" fill="#F2F7F7" stroke="#1d4949" stroke-width="2"/>
+      <rect x="20" y="20" width="165" height="32" rx="8" fill="#1d4949"/>
+      <text x="103" y="42" text-anchor="middle" font-size="15" font-weight="600" fill="white">users</text>
+      <text x="35" y="73"  font-size="12" fill="#374151">id</text><text x="65" y="73" font-size="11" fill="#4d9090">UUID PK</text>
+      <text x="35" y="93"  font-size="12" fill="#374151">email</text><text x="90" y="93" font-size="11" fill="#6B7280">VARCHAR UNIQUE</text>
+      <text x="35" y="113" font-size="12" fill="#374151">password_hash</text>
+      <text x="35" y="133" font-size="12" fill="#374151">first_name</text>
+      <text x="35" y="153" font-size="12" fill="#374151">last_name</text>
+      <text x="35" y="173" font-size="12" fill="#374151">created_at</text><text x="120" y="173" font-size="11" fill="#6B7280">TIMESTAMPTZ</text>
+      <text x="35" y="193" font-size="12" fill="#374151">updated_at</text>
+      <!-- RESTAURANTS -->
+      <rect x="285" y="20" width="175" height="215" rx="8" fill="#F2F7F7" stroke="#1d4949" stroke-width="2"/>
+      <rect x="285" y="20" width="175" height="32" rx="8" fill="#1d4949"/>
+      <text x="372" y="42" text-anchor="middle" font-size="15" font-weight="600" fill="white">restaurants</text>
+      <text x="300" y="73"  font-size="12" fill="#374151">id</text><text x="330" y="73" font-size="11" fill="#4d9090">VARCHAR PK (slug)</text>
+      <text x="300" y="93"  font-size="12" fill="#374151">name</text>
+      <text x="300" y="113" font-size="12" fill="#374151">address</text>
+      <text x="300" y="133" font-size="12" fill="#374151">city</text><text x="338" y="133" font-size="11" fill="#6B7280">idx</text>
+      <text x="300" y="153" font-size="12" fill="#374151">latitude</text><text x="355" y="153" font-size="11" fill="#6B7280">DECIMAL(9,6)</text>
+      <text x="300" y="173" font-size="12" fill="#374151">longitude</text>
+      <text x="300" y="193" font-size="12" fill="#374151">platforms</text><text x="360" y="193" font-size="11" fill="#6B7280">TEXT[]</text>
+      <text x="300" y="213" font-size="12" fill="#374151">image_url</text>
+      <!-- PLATFORM_PRICES -->
+      <rect x="285" y="268" width="195" height="135" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="2"/>
+      <rect x="285" y="268" width="195" height="32" rx="8" fill="#2D6F6F"/>
+      <text x="382" y="290" text-anchor="middle" font-size="14" font-weight="600" fill="white">platform_prices</text>
+      <text x="300" y="320" font-size="12" fill="#374151">id</text><text x="330" y="320" font-size="11" fill="#4d9090">UUID PK</text>
+      <text x="300" y="340" font-size="12" fill="#374151">restaurant_id</text><text x="395" y="340" font-size="11" fill="#e53e3e">FK</text>
+      <text x="300" y="360" font-size="12" fill="#374151">platform</text><text x="358" y="360" font-size="11" fill="#6B7280">uber/glovo/je</text>
+      <text x="300" y="378" font-size="12" fill="#374151">product · delivery · service · total</text>
+      <text x="300" y="396" font-size="12" fill="#374151">available · expires_at</text>
+      <!-- SEARCH_HISTORY -->
+      <rect x="20" y="248" width="185" height="155" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="2"/>
+      <rect x="20" y="248" width="185" height="32" rx="8" fill="#2D6F6F"/>
+      <text x="112" y="270" text-anchor="middle" font-size="14" font-weight="600" fill="white">search_history</text>
+      <text x="35" y="300" font-size="12" fill="#374151">id</text><text x="65" y="300" font-size="11" fill="#4d9090">UUID PK</text>
+      <text x="35" y="320" font-size="12" fill="#374151">user_id</text><text x="90" y="320" font-size="11" fill="#e53e3e">FK → users</text>
+      <text x="35" y="340" font-size="12" fill="#374151">restaurant_id</text><text x="135" y="340" font-size="11" fill="#e53e3e">FK</text>
+      <text x="35" y="360" font-size="12" fill="#374151">query</text>
+      <text x="35" y="380" font-size="12" fill="#374151">platform_chosen</text>
+      <text x="35" y="398" font-size="12" fill="#374151">savings</text><text x="100" y="398" font-size="11" fill="#6B7280">DECIMAL</text>
+      <!-- FK arrows -->
+      <line x1="112" y1="215" x2="112" y2="246" stroke="#374151" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#fk)"/>
+      <text x="120" y="233" font-size="11" fill="#6B7280">1:N</text>
+      <line x1="372" y1="235" x2="372" y2="266" stroke="#374151" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#fk)"/>
+      <text x="380" y="253" font-size="11" fill="#6B7280">1:N</text>
+      <line x1="284" y1="320" x2="207" y2="345" stroke="#374151" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#fk)"/>
+      <!-- Supabase label -->
+      <rect x="545" y="20" width="165" height="58" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="1.5"/>
+      <text x="627" y="43" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a8a">Supabase</text>
+      <text x="627" y="61" text-anchor="middle" font-size="11" fill="#3b82f6">PostgreSQL 15 gestionado</text>
+      <text x="627" y="74" text-anchor="middle" font-size="10" fill="#6B7280">asyncpg + pgbouncer</text>
+    </svg>
+    <div class="diagram-caption">Figura 5.1. Diagrama entidad-relacion de la base de datos en Supabase</div>
+  </div>
+
+  <h3>5.2 Descripcion de tablas</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Tabla</th><th>Filas esperadas</th><th>Proposito</th><th>Indices</th></tr></thead>
+      <tbody>
+        <tr><td><code>users</code></td><td>Creciente</td><td>Credenciales y perfil. Password hasheado con bcrypt (cost 12)</td><td>PK uuid, UNIQUE email</td></tr>
+        <tr><td><code>restaurants</code></td><td>500–5000</td><td>Catalogo. El id es un slug legible. El campo platforms[] indica disponibilidad</td><td>PK slug, idx city</td></tr>
+        <tr><td><code>platform_prices</code></td><td>3x restaurantes</td><td>Precios por plataforma con expires_at para invalidar cache de 15 min</td><td>PK uuid, idx (restaurant_id, platform, expires_at)</td></tr>
+        <tr><td><code>search_history</code></td><td>Creciente por usuario</td><td>Registro de comparaciones. Permite calcular ahorro total del usuario</td><td>PK uuid, idx (user_id, searched_at)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.3 Captura del dashboard Supabase</h3>
+  <div class="screenshot">
+    <img src="capturas/tablas_entiddes_supabase.png" alt="Tablas en Supabase">
+  </div>
+  <div class="screenshot" style="margin-top:12px;">
+    <img src="capturas/supabase.png" alt="Dashboard Supabase">
+  </div>
+  <div class="screenshot" style="margin-top:12px;">
+    <img src="capturas/supabase2.png" alt="Dashboard Supabase detalle">
+  </div>
+</div>
+
+<!-- 6. API REST -->
+<div id="api" class="section">
+  <div class="chapter-label">Capitulo 6</div>
+  <h2 class="section-title">API REST y Endpoints</h2>
+  <div class="section-divider"></div>
+  <p>La API esta versionada bajo el prefijo <code>/api/v1/</code>. La documentacion interactiva esta disponible en <code>/docs</code> (Swagger UI) y <code>/redoc</code> gracias a la generacion automatica de OpenAPI de FastAPI.</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 700 360" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
+      <defs>
+        <marker id="a2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0,7 2.5,0 5" fill="#4d9090"/>
+        </marker>
+      </defs>
+      <!-- Central -->
+      <rect x="255" y="140" width="190" height="55" rx="10" fill="#1d4949"/>
+      <text x="350" y="163" text-anchor="middle" font-size="16" font-weight="600" fill="white">FastAPI</text>
+      <text x="350" y="183" text-anchor="middle" font-size="12" fill="#b0d4d4">/api/v1/</text>
+      <!-- Auth -->
+      <rect x="20" y="20" width="170" height="100" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <rect x="20" y="20" width="170" height="28" rx="8" fill="#2D6F6F"/>
+      <text x="105" y="39" text-anchor="middle" font-size="13" fill="white">auth</text>
+      <text x="35" y="67" font-size="12" fill="#1d4949">POST</text><text x="75" y="67" font-size="12" fill="#374151">/auth/register</text>
+      <text x="35" y="86" font-size="12" fill="#1d4949">POST</text><text x="75" y="86" font-size="12" fill="#374151">/auth/login</text>
+      <text x="35" y="105" font-size="12" fill="#1d4949">GET</text><text x="75" y="105" font-size="12" fill="#374151">/auth/me</text>
+      <!-- Search -->
+      <rect x="20" y="150" width="170" height="65" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <rect x="20" y="150" width="170" height="28" rx="8" fill="#2D6F6F"/>
+      <text x="105" y="169" text-anchor="middle" font-size="13" fill="white">search</text>
+      <text x="35" y="198" font-size="12" fill="#1d4949">GET</text><text x="75" y="198" font-size="12" fill="#374151">/search?q=&amp;city=</text>
+      <!-- Compare -->
+      <rect x="20" y="244" width="170" height="65" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <rect x="20" y="244" width="170" height="28" rx="8" fill="#2D6F6F"/>
+      <text x="105" y="263" text-anchor="middle" font-size="13" fill="white">compare</text>
+      <text x="35" y="293" font-size="12" fill="#1d4949">GET</text><text x="75" y="293" font-size="12" fill="#374151">/compare/{id}</text>
+      <!-- Users -->
+      <rect x="510" y="20" width="175" height="110" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <rect x="510" y="20" width="175" height="28" rx="8" fill="#2D6F6F"/>
+      <text x="597" y="39" text-anchor="middle" font-size="13" fill="white">users</text>
+      <text x="525" y="67" font-size="12" fill="#1d4949">PUT</text><text x="565" y="67" font-size="12" fill="#374151">/users/me</text>
+      <text x="525" y="86" font-size="12" fill="#1d4949">GET</text><text x="565" y="86" font-size="12" fill="#374151">/users/me/history</text>
+      <text x="525" y="108" font-size="11" fill="#6B7280">Requiere JWT Bearer</text>
+      <!-- Health -->
+      <rect x="510" y="160" width="175" height="52" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <rect x="510" y="160" width="175" height="28" rx="8" fill="#2D6F6F"/>
+      <text x="597" y="179" text-anchor="middle" font-size="13" fill="white">health</text>
+      <text x="525" y="204" font-size="12" fill="#1d4949">GET</text><text x="565" y="204" font-size="12" fill="#374151">/health</text>
+      <!-- Arrows left to center -->
+      <line x1="192" y1="70"  x2="253" y2="155" stroke="#4d9090" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="192" y1="183" x2="253" y2="168" stroke="#4d9090" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="192" y1="277" x2="253" y2="180" stroke="#4d9090" stroke-width="1.5" marker-end="url(#a2)"/>
+      <!-- Arrows center to right -->
+      <line x1="447" y1="158" x2="508" y2="75"  stroke="#4d9090" stroke-width="1.5" marker-end="url(#a2)"/>
+      <line x1="447" y1="175" x2="508" y2="186" stroke="#4d9090" stroke-width="1.5" marker-end="url(#a2)"/>
+    </svg>
+    <div class="diagram-caption">Figura 6.1. Mapa de endpoints de la API REST</div>
+  </div>
+
+  <h3>6.1 Referencia de endpoints</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Metodo</th><th>Ruta</th><th>Auth</th><th>Descripcion</th></tr></thead>
+      <tbody>
+        <tr><td><span class="method get">GET</span></td><td><code>/health</code></td><td>No</td><td>Estado del servicio. Usado por Render para healthchecks</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/auth/register</code></td><td>No</td><td>Crea cuenta. Body: email, password (min 6), first_name, last_name</td></tr>
+        <tr><td><span class="method post">POST</span></td><td><code>/auth/login</code></td><td>No</td><td>Devuelve JWT access token</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/auth/me</code></td><td>JWT</td><td>Perfil del usuario autenticado</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/search</code></td><td>No</td><td>Busca restaurantes. Params: q, city, limit (default 20)</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/compare/{id}</code></td><td>Opcional</td><td>Compara precios en 3 plataformas. Cache Redis 15 min. Guarda historial si hay JWT</td></tr>
+        <tr><td><span class="method put">PUT</span></td><td><code>/users/me</code></td><td>JWT</td><td>Actualiza perfil del usuario</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/users/me/history</code></td><td>JWT</td><td>Historial con stats: total comparaciones, ahorro total, restaurantes unicos</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.2 Respuesta ComparisonResponse</h3>
+  <pre><code><span class="cm">// GET /api/v1/compare/mcdonalds-gran-via-madrid</span>
+{
+  <span class="str">"restaurant"</span>: { <span class="str">"id"</span>: <span class="str">"mcdonalds-gran-via-madrid"</span>, <span class="str">"name"</span>: <span class="str">"McDonald's Gran Via"</span> },
+  <span class="str">"comparison"</span>: [
+    { <span class="str">"platform"</span>: <span class="str">"uber_eats"</span>, <span class="str">"product_price"</span>: <span class="num">8.99</span>,
+      <span class="str">"delivery_fee"</span>: <span class="num">2.49</span>, <span class="str">"service_fee"</span>: <span class="num">1.35</span>, <span class="str">"total"</span>: <span class="num">12.83</span> },
+    <span class="cm">// ... glovo, just_eat</span>
+  ],
+  <span class="str">"winner"</span>: <span class="str">"just_eat"</span>,
+  <span class="str">"savings"</span>: <span class="num">2.34</span>
+}</code></pre>
+</div>
+
+<!-- 7. CASOS DE USO -->
+<div id="casos-uso" class="section">
+  <div class="chapter-label">Capitulo 7</div>
+  <h2 class="section-title">Casos de Uso</h2>
+  <div class="section-divider"></div>
+  <div class="diagram">
+    <svg viewBox="0 0 660 360" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
+      <!-- System boundary -->
+      <rect x="90" y="15" width="555" height="330" rx="12" fill="none" stroke="#2D6F6F" stroke-width="2" stroke-dasharray="8,4"/>
+      <text x="367" y="10" text-anchor="middle" font-size="13" fill="#2D6F6F">Sistema HungryDeal</text>
+      <!-- Actor -->
+      <circle cx="35" cy="75"  r="13" fill="none" stroke="#1d4949" stroke-width="2"/>
+      <line x1="35" y1="88"  x2="35" y2="130" stroke="#1d4949" stroke-width="2"/>
+      <line x1="14" y1="102" x2="56" y2="102" stroke="#1d4949" stroke-width="2"/>
+      <line x1="35" y1="130" x2="16" y2="152" stroke="#1d4949" stroke-width="2"/>
+      <line x1="35" y1="130" x2="54" y2="152" stroke="#1d4949" stroke-width="2"/>
+      <text x="35" y="168" text-anchor="middle" font-size="12" fill="#374151">Usuario</text>
+      <!-- Auth actor -->
+      <circle cx="35" cy="260" r="13" fill="none" stroke="#6B7280" stroke-width="2"/>
+      <line x1="35" y1="273" x2="35" y2="315" stroke="#6B7280" stroke-width="2"/>
+      <line x1="14" y1="287" x2="56" y2="287" stroke="#6B7280" stroke-width="2"/>
+      <line x1="35" y1="315" x2="16" y2="337" stroke="#6B7280" stroke-width="2"/>
+      <line x1="35" y1="315" x2="54" y2="337" stroke="#6B7280" stroke-width="2"/>
+      <text x="35" y="354" text-anchor="middle" font-size="12" fill="#6B7280">Autenticado</text>
+      <!-- Use cases col 1 -->
+      <ellipse cx="220" cy="60"  rx="85" ry="21" fill="#dff0f0" stroke="#1d4949" stroke-width="1.5"/>
+      <text x="220" y="65"  text-anchor="middle" font-size="12" fill="#1d4949">Buscar restaurante</text>
+      <ellipse cx="220" cy="120" rx="85" ry="21" fill="#dff0f0" stroke="#1d4949" stroke-width="1.5"/>
+      <text x="220" y="125" text-anchor="middle" font-size="12" fill="#1d4949">Comparar precios</text>
+      <ellipse cx="220" cy="180" rx="85" ry="21" fill="#dff0f0" stroke="#1d4949" stroke-width="1.5"/>
+      <text x="220" y="185" text-anchor="middle" font-size="12" fill="#1d4949">Ver ofertas</text>
+      <ellipse cx="220" cy="240" rx="85" ry="21" fill="#dff0f0" stroke="#1d4949" stroke-width="1.5"/>
+      <text x="220" y="245" text-anchor="middle" font-size="12" fill="#1d4949">Mapa cercano</text>
+      <ellipse cx="220" cy="300" rx="85" ry="21" fill="#dff0f0" stroke="#1d4949" stroke-width="1.5"/>
+      <text x="220" y="305" text-anchor="middle" font-size="12" fill="#1d4949">Registrarse / Login</text>
+      <!-- Use cases col 2 -->
+      <ellipse cx="460" cy="75"  rx="105" ry="21" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <text x="460" y="80"  text-anchor="middle" font-size="12" fill="#2D6F6F">Guardar comparacion</text>
+      <ellipse cx="460" cy="135" rx="105" ry="21" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <text x="460" y="140" text-anchor="middle" font-size="12" fill="#2D6F6F">Ver historial</text>
+      <ellipse cx="460" cy="195" rx="105" ry="21" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <text x="460" y="200" text-anchor="middle" font-size="12" fill="#2D6F6F">Stats de ahorro</text>
+      <ellipse cx="460" cy="255" rx="105" ry="21" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <text x="460" y="260" text-anchor="middle" font-size="12" fill="#2D6F6F">Actualizar perfil</text>
+      <ellipse cx="460" cy="315" rx="105" ry="21" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <text x="460" y="320" text-anchor="middle" font-size="12" fill="#2D6F6F">Redirigir a plataforma</text>
+      <!-- Lines actor to col1 -->
+      <line x1="57" y1="90"  x2="133" y2="60"  stroke="#1d4949" stroke-width="1.2"/>
+      <line x1="57" y1="100" x2="133" y2="120" stroke="#1d4949" stroke-width="1.2"/>
+      <line x1="57" y1="110" x2="133" y2="180" stroke="#1d4949" stroke-width="1.2"/>
+      <line x1="57" y1="120" x2="133" y2="240" stroke="#1d4949" stroke-width="1.2"/>
+      <line x1="57" y1="130" x2="133" y2="300" stroke="#1d4949" stroke-width="1.2"/>
+      <!-- Lines auth to col2 -->
+      <line x1="57" y1="270" x2="353" y2="135" stroke="#6B7280" stroke-width="1.2"/>
+      <line x1="57" y1="278" x2="353" y2="195" stroke="#6B7280" stroke-width="1.2"/>
+      <line x1="57" y1="286" x2="353" y2="255" stroke="#6B7280" stroke-width="1.2"/>
+      <line x1="57" y1="294" x2="353" y2="315" stroke="#6B7280" stroke-width="1.2"/>
+      <!-- include -->
+      <line x1="306" y1="120" x2="353" y2="75" stroke="#4d9090" stroke-width="1.2" stroke-dasharray="5,3"/>
+      <text x="368" y="106" font-size="10" fill="#4d9090" font-style="italic">«incluye»</text>
+    </svg>
+    <div class="diagram-caption">Figura 7.1. Diagrama de casos de uso del sistema</div>
+  </div>
+</div>
+
+<!-- 8. ADAPTER PATTERN -->
+<div id="adapter" class="section">
+  <div class="chapter-label">Capitulo 8</div>
+  <h2 class="section-title">Patron de Diseno: Adapter</h2>
+  <div class="section-divider"></div>
+  <p>El patron Adapter es el nucleo arquitectonico del sistema. Define una interfaz abstracta <code>DeliveryAdapter</code> que todos los adaptadores de plataforma deben implementar. El <code>PriceComparator</code> trabaja exclusivamente contra esta interfaz, sin conocer los detalles de ninguna plataforma concreta.</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 660 300" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
+      <!-- Abstract -->
+      <rect x="200" y="10" width="260" height="75" rx="8" fill="#dff0f0" stroke="#1d4949" stroke-width="2.5"/>
+      <text x="330" y="30"  text-anchor="middle" font-size="11" fill="#4d9090" font-style="italic">abstract</text>
+      <text x="330" y="50"  text-anchor="middle" font-size="16" font-weight="600" fill="#1d4949">DeliveryAdapter</text>
+      <line x1="200" y1="58" x2="460" y2="58" stroke="#1d4949" stroke-width="1"/>
+      <text x="330" y="73"  text-anchor="middle" font-size="12" fill="#374151">+ get_prices(restaurant_id)</text>
+      <!-- Inheritance lines, se unen en un punto antes del padre -->
+      <line x1="100" y1="170" x2="100" y2="132" stroke="#1d4949" stroke-width="1.5"/>
+      <line x1="330" y1="170" x2="330" y2="132" stroke="#1d4949" stroke-width="1.5"/>
+      <line x1="562" y1="170" x2="562" y2="132" stroke="#1d4949" stroke-width="1.5"/>
+      <line x1="100" y1="132" x2="562" y2="132" stroke="#1d4949" stroke-width="1.5"/>
+      <line x1="330" y1="132" x2="330" y2="87"  stroke="#1d4949" stroke-width="1.5"/>
+      <!-- Triangulo de herencia (solo uno, limpio) -->
+      <polygon points="318,87 342,87 330,100" fill="white" stroke="#1d4949" stroke-width="1.5"/>
+      <!-- UberEats -->
+      <rect x="15"  y="170" width="172" height="88" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <rect x="15"  y="170" width="172" height="28" rx="8" fill="#2D6F6F"/>
+      <text x="100" y="189" text-anchor="middle" font-size="13" fill="white">UberEatsAdapter</text>
+      <text x="30"  y="215" font-size="11" fill="#6B7280">API: mock interna</text>
+      <text x="30"  y="232" font-size="11" fill="#6B7280">Precio infla +12%</text>
+      <text x="30"  y="249" font-size="11" fill="#6B7280">Service fee: 0.99–2.49 EUR</text>
+      <!-- Glovo -->
+      <rect x="244" y="170" width="172" height="88" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <rect x="244" y="170" width="172" height="28" rx="8" fill="#2D6F6F"/>
+      <text x="330" y="189" text-anchor="middle" font-size="13" fill="white">GlovoAdapter</text>
+      <text x="259" y="215" font-size="11" fill="#6B7280">API: mock interna</text>
+      <text x="259" y="232" font-size="11" fill="#6B7280">Precio infla +8%</text>
+      <text x="259" y="249" font-size="11" fill="#6B7280">Service fee: 0.50–1.80 EUR</text>
+      <!-- JustEat -->
+      <rect x="473" y="170" width="178" height="88" rx="8" fill="#F2F7F7" stroke="#1d4949" stroke-width="2"/>
+      <rect x="473" y="170" width="178" height="28" rx="8" fill="#1d4949"/>
+      <text x="562" y="189" text-anchor="middle" font-size="13" fill="white">JustEatAdapter (real)</text>
+      <text x="488" y="215" font-size="11" fill="#374151">API: api.just-eat.es</text>
+      <text x="488" y="232" font-size="11" fill="#374151">Scraping real en produccion</text>
+      <text x="488" y="249" font-size="11" fill="#374151">Delivery fee variable</text>
+      <!-- Comparator -->
+      <rect x="190" y="278" width="280" height="22" rx="6" fill="#1d4949"/>
+      <text x="330" y="293" text-anchor="middle" font-size="13" fill="white">PriceComparator (orquestador)</text>
+      <line x1="100" y1="258" x2="255" y2="278" stroke="#4d9090" stroke-width="1.2" stroke-dasharray="5,3"/>
+      <line x1="330" y1="258" x2="330" y2="278" stroke="#4d9090" stroke-width="1.2" stroke-dasharray="5,3"/>
+      <line x1="562" y1="258" x2="405" y2="278" stroke="#4d9090" stroke-width="1.2" stroke-dasharray="5,3"/>
+    </svg>
+    <div class="diagram-caption">Figura 8.1. Jerarquia del patron Adapter. JustEat usa API real</div>
+  </div>
+
+  <pre><code><span class="kw">from</span> abc <span class="kw">import</span> ABC, abstractmethod
+
+<span class="kw">class</span> <span class="fn">DeliveryAdapter</span>(ABC):
+    <span class="kw">@abstractmethod</span>
+    <span class="kw">async def</span> <span class="fn">get_prices</span>(self, restaurant_id: str) -> dict: ...</code></pre>
+</div>
+
+<!-- 9. CACHE REDIS -->
+<div id="cache" class="section">
+  <div class="chapter-label">Capitulo 9</div>
+  <h2 class="section-title">Cache Redis</h2>
+  <div class="section-divider"></div>
+  <p>El sistema implementa cache Redis con <strong>degradacion elegante</strong>: si Redis no esta disponible al arrancar, la app continua funcionando sin cache, sin lanzar excepciones al cliente.</p>
+
+  <div class="diagram">
+    <svg viewBox="0 0 540 260" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
+      <defs>
+        <marker id="a3" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+          <polygon points="0 0,8 3,0 6" fill="#2D6F6F"/>
+        </marker>
+      </defs>
+      <!-- Request -->
+      <rect x="10" y="105" width="88" height="38" rx="8" fill="#1d4949"/>
+      <text x="54" y="128" text-anchor="middle" font-size="13" fill="white">Request</text>
+      <line x1="100" y1="124" x2="138" y2="124" stroke="#2D6F6F" stroke-width="2" marker-end="url(#a3)"/>
+      <!-- Decision -->
+      <polygon points="195,95 255,124 195,153 135,124" fill="#fef9c3" stroke="#d97706" stroke-width="2"/>
+      <text x="195" y="120" text-anchor="middle" font-size="12" fill="#92400e">Cache</text>
+      <text x="195" y="136" text-anchor="middle" font-size="12" fill="#92400e">hit?</text>
+      <!-- YES -->
+      <line x1="195" y1="95" x2="195" y2="58" stroke="#16a34a" stroke-width="2" marker-end="url(#a3)"/>
+      <text x="204" y="80" font-size="11" fill="#16a34a">SI</text>
+      <rect x="125" y="18" width="140" height="38" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+      <text x="195" y="34" text-anchor="middle" font-size="12" fill="#15803d">Return cached</text>
+      <text x="195" y="50" text-anchor="middle" font-size="11" fill="#15803d">~15 ms</text>
+      <!-- NO -->
+      <line x1="255" y1="124" x2="300" y2="124" stroke="#dc2626" stroke-width="2" marker-end="url(#a3)"/>
+      <text x="276" y="115" font-size="11" fill="#dc2626">NO</text>
+      <!-- Adapters -->
+      <rect x="302" y="103" width="125" height="42" rx="8" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
+      <text x="364" y="120" text-anchor="middle" font-size="12" fill="#1d4949">Llama adapters</text>
+      <text x="364" y="136" text-anchor="middle" font-size="11" fill="#6B7280">Uber · Glovo · JE</text>
+      <line x1="428" y1="124" x2="466" y2="124" stroke="#2D6F6F" stroke-width="2" marker-end="url(#a3)"/>
+      <!-- Store -->
+      <rect x="468" y="103" width="60" height="42" rx="8" fill="#fef9c3" stroke="#d97706" stroke-width="1.5"/>
+      <text x="498" y="120" text-anchor="middle" font-size="12" fill="#92400e">Store</text>
+      <text x="498" y="136" text-anchor="middle" font-size="11" fill="#b45309">15 min</text>
+      <!-- Return -->
+      <line x1="364" y1="146" x2="364" y2="190" stroke="#2D6F6F" stroke-width="2" marker-end="url(#a3)"/>
+      <rect x="290" y="192" width="148" height="38" rx="8" fill="#dff0f0" stroke="#1d4949" stroke-width="1.5"/>
+      <text x="364" y="208" text-anchor="middle" font-size="12" fill="#1d4949">ComparisonResponse</text>
+      <text x="364" y="224" text-anchor="middle" font-size="11" fill="#6B7280">~600-900 ms</text>
+      <!-- Key info -->
+      <rect x="10" y="195" width="200" height="58" rx="8" fill="#F2F7F7" stroke="#d97706" stroke-width="1.5"/>
+      <text x="110" y="212" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">Clave Redis</text>
+      <text x="20"  y="229" font-size="11" fill="#374151">hd:compare:{restaurant_id}</text>
+      <text x="20"  y="244" font-size="10" fill="#6B7280">Prefijo hd: evita colisiones</text>
+    </svg>
+    <div class="diagram-caption">Figura 9.1. Flujo de cache Redis en el endpoint /compare</div>
+  </div>
+
+  <div class="info-box">
+    <strong>Degradacion elegante:</strong> Si Redis no responde al arrancar (timeout 2s), el atributo <code>cache.available</code> se establece a <code>False</code>. Todos los metodos <code>get()</code> y <code>set()</code> devuelven <code>None</code> silenciosamente. La app funciona con normalidad, simplemente sin cache.
+  </div>
+</div>
+
+<!-- 10. BACKEND -->
+<div id="backend" class="section">
+  <div class="chapter-label">Capitulo 10</div>
+  <h2 class="section-title">Backend con FastAPI</h2>
+  <div class="section-divider"></div>
+  <h3>10.1 Estructura del proyecto</h3>
+  <pre><code>backend/
+├── app/
+│   ├── api/routes/       <span class="cm"># auth.py, search.py, compare.py, users.py</span>
+│   ├── core/
+│   │   ├── config.py     <span class="cm"># Settings con Pydantic BaseSettings</span>
+│   │   ├── database.py   <span class="cm"># Engine async SQLAlchemy + asyncpg</span>
+│   │   ├── cache.py      <span class="cm"># RedisCache con degradacion elegante</span>
+│   │   └── security.py   <span class="cm"># JWT: crear y verificar tokens</span>
+│   ├── models/           <span class="cm"># ORM: User, Restaurant, PlatformPrice, SearchHistory</span>
+│   ├── schemas/          <span class="cm"># Pydantic: validacion entrada/salida API</span>
+│   ├── adapters/         <span class="cm"># DeliveryAdapter ABC + UberEats, Glovo, JustEat</span>
+│   └── main.py           <span class="cm"># Lifespan, CORS, router mount</span>
+├── requirements.txt
+└── test_integration.py</code></pre>
+
+  <h3>10.2 Variables de entorno</h3>
+  <pre><code>DATABASE_URL=postgresql+asyncpg://user:pass@db.supabase.co/postgres
+SECRET_KEY=clave-secreta-256-bits
+REDIS_URL=redis://localhost:6379/0
+CACHE_TTL_SECONDS=900</code></pre>
+
+  <h4>Build completado</h4>
+  <div class="screenshot">
+    <img src="capturas/render_build.png" alt="Render build">
+  </div>
+  <h4>Eventos de despliegue</h4>
+  <div class="screenshot">
+    <img src="capturas/render_events.png" alt="Render events">
+  </div>
+  <h4>Logs de arranque</h4>
+  <div class="screenshot">
+    <img src="capturas/render_logs.png" alt="Render logs">
+  </div>
+</div>
+
+<!-- 11. FRONTEND -->
+<div id="frontend" class="section">
+  <div class="chapter-label">Capitulo 11</div>
+  <h2 class="section-title">Frontend con Next.js 14</h2>
+  <div class="section-divider"></div>
+  <h3>11.1 Paginas de la aplicacion</h3>
+  <div class="tech-grid">
+    <div class="tech-card"><div class="tech-name">/</div><div class="tech-role">Homepage con busqueda y restaurantes populares</div></div>
+    <div class="tech-card"><div class="tech-name">/search</div><div class="tech-role">Resultados con filtros por ciudad y categoria</div></div>
+    <div class="tech-card"><div class="tech-name">/compare/[id]</div><div class="tech-role">Comparacion detallada con desglose de tarifas</div></div>
+    <div class="tech-card"><div class="tech-name">/ofertas</div><div class="tech-role">Ordenados por maximo ahorro potencial</div></div>
+    <div class="tech-card"><div class="tech-name">/cerca</div><div class="tech-role">Mapa interactivo Leaflet con geolocalizacion</div></div>
+    <div class="tech-card"><div class="tech-name">/perfil</div><div class="tech-role">Historial, stats de ahorro y datos de cuenta</div></div>
+  </div>
+  <h4>Pagina principal</h4>
+  <div class="screenshot">
+    <img src="capturas/imagen_inicio_web_masbaja.png" alt="Pagina principal de HungryDeal">
+  </div>
+  <h4>Busqueda de restaurantes</h4>
+  <div class="screenshot">
+    <img src="capturas/restaurantes.png" alt="Listado de restaurantes">
+  </div>
+  <h4>Comparacion de precios</h4>
+  <div class="screenshot">
+    <img src="capturas/comparador.png" alt="Comparacion de precios entre plataformas">
+  </div>
+  <h4>Pagina de ofertas</h4>
+  <div class="screenshot">
+    <img src="capturas/ofertas.png" alt="Pagina de ofertas ordenada por ahorro">
+  </div>
+  <h4>Mapa de restaurantes cercanos</h4>
+  <div class="screenshot">
+    <img src="capturas/cerca_de_mi.png" alt="Mapa interactivo con restaurantes cercanos">
+  </div>
+  <h4>Login y registro</h4>
+  <div class="screenshot">
+    <img src="capturas/login.png" alt="Formulario de inicio de sesion">
+  </div>
+  <div class="screenshot">
+    <img src="capturas/registrarse.png" alt="Formulario de registro de usuario">
+  </div>
+</div>
+
+<!-- 12. DESPLIEGUE -->
+<div id="despliegue" class="section">
+  <div class="chapter-label">Capitulo 12</div>
+  <h2 class="section-title">Despliegue en Produccion</h2>
+  <div class="section-divider"></div>
+  <h3>12.1 Frontend en Netlify</h3>
+  <div class="info-box">
+    El frontend se despliega automaticamente en Netlify con cada <code>git push</code>. El plugin oficial <code>@netlify/plugin-nextjs</code> gestiona la compilacion y el enrutamiento de Next.js 14 App Router.
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Parametro netlify.toml</th><th>Valor</th></tr></thead>
+      <tbody>
+        <tr><td>base</td><td><code>Hungrydeal-code/frontend/web</code></td></tr>
+        <tr><td>command</td><td><code>npm install --legacy-peer-deps &amp;&amp; npm run build</code></td></tr>
+        <tr><td>publish</td><td><code>.next</code></td></tr>
+        <tr><td>NODE_VERSION</td><td><code>20</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h3>12.2 Backend en Render</h3>
+  <p>El backend corre como web service Docker en Render. Render ejecuta healthchecks periodicos contra <code>GET /health</code> para detectar caidas automaticamente.</p>
+  <pre><code><span class="cm"># docker-compose.prod.yml</span>
+services:
+  api:
+    build: ./backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2
+    restart: always
+  redis:
+    image: redis:7-alpine
+    restart: always</code></pre>
+  <h4>Docker Compose en ejecucion</h4>
+  <div class="screenshot">
+    <img src="capturas/docker_compose.png" alt="Docker compose arrancando servicios">
+  </div>
+  <div class="screenshot" style="margin-top:12px;">
+    <img src="capturas/docker_compose2.png" alt="Docker compose servicios activos">
+  </div>
+  <div class="screenshot" style="margin-top:12px;">
+    <img src="capturas/docker_compose3.png" alt="Docker compose logs completos">
+  </div>
+  <h3>12.3 Base de datos en Supabase</h3>
+  <p>PostgreSQL se gestiona en Supabase. La cadena de conexion se pasa como variable de entorno <code>DATABASE_URL</code> en Render. Se usa pgbouncer para reutilizar conexiones y no saturar el limite del plan gratuito.</p>
+  <h4>Panel principal de Netlify</h4>
+  <div class="screenshot">
+    <img src="capturas/netlify.png" alt="Panel Netlify">
+  </div>
+  <h4>Historial de despliegues</h4>
+  <div class="screenshot">
+    <img src="capturas/netlify_deploy.png" alt="Netlify deploys">
+  </div>
+  <h4>Observabilidad y analíticas</h4>
+  <div class="screenshot">
+    <img src="capturas/netlify_observasbility.png" alt="Netlify observability">
+  </div>
+</div>
+
+<!-- 13. PRUEBAS -->
+<div id="pruebas" class="section">
+  <div class="chapter-label">Capitulo 13</div>
+  <h2 class="section-title">Pruebas</h2>
+  <div class="section-divider"></div>
+  <p>Se incluye <code>test_integration.py</code> con 8 tests que validan los endpoints principales contra el servidor en ejecucion usando <code>httpx</code>.</p>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Test</th><th>Endpoint</th><th>Validacion</th></tr></thead>
+      <tbody>
+        <tr><td>test_health</td><td>GET /health</td><td>status == "ok"</td></tr>
+        <tr><td>test_search_with_results</td><td>GET /search?q=mc</td><td>results.length > 0</td></tr>
+        <tr><td>test_search_no_results</td><td>GET /search?q=xyzxyz</td><td>results.length == 0</td></tr>
+        <tr><td>test_search_no_query</td><td>GET /search</td><td>HTTP 422</td></tr>
+        <tr><td>test_search_limit</td><td>GET /search?q=&amp;limit=3</td><td>results.length menor o igual 3</td></tr>
+        <tr><td>test_compare_full</td><td>GET /compare/{id}</td><td>winner es el mas barato, total = suma de tarifas</td></tr>
+        <tr><td>test_compare_404</td><td>GET /compare/no-existe</td><td>HTTP 404</td></tr>
+        <tr><td>test_compare_all</td><td>GET /compare/* x6</td><td>estructura valida en todos</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <pre><code><span class="cm"># Ejecutar tests</span>
+cd backend &amp;&amp; python test_integration.py
+
+<span class="cm"># Verificar cache Redis</span>
+redis-cli keys "hd:*"
+redis-cli ttl  "hd:compare:mcdonalds-gran-via-madrid"</code></pre>
+  <div class="screenshot">
+    <img src="capturas/captura-tests.png" alt="Tests"
+         onerror="this.parentElement.innerHTML='<p>[ Captura pendiente: subir captura-tests.png con la salida de test_integration.py ]</p>'">
+  </div>
+</div>
+
+<!-- 14. CONCLUSIONES -->
+<div id="conclusiones" class="section">
+  <div class="chapter-label">Capitulo 14</div>
+  <h2 class="section-title">Conclusiones</h2>
+  <div class="section-divider"></div>
+  <h3>14.1 Objetivos alcanzados</h3>
+  <ul>
+    <li>Sistema full-stack completo con separacion clara de capas y principios SOLID.</li>
+    <li>El patron Adapter permite anadir nuevas plataformas sin modificar el nucleo del sistema.</li>
+    <li>La integracion real con la API interna de Just Eat Espana demuestra la viabilidad tecnica.</li>
+    <li>La cache Redis reduce la latencia de ~800 ms a ~15 ms para peticiones repetidas.</li>
+    <li>La aplicacion esta desplegada en produccion y es accesible publicamente.</li>
+  </ul>
+  <h3>14.2 Trabajo futuro</h3>
+  <ul>
+    <li>Integracion real con APIs de Uber Eats y Glovo mediante acuerdos de afiliacion.</li>
+    <li>Sistema de alertas: notificar cuando el precio de un restaurante favorito baja.</li>
+    <li>Aplicacion movil nativa con React Native reutilizando la misma API REST.</li>
+    <li>Analisis de tendencias de precios con historial temporal en una tabla <code>price_history</code>.</li>
+  </ul>
+
+  <div class="card" style="margin-top:40px;text-align:center;">
+    <p style="font-size:.85rem;color:var(--gray-500);margin-bottom:12px;">Esta misma memoria en version web</p>
+    <img src="../qr_memoria.png" alt="QR memoria web" style="width:100px;height:100px;border-radius:6px;" onerror="this.style.display='none'">
+    <p style="margin-top:8px;font-size:.8rem;color:var(--teal-700);">hungrydeal-memoria.netlify.app</p>
+  </div>
+</div>
+
+<div style="max-width:var(--content-max);margin:60px auto 0;padding:0 40px 40px;border-top:1px solid var(--gray-300);margin-top:40px;">
+  <p style="font-size:.75rem;color:var(--gray-500);text-align:center;">HungryDeal · Trabajo de Fin de Grado · Mayo 2026 · FastAPI · Next.js 14 · Supabase PostgreSQL · Redis · Netlify · Render</p>
+</div>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('[id]');
+  const links    = document.querySelectorAll('nav#sidebar a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector('nav#sidebar a[href="#' + e.target.id + '"]');
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>

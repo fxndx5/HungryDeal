@@ -1,0 +1,83 @@
+version: "3.9"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# docker-compose.prod.yml — HungryDeal (Producción)
+#
+# Diferencias respecto a docker-compose.yml (desarrollo):
+#   - Sin --reload (el servidor no vigila cambios de código)
+#   - Sin volumen montado de ./backend (el código va dentro de la imagen)
+#   - APP_ENV=production, DEBUG=false
+#   - Múltiples workers de uvicorn para mejor rendimiento
+#   - Redis sin puerto expuesto al exterior
+#   - Restart policy: always
+#
+# Uso:
+#   1. Copia .env.example → .env y rellena los valores reales
+#   2. docker compose -f docker-compose.prod.yml build
+#   3. docker compose -f docker-compose.prod.yml up -d
+#   4. docker compose -f docker-compose.prod.yml logs -f backend
+# ─────────────────────────────────────────────────────────────────────────────
+
+services:
+
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    # En producción Redis NO expone puerto al exterior
+    # Solo accesible desde la red interna de Docker
+    command: redis-server --save "" --appendonly no
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: hungrydeal-backend:latest
+    restart: always
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    environment:
+      DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+      ACCESS_TOKEN_EXPIRE_DAYS: ${ACCESS_TOKEN_EXPIRE_DAYS:-30}
+      APP_ENV: production
+      DEBUG: "false"
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+    # Sin volumen montado: el código está dentro de la imagen (COPY en Dockerfile)
+    # Sin --reload: no recarga en cambios de archivo
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+      --workers 2
+      --no-access-log
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  postgres_data:

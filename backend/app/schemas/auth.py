@@ -20,6 +20,12 @@ class RegisterRequest(BaseModel):
 AuthRequest = LoginRequest
 
 
+class UserUpdate(BaseModel):
+    """Body de PATCH/PUT /api/v1/users/me — todos los campos son opcionales."""
+    first_name: Optional[str] = Field(None, max_length=100)
+    last_name: Optional[str] = Field(None, max_length=100)
+
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"

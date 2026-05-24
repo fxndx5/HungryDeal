@@ -38,7 +38,7 @@ jobs:
           SECRET_KEY: ci_secret_key_only_for_tests_not_real
           APP_ENV: test
           DEBUG: "false"
-        run: python -c "from app.main import app; print('OK — app imports correctly')"
+        run: python -c "from app.main import app; print('OK: app imports correctly')"
 
       - name: Run pytest
         working-directory: backend

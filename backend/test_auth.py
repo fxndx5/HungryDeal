@@ -154,14 +154,99 @@ async def test_compare(client: httpx.AsyncClient):
             print(f"       {p['platform']:12} total: {p['total']:.2f} EUR ({estado})")
 
 
+async def test_put_me(client: httpx.AsyncClient, token: str):
+    section("10. PUT /users/me (editar nombre)")
+    r = await client.put(
+        "/api/v1/users/me",
+        json={"first_name": "Demo", "last_name": "HungryDeal"},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert r.status_code == 200, f"Status {r.status_code}: {r.text}"
+    data = r.json()
+    assert data["first_name"] == "Demo"
+    assert data["last_name"] == "HungryDeal"
+    ok(f"Perfil actualizado: {data['first_name']} {data['last_name']}")
+
+
+async def test_put_me_sin_token(client: httpx.AsyncClient):
+    section("11. PUT /users/me sin token (debe dar 401/403)")
+    r = await client.put("/api/v1/users/me", json={"first_name": "Hacker"})
+    assert r.status_code in (401, 403), f"Esperaba 401/403, recibio {r.status_code}"
+    ok(f"Rechazo correcto: {r.status_code}")
+
+
+async def test_compare_con_auth_guarda_historial(client: httpx.AsyncClient, token: str):
+    section("12. Comparar con auth guarda en historial")
+    r = await client.get(
+        "/api/v1/compare/mcdonalds-sol-madrid",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert r.status_code == 200, f"Status {r.status_code}: {r.text}"
+    ok("Comparacion autenticada OK — se debio guardar en search_history")
+
+
+async def test_historial_vacio_o_con_datos(client: httpx.AsyncClient, token: str):
+    section("13. GET /users/me/history (requiere auth)")
+    r = await client.get(
+        "/api/v1/users/me/history",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert r.status_code == 200, f"Status {r.status_code}: {r.text}"
+    data = r.json()
+    assert "items" in data
+    assert "stats" in data
+    assert "total" in data
+    assert isinstance(data["stats"]["total_comparisons"], int)
+    assert isinstance(data["stats"]["total_savings"], float)
+    ok(f"Historial OK — {data['total']} entradas — ahorro total: {data['stats']['total_savings']:.2f} EUR")
+    for item in data["items"][:3]:
+        print(f"       {item['searched_at'][:10]}  {item.get('restaurant_name') or item.get('query') or '-':30} winner: {item.get('platform_chosen') or '-'}")
+
+
+async def test_historial_sin_token(client: httpx.AsyncClient):
+    section("14. GET /users/me/history sin token (debe dar 401/403)")
+    r = await client.get("/api/v1/users/me/history")
+    assert r.status_code in (401, 403), f"Esperaba 401/403, recibio {r.status_code}"
+    ok(f"Rechazo correcto: {r.status_code}")
+
+
 # --------------------------------------------------------------------------
 # Main
 # --------------------------------------------------------------------------
+
+async def check_server_running():
+    """Comprueba que el servidor esta arrancado antes de lanzar los tests."""
+    try:
+        async with httpx.AsyncClient(timeout=3.0) as c:
+            await c.get(f"{BASE_URL}/health")
+    except (httpx.ConnectError, httpx.TimeoutException):
+        print(f"""
+{'='*50}
+  ERROR: El servidor no esta corriendo en {BASE_URL}
+{'='*50}
+
+  Arranca el backend primero con uno de estos comandos:
+
+  Opcion A — Docker Compose (recomendado):
+    docker compose up
+
+  Opcion B — manual:
+    cd backend
+    pip install -r requirements.txt
+    uvicorn app.main:app --reload
+
+  Luego vuelve a ejecutar este test.
+{'='*50}
+""")
+        sys.exit(1)
+
 
 async def main():
     print(f"\nHungryDeal — Test de Auth y API")
     print(f"Base URL: {BASE_URL}")
     print(f"Usuario de prueba: {TEST_EMAIL}")
+
+    await check_server_running()
 
     async with httpx.AsyncClient(base_url=BASE_URL, timeout=15.0) as client:
         await test_health(client)
@@ -180,6 +265,11 @@ async def main():
         await test_token_invalido(client)
         await test_search(client)
         await test_compare(client)
+        await test_put_me(client, token)
+        await test_put_me_sin_token(client)
+        await test_compare_con_auth_guarda_historial(client, token)
+        await test_historial_vacio_o_con_datos(client, token)
+        await test_historial_sin_token(client)
 
     print(f"\n{'='*50}")
     print(f"  TODOS LOS TESTS PASARON CORRECTAMENTE")

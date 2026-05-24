@@ -29,8 +29,6 @@ target_metadata = Base.metadata
 # Leer DATABASE_URL del entorno (sobreescribe el valor de alembic.ini)
 def get_url() -> str:
     url = os.getenv("DATABASE_URL", config.get_main_option("sqlalchemy.url", ""))
-    # Alembic necesita driver síncrono para las migraciones
-    # Convertir asyncpg → psycopg2 si es necesario
     return url.replace("postgresql+asyncpg://", "postgresql://")
 
 
