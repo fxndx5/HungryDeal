@@ -6,7 +6,7 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS    = "--legacy-peer-deps"
-  NEXT_PUBLIC_API_URL = "https://hungrydeal-api.onrender.com"
+  NEXT_PUBLIC_API_URL = "https://hungrydeal.onrender.com"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

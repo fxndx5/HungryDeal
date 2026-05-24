@@ -38,5 +38,5 @@ jobs:
       - name: Build
         working-directory: frontend/web
         env:
-          NEXT_PUBLIC_API_URL: https://hungrydeal-api.onrender.com
+          NEXT_PUBLIC_API_URL: https://hungrydeal.onrender.com
         run: npm run build
