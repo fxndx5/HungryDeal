@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HungryDeal · Memoria Tecnica TFG</title>
+<title>HungryDeal · Memoria Técnica TFG</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232D6F6F'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='Arial' font-weight='bold' font-size='14' fill='%23b0d4d4'%3EHD%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Caveat:wght@500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -21,6 +22,7 @@
     --gray-300: #D1D5DB;
     --gray-100: #F3F4F6;
     --white: #ffffff;
+
     --sidebar-w: 260px;
     --content-max: 820px;
   }
@@ -34,9 +36,25 @@
     height: 100vh; background: var(--teal-800); overflow-y: auto;
     display: flex; flex-direction: column; z-index: 100;
   }
-  .nav-logo { padding: 28px 20px 20px; border-bottom: 1px solid rgba(255,255,255,.12); }
-  .nav-logo h1 { font-size: 1.35rem; font-weight: 700; color: var(--white); letter-spacing: -.3px; }
-  .nav-logo p  { font-size: .72rem; color: var(--teal-200); margin-top: 3px; font-weight: 300; }
+  .nav-logo { 
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+  }
+  .nav-logo-title {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--teal-500); flex-shrink: 0;
+  }
+  .nav-logo h1 { font-size: 1.2rem; font-weight: 700; color: var(--white); }
+  .nav-logo .nav-author { font-size: .7rem; color: var(--teal-200); margin-top: 6px; line-height: 1.5; }
+  .nav-logo .nav-year { 
+    display: inline-block; margin-top: 6px;
+    background: rgba(77,144,144,0.18); border: 1px solid rgba(77,144,144,0.4);
+    border-radius: 4px; padding: 2px 8px;
+    font-size: .65rem; font-weight: 600; color: var(--teal-200); letter-spacing: .05em;
+  }
   .nav-section { padding: 18px 0 6px 20px; font-size: .65rem; font-weight: 600; color: var(--teal-500); letter-spacing: .08em; text-transform: uppercase; }
   nav#sidebar a { display: block; padding: 7px 20px; font-size: .8rem; color: rgba(255,255,255,.72); text-decoration: none; border-left: 3px solid transparent; transition: all .15s; }
   nav#sidebar a:hover, nav#sidebar a.active { color: var(--white); background: rgba(255,255,255,.07); border-left-color: var(--teal-200); }
@@ -47,20 +65,27 @@
   .section { max-width: var(--content-max); margin: 0 auto; padding: 60px 40px 0; }
 
   /* COVER */
-  .cover { background: linear-gradient(135deg, var(--teal-800) 0%, var(--teal-700) 100%); color: var(--white); padding: 80px 60px; max-width: 100%; }
+  .cover {
+    background: linear-gradient(135deg, var(--teal-900) 0%, var(--teal-800) 60%, var(--teal-700) 100%);
+    color: var(--white);
+    padding: 80px 60px;
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
   .cover-inner { max-width: var(--content-max); margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center; }
   .cover-title { font-size: 3rem; font-weight: 700; letter-spacing: -1px; line-height: 1.1; }
   .cover-subtitle { font-size: 1.1rem; color: var(--teal-200); margin-top: 10px; font-weight: 300; }
   .cover-meta { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
-  .cover-badge { background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2); border-radius: 6px; padding: 6px 14px; font-size: .78rem; font-weight: 500; }
+  .cover-badge { background: rgba(77,144,144,0.18); border: 1px solid rgba(176,212,212,0.35); border-radius: 6px; padding: 6px 14px; font-size: .78rem; font-weight: 500; }
   .cover-qr { text-align: center; }
   .cover-qr img { width: 120px; height: 120px; border-radius: 8px; border: 3px solid rgba(255,255,255,.3); }
   .cover-qr p { font-size: .7rem; color: var(--teal-200); margin-top: 8px; line-height: 1.4; }
 
   /* TYPOGRAPHY */
-  .chapter-label { font-size: .7rem; font-weight: 600; color: var(--teal-500); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
+  .chapter-label { font-size: .7rem; font-weight: 600; color: var(--teal-700); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 6px; }
   h2.section-title { font-size: 1.9rem; font-weight: 700; color: var(--gray-900); letter-spacing: -.5px; margin-bottom: 6px; }
-  .section-divider { height: 3px; width: 48px; background: var(--teal-700); border-radius: 2px; margin-bottom: 28px; }
+  .section-divider { height: 3px; width: 48px; background: var(--teal-500); border-radius: 2px; margin-bottom: 28px; }
   h3 { font-size: 1.05rem; font-weight: 600; color: var(--teal-800); margin: 32px 0 10px; }
   h4 { font-size: .9rem; font-weight: 600; color: var(--gray-700); margin: 20px 0 8px; }
   p  { font-size: .9rem; line-height: 1.75; color: var(--gray-700); margin-bottom: 14px; }
@@ -101,7 +126,14 @@
   .diagram-caption { text-align: center; font-size: .75rem; color: var(--gray-500); margin-top: 10px; font-style: italic; }
 
   /* SCREENSHOTS */
-  .screenshot { background: var(--gray-100); border: 2px dashed var(--gray-300); border-radius: 8px; padding: 32px; text-align: center; margin: 16px 0; min-height: 80px; display: flex; align-items: center; justify-content: center; }
+  .screenshot {
+    background: var(--gray-100);
+    border: 1px solid var(--gray-300);
+    border-radius: 10px;
+    padding: 8px;
+    margin: 16px 0;
+    display: flex; align-items: center; justify-content: center;
+  }
   .screenshot p { color: var(--gray-500); font-size: .82rem; margin: 0; }
   .screenshot img { max-width: 100%; border-radius: 6px; box-shadow: 0 4px 20px rgba(0,0,0,.12); }
 
@@ -114,11 +146,59 @@
   /* STATS */
   .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
   .stat-box { background: var(--white); border: 1px solid var(--gray-300); border-radius: 10px; padding: 20px; text-align: center; }
-  .stat-num { font-size: 2rem; font-weight: 700; color: var(--teal-800); }
+  .stat-num { font-size: 2rem; font-weight: 700; color: var(--teal-700); }
   .stat-label { font-size: .75rem; color: var(--gray-500); margin-top: 4px; }
 
   nav#sidebar::-webkit-scrollbar { width: 4px; }
   nav#sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 2px; }
+
+  /* ── LOGO IMAGE ── */
+  .nav-logo-img {
+    display: block; width: 120px; height: auto;
+    border-radius: 8px; margin-bottom: 10px;
+    filter: brightness(1.08) contrast(1.05);
+  }
+  .cover-logo {
+    display: block; width: 220px; max-width: 60%; height: auto;
+    border-radius: 10px; margin-bottom: 22px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.35);
+  }
+  .footer-logo {
+    display: block; width: 130px; height: auto;
+    margin: 0 auto 14px; border-radius: 8px; opacity: .85;
+  }
+  .section-logo {
+    display: inline-block; width: 28px; height: 28px;
+    border-radius: 5px; vertical-align: middle;
+    margin-right: 8px; object-fit: cover;
+  }
+
+  /* ── ACCENTS ── */
+  .tech-card:hover { background: var(--teal-100); transition: background .18s; }
+  .stat-box { border: 1px solid var(--gray-300); }
+  .carousel-dot.active { background: var(--teal-500); }
+  .carousel-btn { background: var(--teal-700); }
+  .carousel-btn:hover { background: var(--teal-500); color: var(--white); }
+  .carousel-btn:disabled { background: var(--gray-300); }
+  thead th { background: var(--teal-900); }
+  thead th:first-child { border-radius: 8px 0 0 0; }
+  .card { transition: border-color .18s, box-shadow .18s; }
+  .card:hover { border-color: var(--teal-500); box-shadow: 0 4px 18px rgba(77,144,144,.15); }
+  h3 { }
+  .diagram-caption { color: var(--teal-700); font-style: normal; font-weight: 500; font-size: .78rem; }
+
+  /* ── RESPONSIVE MEJORAS ── */
+  @media (max-width: 900px) {
+    .carousel-btn { width: 44px; height: 44px; font-size: 1.2rem; }
+    .cover-logo { width: 160px; }
+  }
+  @media (max-width: 480px) {
+    .carousel-btn { width: 40px; height: 40px; }
+    .cover-logo { width: 130px; }
+    .nav-logo-img { width: 90px; }
+    .tech-card { padding: 10px 12px; }
+    .stat-num { font-size: 1.6rem; }
+  }
 
   /* CAROUSEL */
   .carousel { position: relative; overflow: hidden; border-radius: 10px; margin: 20px 0; background: var(--white); border: 1px solid var(--gray-300); }
@@ -196,23 +276,28 @@
 
 <nav id="sidebar">
   <div class="nav-logo">
-    <h1>HungryDeal</h1>
-    <p>Memoria Tecnica TFG · 2026</p>
+    <img src="capturas/logo_hungrydeal2.png" alt="HungryDeal" class="nav-logo-img" onerror="this.style.display='none'">
+    <div class="nav-logo-title">
+      <span class="nav-logo-dot"></span>
+      <h1>HungryDeal</h1>
+    </div>
+    <div class="nav-author">Fernanda González Alvarenga</div>
+    <span class="nav-year">2º DAM · 2026</span>
   </div>
   <span class="nav-section">Inicio</span>
   <a href="#portada">Portada y Resumen</a>
   <span class="nav-section">Proyecto</span>
-  <a href="#introduccion">1. Introduccion</a>
+  <a href="#introduccion">1. Introducción</a>
   <a href="#objetivos">2. Objetivos</a>
-  <a href="#estado-arte">3. Estado del Arte</a>
-  <span class="nav-section">Diseño Tecnico</span>
+  <a href="#estado-arte">3. El mercado del delivery</a>
+  <span class="nav-section">Diseño Técnico</span>
   <a href="#arquitectura">4. Arquitectura</a>
   <a href="#base-datos">5. Base de Datos</a>
   <a href="#api">6. API REST</a>
   <a href="#casos-uso">7. Casos de Uso</a>
-  <a href="#adapter">8. Patron Adapter</a>
-  <a href="#cache">9. Cache Redis</a>
-  <span class="nav-section">Implementacion</span>
+  <a href="#adapter">8. Patrón Adapter</a>
+  <a href="#cache">9. Caché Redis</a>
+  <span class="nav-section">Implementación</span>
   <a href="#backend">10. Backend con FastAPI</a>
   <a href="#frontend">11. Frontend con Next.js</a>
   <a href="#registro-demo">11b. Demo Registro</a>
@@ -227,11 +312,11 @@
 <div id="portada" class="cover">
   <div class="cover-inner">
     <div>
-      <div style="font-size:.75rem;color:var(--teal-200);font-weight:500;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;">Trabajo de Fin de Grado</div>
+      <div style="font-size:.7rem;color:var(--teal-200);font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px;">Trabajo de Fin de Grado · 2º DAM</div>
       <div class="cover-title">HungryDeal</div>
       <div class="cover-subtitle">Comparador de precios de delivery en tiempo real</div>
-      <div style="margin-top:20px;font-size:.9rem;color:rgba(255,255,255,.75);line-height:1.7;max-width:520px;">
-        Plataforma web que compara el coste total de realizar un mismo pedido en Uber Eats, Glovo y Just Eat, identificando la opcion mas economica mediante el patron Adapter, cache Redis y autenticacion JWT.
+      <div style="margin-top:18px;font-size:.88rem;color:rgba(255,255,255,.8);line-height:1.75;max-width:520px;">
+        Plataforma web que compara el coste total de realizar un mismo pedido en Uber Eats, Glovo y Just Eat, identificando la opción más económica mediante el patrón Adapter, caché Redis y autenticación JWT.
       </div>
       <div class="cover-meta">
         <span class="cover-badge">FastAPI 0.111</span>
@@ -240,10 +325,15 @@
         <span class="cover-badge">Redis</span>
         <span class="cover-badge">Mayo 2026</span>
       </div>
+      <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12);">
+        <div style="font-size:.75rem;color:var(--teal-200);margin-bottom:4px;">Autora</div>
+        <div style="font-size:1.05rem;font-weight:600;color:var(--white);">Fernanda González Alvarenga</div>
+        <div style="font-size:.8rem;color:var(--teal-200);margin-top:3px;">2º DAM · Mayo 2026</div>
+      </div>
     </div>
     <div class="cover-qr">
-      <img src="qr_app.png" alt="QR aplicacion" onerror="this.style.display='none'">
-      <p>Aplicacion en linea<br>hungrydeal.netlify.app</p>
+      <img src="qr_app.png" alt="QR aplicación" onerror="this.style.display='none'">
+      <p>Aplicación en línea<br>hungrydeal.netlify.app</p>
     </div>
   </div>
 </div>
@@ -258,77 +348,79 @@
     <div class="stat-box"><div class="stat-num">7</div><div class="stat-label">Endpoints REST</div></div>
     <div class="stat-box"><div class="stat-num">4</div><div class="stat-label">Tablas en Supabase</div></div>
   </div>
-  <p>HungryDeal es una aplicacion web que resuelve un problema concreto del mercado del delivery en Espana: la opacidad de precios entre plataformas. Un mismo restaurante puede tener precios de producto, tarifa de envio y tarifa de servicio distintos en Uber Eats, Glovo y Just Eat. El usuario actualmente debe abrir tres aplicaciones distintas y comparar mentalmente el coste total. HungryDeal automatiza este proceso.</p>
-  <p>La arquitectura esta dividida en un backend REST con FastAPI (Python 3.11) desplegado en Render, y un frontend SPA con Next.js 14 desplegado en Netlify. La persistencia se gestiona con PostgreSQL alojado en Supabase. El sistema implementa el patron Adapter para abstraer cada plataforma, un sistema de cache Redis con TTL de 15 minutos, y autenticacion JWT.</p>
+  <p>HungryDeal es una aplicación web que resuelve un problema concreto del mercado del delivery en España: la opacidad de precios entre plataformas. Un mismo restaurante puede tener precios de producto, tarifa de envio y tarifa de servicio distintos en Uber Eats, Glovo y Just Eat. El usuario actualmente debe abrir tres aplicaciones distintas y comparar mentalmente el coste total. HungryDeal automatiza este proceso.</p>
+  <p>La arquitectura esta dividida en un backend REST con FastAPI (Python 3.11) desplegado en Render, y un frontend SPA con Next.js 14 desplegado en Netlify. La persistencia se gestiona con PostgreSQL alojado en Supabase. El sistema implementa el patrón Adapter para abstraer cada plataforma, un sistema de cache Redis con TTL de 15 minutos, y autenticación JWT.</p>
   <p><strong>Abstract:</strong> HungryDeal is a web application that compares in real time the total cost of ordering from the same restaurant across Spain's three main delivery platforms. It implements the Adapter design pattern, a Redis cache layer, JWT authentication, and comparison history tracking, deployed on Netlify and Render with a Supabase PostgreSQL database.</p>
 </div>
 
 <!-- 1. INTRODUCCION -->
 <div id="introduccion" class="section">
-  <div class="chapter-label">Capitulo 1</div>
-  <h2 class="section-title">Introduccion y motivacion</h2>
+  <div class="chapter-label">Capítulo 1</div>
+  <h2 class="section-title">Introducción y motivación</h2>
   <div class="section-divider"></div>
   <h3>1.1 Contexto</h3>
-  <p>El mercado de delivery de comida en Espana mueve mas de 2.500 millones de euros anuales. Uber Eats, Glovo y Just Eat compiten por los mismos restaurantes y usuarios, pero con estructuras de precios diferentes y en muchos casos opacas. La tarifa de servicio varia entre el 5% y el 15% del valor del pedido y raramente aparece destacada en la interfaz hasta el momento de confirmar el pago.</p>
-  <p>Esta asimetria de informacion perjudica al consumidor: quien pide con frecuencia podria ahorrar entre 2 y 6 euros por pedido eligiendo la plataforma correcta.</p>
-  <h3>1.2 Motivacion</h3>
-  <p>El proyecto nace de la observacion directa de este problema. La solucion debe: (a) obtener precios reales de cada plataforma para un restaurante especifico, (b) calcular el coste total incluyendo todos los cargos, (c) presentar la comparacion de forma clara y accionable, y (d) recordar las comparaciones pasadas para mostrar tendencias al usuario.</p>
+  <p>El mercado de delivery de comida en España mueve más de 2.500 millones de euros anuales. Uber Eats, Glovo y Just Eat compiten por los mismos restaurantes y usuarios, pero con estructuras de precios diferentes y en muchos casos opacas. La tarifa de servicio varia entre el 5% y el 15% del valor del pedido y raramente aparece destacada en la interfaz hasta el momento de confirmar el pago.</p>
+  <p>Esta asimetria de información perjudica al consumidor: quien pide con frecuencia podria ahorrar entre 2 y 6 euros por pedido eligiendo la plataforma correcta.</p>
+  <h3>1.2 Motivación</h3>
+  <p>El proyecto nace de la observacion directa de este problema. La solución debe: (a) obtener precios reales de cada plataforma para un restaurante especifico, (b) calcular el coste total incluyendo todos los cargos, (c) presentar la comparación de forma clara y accionable, y (d) recordar las comparaciónes pasadas para mostrar tendencias al usuario.</p>
   <h3>1.3 Alcance</h3>
   <div class="info-box">
-    <strong>Plataformas cubiertas:</strong> Uber Eats (mock API), Glovo (mock API), Just Eat Espana (API interna real en <code>api.just-eat.es</code>). La integracion real de Uber Eats y Glovo requeriria acuerdos comerciales fuera del alcance academico de este TFG.
+    <strong>Plataformas cubiertas:</strong> Uber Eats (mock API), Glovo (mock API), Just Eat España (API interna real en <code>api.just-eat.es</code>). La integración real de Uber Eats y Glovo requeriria acuerdos comerciales fuera del alcance académico de este TFG.
   </div>
   <ul>
-    <li>Busqueda de restaurantes por nombre o ciudad</li>
-    <li>Comparacion de precios con desglose por tarifa</li>
-    <li>Identificacion automatica de la plataforma mas barata</li>
-    <li>Historial de comparaciones por usuario autenticado</li>
+    <li>Búsqueda de restaurantes por nombre o ciudad</li>
+    <li>Comparación de precios con desglose por tarifa</li>
+    <li>Identificacion automática de la plataforma más barata</li>
+    <li>Historial de comparaciónes por usuario autenticado</li>
     <li>Mapa de restaurantes cercanos con filtros</li>
-    <li>Pagina de ofertas ordenada por maximo ahorro potencial</li>
+    <li>Página de ofertas ordenada por máximo ahorro potencial</li>
   </ul>
 </div>
 
 <!-- 2. OBJETIVOS -->
 <div id="objetivos" class="section">
-  <div class="chapter-label">Capitulo 2</div>
+  <div class="chapter-label">Capítulo 2</div>
   <h2 class="section-title">Objetivos</h2>
   <div class="section-divider"></div>
   <h3>2.1 Objetivo principal</h3>
-  <p>Desarrollar una aplicacion web funcional que compare el coste total de un pedido entre Uber Eats, Glovo y Just Eat para un restaurante dado, mostrando el desglose de cargos y la opcion mas economica.</p>
-  <h3>2.2 Objetivos tecnicos</h3>
+  <p>Desarrollar una aplicación web funciónal que compare el coste total de un pedido entre Uber Eats, Glovo y Just Eat para un restaurante dado, mostrando el desglose de cargos y la opción más económica.</p>
+  <h3>2.2 Objetivos técnicos</h3>
   <ul>
-    <li>Implementar el patron de diseño <strong>Adapter</strong> para desacoplar la logica de negocio de cada plataforma</li>
-    <li>Disenar una API REST con <strong>FastAPI</strong> que respete los principios REST y OpenAPI</li>
+    <li>Implementar el patrón de diseño <strong>Adapter</strong> para desacoplar la lógica de negocio de cada plataforma</li>
+    <li>Diseñar una API REST con <strong>FastAPI</strong> que respete los principios REST y OpenAPI</li>
     <li>Persistir datos en <strong>PostgreSQL (Supabase)</strong> usando SQLAlchemy async con asyncpg</li>
     <li>Implementar cache con <strong>Redis</strong> para reducir llamadas externas y mejorar latencia</li>
-    <li>Autenticacion segura con <strong>JWT</strong> (tokens con expiracion)</li>
-    <li>Despliegue en produccion con <strong>CI/CD automatico</strong></li>
+    <li>Autenticación segura con <strong>JWT</strong> (tokens con expiracion)</li>
+    <li>Despliegue en producción con <strong>CI/CD automático</strong></li>
   </ul>
 </div>
 
-<!-- 3. ESTADO DEL ARTE -->
+<!-- 3. EL MERCADO DEL DELIVERY -->
 <div id="estado-arte" class="section">
-  <div class="chapter-label">Capitulo 3</div>
-  <h2 class="section-title">Estado del Arte</h2>
+  <div class="chapter-label">Capítulo 3</div>
+  <h2 class="section-title">El mercado del delivery</h2>
   <div class="section-divider"></div>
-  <h3>3.1 Soluciones existentes</h3>
-  <p>No existe en Espana ninguna herramienta publica que compare precios entre plataformas de delivery de forma automatizada.</p>
+  <h3>3.1 Lo que existe hoy</h3>
+  <p>En España no existe ninguna herramienta que compare el coste total de un pedido entre plataformas de delivery de forma automática y en tiempo real. El usuario que quiere saber si le sale más barato pedir en Uber Eats, Glovo o Just Eat tiene que abrir las tres aplicaciones por separado, calcular mentalmente la suma de precio del producto, tarifa de envío y tarifa de servicio, y comparar. HungryDeal elimina ese proceso.</p>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Herramienta</th><th>Enfoque</th><th>Limitacion</th></tr></thead>
+      <thead><tr><th>Herramienta</th><th>Enfoque</th><th>Limitación</th></tr></thead>
       <tbody>
-        <tr><td>Comparacion manual</td><td>Abrir 3 apps</td><td>Lento, sin historial</td></tr>
-        <tr><td>Articulos de blog</td><td>Comparativas estaticas</td><td>Desactualizadas rapidamente</td></tr>
-        <tr><td>Extensiones de navegador</td><td>Solapan precios en web</td><td>Solo funcionan en web</td></tr>
-        <tr><td>HungryDeal</td><td>API propia + Adapter Pattern</td><td>Alcance academico (mocks en 2 de 3)</td></tr>
+        <tr><td>Comparación manual</td><td>Abrir 3 apps</td><td>Lento, sin historial, propenso a errores</td></tr>
+        <tr><td>Artículos de blog</td><td>Comparativas estáticas</td><td>Se desactualizan rápidamente</td></tr>
+        <tr><td>Extensiones de navegador</td><td>Solapan precios en la web</td><td>Solo funcionan en navegador de escritorio</td></tr>
+        <tr><td>Bundl / agregadores</td><td>Agrupan menús de varias apps</td><td>No comparan precio total entre plataformas</td></tr>
+        <tr><td>HungryDeal</td><td>API propia + Adapter Pattern</td><td>Integración real con Just Eat; Uber Eats y Glovo en roadmap</td></tr>
       </tbody>
     </table>
   </div>
-  <h3>3.2 Tecnologias evaluadas</h3>
+  <p>El análisis anterior evidencia que la brecha que cubre HungryDeal no está siendo atendida por ningún competidor directo. La ventaja diferencial reside en tres aspectos técnicos concretos: acceso a la API interna no documentada de Just Eat España, normalización de precios entre plataformas con distintas estructuras de datos mediante el patrón Adapter, y una caché Redis con TTL de 15 minutos que hace el sistema sostenible sin sobrecargar las APIs de terceros.</p>
+  <h3>3.2 Por qué estas tecnologías</h3>
   <div class="table-wrap">
     <table>
       <thead><tr><th>Componente</th><th>Elegido</th><th>Alternativas</th><th>Motivo</th></tr></thead>
       <tbody>
-        <tr><td>Backend</td><td>FastAPI</td><td>Django REST, NestJS</td><td>Alto rendimiento async, OpenAPI automatico</td></tr>
+        <tr><td>Backend</td><td>FastAPI</td><td>Django REST, NestJS</td><td>Alto rendimiento async, OpenAPI automático</td></tr>
         <tr><td>Frontend</td><td>Next.js 14</td><td>Vite+React, Remix</td><td>App Router, SSR/SSG, ecosistema maduro</td></tr>
         <tr><td>Base de datos</td><td>PostgreSQL (Supabase)</td><td>MongoDB, PlanetScale</td><td>Dashboard gratuito, auth integrada, realtime</td></tr>
         <tr><td>Cache</td><td>Redis</td><td>Memcached, cache en memoria</td><td>TTL nativo, persistencia, soporte async</td></tr>
@@ -341,10 +433,10 @@
 
 <!-- 4. ARQUITECTURA -->
 <div id="arquitectura" class="section">
-  <div class="chapter-label">Capitulo 4</div>
+  <div class="chapter-label">Capítulo 4</div>
   <h2 class="section-title">Arquitectura del Sistema</h2>
   <div class="section-divider"></div>
-  <p>El sistema sigue una arquitectura de <strong>tres capas</strong> con separacion clara entre presentacion, logica de negocio y persistencia. Los componentes se comunican exclusivamente mediante HTTP/JSON, permitiendo desplegar cada capa de forma independiente.</p>
+  <p>El sistema sigue una arquitectura de <strong>tres capas</strong> con separación clara entre presentacion, lógica de negocio y persistencia. Los componentes se comunican exclusivamente mediante HTTP/JSON, permitiendo desplegar cada capa de forma independiente.</p>
 
   <div class="diagram">
     <svg viewBox="0 0 740 290" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
@@ -392,20 +484,20 @@
     <div class="diagram-caption">Figura 4.1. Arquitectura de tres capas del sistema HungryDeal</div>
   </div>
 
-  <h3>4.1 Comunicacion entre capas</h3>
-  <p>El frontend se comunica exclusivamente con el backend a traves de llamadas HTTP al prefijo <code>/api/v1/</code>. El backend no expone directamente la base de datos; todo el acceso pasa por SQLAlchemy y los modelos ORM. La cache Redis actua como capa intermedia en el endpoint de comparacion, reduciendo la latencia de ~800 ms a ~15 ms para peticiones cacheadas.</p>
+  <h3>4.1 Comunicación entre capas</h3>
+  <p>El frontend se comunica exclusivamente con el backend a traves de llamadas HTTP al prefijo <code>/api/v1/</code>. El backend no expone directamente la base de datos; todo el acceso pasa por SQLAlchemy y los modelos ORM. La cache Redis actua como capa intermedia en el endpoint de comparación, reduciendo la latencia de ~800 ms a ~15 ms para peticiones cacheadas.</p>
 </div>
 
 <!-- 5. BASE DE DATOS -->
 <div id="base-datos" class="section">
-  <div class="chapter-label">Capitulo 5</div>
+  <div class="chapter-label">Capítulo 5</div>
   <h2 class="section-title">Base de Datos en Supabase</h2>
   <div class="section-divider"></div>
   <div class="info-box">
-    <strong>Supabase</strong> es un Backend-as-a-Service basado en PostgreSQL que proporciona base de datos relacional gestionada, autenticacion integrada, API REST automatica y un dashboard web. HungryDeal utiliza exclusivamente la capa de base de datos de Supabase a traves de una conexion asyncpg directa con SQLAlchemy.
+    <strong>Supabase</strong> es un Backend-as-a-Service basado en PostgreSQL que proporciona base de datos relacional gestionada, autenticación integrada, API REST automática y un dashboard web. HungryDeal utiliza exclusivamente la capa de base de datos de Supabase a traves de una conexión asyncpg directa con SQLAlchemy.
   </div>
 
-  <h3>5.1 Diagrama entidad-relacion</h3>
+  <h3>5.1 Diagrama entidad-relación</h3>
   <div class="diagram">
     <svg viewBox="0 0 720 420" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
       <defs>
@@ -467,18 +559,18 @@
       <text x="627" y="61" text-anchor="middle" font-size="11" fill="#3b82f6">PostgreSQL 15 gestionado</text>
       <text x="627" y="74" text-anchor="middle" font-size="10" fill="#6B7280">asyncpg + pgbouncer</text>
     </svg>
-    <div class="diagram-caption">Figura 5.1. Diagrama entidad-relacion de la base de datos en Supabase</div>
+    <div class="diagram-caption">Figura 5.1. Diagrama entidad-relación de la base de datos en Supabase</div>
   </div>
 
-  <h3>5.2 Descripcion de tablas</h3>
+  <h3>5.2 Descripción de tablas</h3>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Tabla</th><th>Filas esperadas</th><th>Proposito</th><th>Indices</th></tr></thead>
+      <thead><tr><th>Tabla</th><th>Filas esperadas</th><th>Propósito</th><th>Índices</th></tr></thead>
       <tbody>
         <tr><td><code>users</code></td><td>Creciente</td><td>Credenciales y perfil. Password hasheado con bcrypt (cost 12)</td><td>PK uuid, UNIQUE email</td></tr>
-        <tr><td><code>restaurants</code></td><td>500–5000</td><td>Catalogo. El id es un slug legible. El campo platforms[] indica disponibilidad</td><td>PK slug, idx city</td></tr>
+        <tr><td><code>restaurants</code></td><td>500–5000</td><td>Catálogo. El id es un slug legible. El campo platforms[] indica disponibilidad</td><td>PK slug, idx city</td></tr>
         <tr><td><code>platform_prices</code></td><td>3x restaurantes</td><td>Precios por plataforma con expires_at para invalidar cache de 15 min</td><td>PK uuid, idx (restaurant_id, platform, expires_at)</td></tr>
-        <tr><td><code>search_history</code></td><td>Creciente por usuario</td><td>Registro de comparaciones. Permite calcular ahorro total del usuario</td><td>PK uuid, idx (user_id, searched_at)</td></tr>
+        <tr><td><code>search_history</code></td><td>Creciente por usuario</td><td>Registro de comparaciónes. Permite calcular ahorro total del usuario</td><td>PK uuid, idx (user_id, searched_at)</td></tr>
       </tbody>
     </table>
   </div>
@@ -497,10 +589,10 @@
 
 <!-- 6. API REST -->
 <div id="api" class="section">
-  <div class="chapter-label">Capitulo 6</div>
+  <div class="chapter-label">Capítulo 6</div>
   <h2 class="section-title">API REST y Endpoints</h2>
   <div class="section-divider"></div>
-  <p>La API esta versionada bajo el prefijo <code>/api/v1/</code>. La documentacion interactiva esta disponible en <code>/docs</code> (Swagger UI) y <code>/redoc</code> gracias a la generacion automatica de OpenAPI de FastAPI.</p>
+  <p>La API esta versiónada bajo el prefijo <code>/api/v1/</code>. La documentación interactiva esta disponible en <code>/docs</code> (Swagger UI) y <code>/redoc</code> gracias a la generación automática de OpenAPI de FastAPI.</p>
 
   <div class="diagram">
     <svg viewBox="0 0 700 360" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
@@ -556,16 +648,16 @@
   <h3>6.1 Referencia de endpoints</h3>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Metodo</th><th>Ruta</th><th>Auth</th><th>Descripcion</th></tr></thead>
+      <thead><tr><th>Método</th><th>Ruta</th><th>Auth</th><th>Descripción</th></tr></thead>
       <tbody>
         <tr><td><span class="method get">GET</span></td><td><code>/health</code></td><td>No</td><td>Estado del servicio. Usado por Render para healthchecks</td></tr>
         <tr><td><span class="method post">POST</span></td><td><code>/auth/register</code></td><td>No</td><td>Crea cuenta. Body: email, password (min 6), first_name, last_name</td></tr>
         <tr><td><span class="method post">POST</span></td><td><code>/auth/login</code></td><td>No</td><td>Devuelve JWT access token</td></tr>
         <tr><td><span class="method get">GET</span></td><td><code>/auth/me</code></td><td>JWT</td><td>Perfil del usuario autenticado</td></tr>
         <tr><td><span class="method get">GET</span></td><td><code>/search</code></td><td>No</td><td>Busca restaurantes. Params: q, city, limit (default 20)</td></tr>
-        <tr><td><span class="method get">GET</span></td><td><code>/compare/{id}</code></td><td>Opcional</td><td>Compara precios en 3 plataformas. Cache Redis 15 min. Guarda historial si hay JWT</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/compare/{id}</code></td><td>Opciónal</td><td>Compara precios en 3 plataformas. Cache Redis 15 min. Guarda historial si hay JWT</td></tr>
         <tr><td><span class="method put">PUT</span></td><td><code>/users/me</code></td><td>JWT</td><td>Actualiza perfil del usuario</td></tr>
-        <tr><td><span class="method get">GET</span></td><td><code>/users/me/history</code></td><td>JWT</td><td>Historial con stats: total comparaciones, ahorro total, restaurantes unicos</td></tr>
+        <tr><td><span class="method get">GET</span></td><td><code>/users/me/history</code></td><td>JWT</td><td>Historial con stats: total comparaciónes, ahorro total, restaurantes únicos</td></tr>
       </tbody>
     </table>
   </div>
@@ -586,7 +678,7 @@
 
 <!-- 7. CASOS DE USO -->
 <div id="casos-uso" class="section">
-  <div class="chapter-label">Capitulo 7</div>
+  <div class="chapter-label">Capítulo 7</div>
   <h2 class="section-title">Casos de Uso</h2>
   <div class="section-divider"></div>
   <div class="diagram">
@@ -621,7 +713,7 @@
       <text x="220" y="305" text-anchor="middle" font-size="12" fill="#1d4949">Registrarse / Login</text>
       <!-- Use cases col 2 -->
       <ellipse cx="460" cy="75"  rx="105" ry="21" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
-      <text x="460" y="80"  text-anchor="middle" font-size="12" fill="#2D6F6F">Guardar comparacion</text>
+      <text x="460" y="80"  text-anchor="middle" font-size="12" fill="#2D6F6F">Guardar comparación</text>
       <ellipse cx="460" cy="135" rx="105" ry="21" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
       <text x="460" y="140" text-anchor="middle" font-size="12" fill="#2D6F6F">Ver historial</text>
       <ellipse cx="460" cy="195" rx="105" ry="21" fill="#F2F7F7" stroke="#2D6F6F" stroke-width="1.5"/>
@@ -651,10 +743,10 @@
 
 <!-- 8. ADAPTER PATTERN -->
 <div id="adapter" class="section">
-  <div class="chapter-label">Capitulo 8</div>
-  <h2 class="section-title">Patron de Diseño: Adapter</h2>
+  <div class="chapter-label">Capítulo 8</div>
+  <h2 class="section-title">Patrón de Diseño: Adapter</h2>
   <div class="section-divider"></div>
-  <p>El patron Adapter es el nucleo arquitectonico del sistema. Define una interfaz abstracta <code>DeliveryAdapter</code> que todos los adaptadores de plataforma deben implementar. El <code>PriceComparator</code> trabaja exclusivamente contra esta interfaz, sin conocer los detalles de ninguna plataforma concreta.</p>
+  <p>El patrón Adapter es el núcleo arquitectonico del sistema. Define una interfaz abstracta <code>DeliveryAdapter</code> que todos los adaptadores de plataforma deben implementar. El <code>PriceComparator</code> trabaja exclusivamente contra esta interfaz, sin conocer los detalles de ninguna plataforma concreta.</p>
 
   <div class="diagram">
     <svg viewBox="0 0 660 300" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
@@ -691,7 +783,7 @@
       <rect x="473" y="170" width="178" height="28" rx="8" fill="#1d4949"/>
       <text x="562" y="189" text-anchor="middle" font-size="13" fill="white">JustEatAdapter (real)</text>
       <text x="488" y="215" font-size="11" fill="#374151">API: api.just-eat.es</text>
-      <text x="488" y="232" font-size="11" fill="#374151">Scraping real en produccion</text>
+      <text x="488" y="232" font-size="11" fill="#374151">Scraping real en producción</text>
       <text x="488" y="249" font-size="11" fill="#374151">Delivery fee variable</text>
       <!-- Comparator -->
       <rect x="190" y="278" width="280" height="22" rx="6" fill="#1d4949"/>
@@ -700,7 +792,7 @@
       <line x1="330" y1="258" x2="330" y2="278" stroke="#4d9090" stroke-width="1.2" stroke-dasharray="5,3"/>
       <line x1="562" y1="258" x2="405" y2="278" stroke="#4d9090" stroke-width="1.2" stroke-dasharray="5,3"/>
     </svg>
-    <div class="diagram-caption">Figura 8.1. Jerarquia del patron Adapter. JustEat usa API real</div>
+    <div class="diagram-caption">Figura 8.1. Jerarquia del patrón Adapter. JustEat usa API real</div>
   </div>
 
   <pre><code><span class="kw">from</span> abc <span class="kw">import</span> ABC, abstractmethod
@@ -712,10 +804,10 @@
 
 <!-- 9. CACHE REDIS -->
 <div id="cache" class="section">
-  <div class="chapter-label">Capitulo 9</div>
-  <h2 class="section-title">Cache Redis</h2>
+  <div class="chapter-label">Capítulo 9</div>
+  <h2 class="section-title">Caché Redis</h2>
   <div class="section-divider"></div>
-  <p>El sistema implementa cache Redis con <strong>degradacion elegante</strong>: si Redis no esta disponible al arrancar, la app continua funcionando sin cache, sin lanzar excepciones al cliente.</p>
+  <p>El sistema implementa cache Redis con <strong>degradacion elegante</strong>: si Redis no esta disponible al arrancar, la app continua funciónando sin cache, sin lanzar excepciones al cliente.</p>
 
   <div class="diagram">
     <svg viewBox="0 0 540 260" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Caveat, cursive">
@@ -765,13 +857,13 @@
   </div>
 
   <div class="info-box">
-    <strong>Degradacion elegante:</strong> Si Redis no responde al arrancar (timeout 2s), el atributo <code>cache.available</code> se establece a <code>False</code>. Todos los metodos <code>get()</code> y <code>set()</code> devuelven <code>None</code> silenciosamente. La app funciona con normalidad, simplemente sin cache.
+    <strong>Degradacion elegante:</strong> Si Redis no responde al arrancar (timeout 2s), el atributo <code>cache.available</code> se establece a <code>False</code>. Todos los métodos <code>get()</code> y <code>set()</code> devuelven <code>None</code> silenciosamente. La app funcióna con normalidad, simplemente sin cache.
   </div>
 </div>
 
 <!-- 10. BACKEND -->
 <div id="backend" class="section">
-  <div class="chapter-label">Capitulo 10</div>
+  <div class="chapter-label">Capítulo 10</div>
   <h2 class="section-title">Backend con FastAPI</h2>
   <div class="section-divider"></div>
   <h3>10.1 Estructura del proyecto</h3>
@@ -784,24 +876,24 @@
 │   │   ├── cache.py      <span class="cm"># RedisCache con degradacion elegante</span>
 │   │   └── security.py   <span class="cm"># JWT: crear y verificar tokens</span>
 │   ├── models/           <span class="cm"># ORM: User, Restaurant, PlatformPrice, SearchHistory</span>
-│   ├── schemas/          <span class="cm"># Pydantic: validacion entrada/salida API</span>
+│   ├── schemas/          <span class="cm"># Pydantic: validación entrada/salida API</span>
 │   ├── adapters/         <span class="cm"># DeliveryAdapter ABC + UberEats, Glovo, JustEat</span>
 │   └── main.py           <span class="cm"># Lifespan, CORS, router mount</span>
 ├── requirements.txt
 └── test_integration.py</code></pre>
 
-  <h3>10.2 Entornos: local (Docker) vs produccion (Supabase)</h3>
+  <h3>10.2 Entornos: local (Docker) vs producción (Supabase)</h3>
   <div class="info-box" style="border-left-color:#2D6F6F;">
-    <strong>En local (Docker Compose):</strong> el backend arranca junto a un contenedor PostgreSQL y otro Redis. La <code>DATABASE_URL</code> apunta al contenedor <code>db</code> interno. Los datos son locales y efimeros (se pierden si se borra el volumen).<br><br>
-    <strong>En produccion (Render + Supabase):</strong> el backend corre como servicio Docker en Render. La <code>DATABASE_URL</code> apunta al cluster PostgreSQL de Supabase, que persiste los datos en la nube y es accesible desde cualquier lugar. Redis corre como servicio adicional en el mismo docker-compose.prod.yml.
+    <strong>En local (Docker Compose):</strong> el backend arranca junto a un contenedor PostgreSQL y otro Redis. La <code>DATABASE_URL</code> apunta al contenedor <code>db</code> interno. Los datos son locales y efímeros (se pierden si se borra el volumen).<br><br>
+    <strong>En producción (Render + Supabase):</strong> el backend corre como servicio Docker en Render. La <code>DATABASE_URL</code> apunta al cluster PostgreSQL de Supabase, que persiste los datos en la nube y es accesible desde cualquier lugar. Redis corre como servicio adicional en el mismo docker-compose.prod.yml.
   </div>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Variable</th><th>Local (Docker)</th><th>Produccion (Render)</th></tr></thead>
+      <thead><tr><th>Variable</th><th>Local (Docker)</th><th>Producción (Render)</th></tr></thead>
       <tbody>
         <tr><td><code>DATABASE_URL</code></td><td>postgresql+asyncpg://hungryapp:pass@db:5432/hungrydb</td><td>postgresql+asyncpg://user:pass@db.supabase.co:6543/postgres</td></tr>
         <tr><td><code>REDIS_URL</code></td><td>redis://redis:6379/0</td><td>redis://redis:6379/0</td></tr>
-        <tr><td><code>SECRET_KEY</code></td><td>clave local (cualquier string)</td><td>generada por Render automaticamente</td></tr>
+        <tr><td><code>SECRET_KEY</code></td><td>clave local (cualquier string)</td><td>generada por Render automáticamente</td></tr>
         <tr><td><code>APP_ENV</code></td><td>development</td><td>production</td></tr>
       </tbody>
     </table>
@@ -828,33 +920,33 @@ CACHE_TTL_SECONDS=900</code></pre>
 
 <!-- 11. FRONTEND -->
 <div id="frontend" class="section">
-  <div class="chapter-label">Capitulo 11</div>
+  <div class="chapter-label">Capítulo 11</div>
   <h2 class="section-title">Frontend con Next.js 14</h2>
   <div class="section-divider"></div>
-  <h3>11.1 Paginas de la aplicacion</h3>
+  <h3>11.1 Páginas de la aplicación</h3>
   <div class="tech-grid">
-    <div class="tech-card"><div class="tech-name">/</div><div class="tech-role">Homepage con busqueda y restaurantes populares</div></div>
+    <div class="tech-card"><div class="tech-name">/</div><div class="tech-role">Homepage con búsqueda y restaurantes populares</div></div>
     <div class="tech-card"><div class="tech-name">/search</div><div class="tech-role">Resultados con filtros por ciudad y categoria</div></div>
-    <div class="tech-card"><div class="tech-name">/compare/[id]</div><div class="tech-role">Comparacion detallada con desglose de tarifas</div></div>
-    <div class="tech-card"><div class="tech-name">/ofertas</div><div class="tech-role">Ordenados por maximo ahorro potencial</div></div>
+    <div class="tech-card"><div class="tech-name">/compare/[id]</div><div class="tech-role">Comparación detallada con desglose de tarifas</div></div>
+    <div class="tech-card"><div class="tech-name">/ofertas</div><div class="tech-role">Ordenados por máximo ahorro potencial</div></div>
     <div class="tech-card"><div class="tech-name">/cerca</div><div class="tech-role">Mapa interactivo Leaflet con geolocalizacion</div></div>
     <div class="tech-card"><div class="tech-name">/perfil</div><div class="tech-role">Historial, stats de ahorro y datos de cuenta</div></div>
   </div>
-  <h4>Pagina principal</h4>
+  <h4>Página principal</h4>
   <div class="screenshot">
-    <img src="capturas/imagen_inicio_web_masbaja.png" alt="Pagina principal de HungryDeal">
+    <img src="capturas/imagen_inicio_web_masbaja.png" alt="Página principal de HungryDeal">
   </div>
-  <h4>Busqueda de restaurantes</h4>
+  <h4>Búsqueda de restaurantes</h4>
   <div class="screenshot">
     <img src="capturas/restaurantes.png" alt="Listado de restaurantes">
   </div>
-  <h4>Comparacion de precios</h4>
+  <h4>Comparación de precios</h4>
   <div class="screenshot">
-    <img src="capturas/comparador.png" alt="Comparacion de precios entre plataformas">
+    <img src="capturas/comparador.png" alt="Comparación de precios entre plataformas">
   </div>
-  <h4>Pagina de ofertas</h4>
+  <h4>Página de ofertas</h4>
   <div class="screenshot">
-    <img src="capturas/ofertas.png" alt="Pagina de ofertas ordenada por ahorro">
+    <img src="capturas/ofertas.png" alt="Página de ofertas ordenada por ahorro">
   </div>
   <h4>Mapa de restaurantes cercanos</h4>
   <div class="screenshot">
@@ -862,32 +954,32 @@ CACHE_TTL_SECONDS=900</code></pre>
   </div>
   <h4>Login y registro</h4>
   <div class="screenshot">
-    <img src="capturas/login.png" alt="Formulario de inicio de sesion">
+    <img src="capturas/login.png" alt="Formulario de inicio de sesión">
   </div>
   <div class="screenshot">
     <img src="capturas/registrarse.png" alt="Formulario de registro de usuario">
   </div>
   <div class="screenshot" style="margin-top:12px;">
-    <img src="capturas/registrarte_error.png" alt="Validacion de error en registro">
+    <img src="capturas/registrarte_error.png" alt="Validación de error en registro">
   </div>
   <h4>Menu de usuario autenticado</h4>
   <div class="screenshot">
-    <img src="capturas/barra_perfil.png" alt="Dropdown de usuario en la barra de navegacion">
+    <img src="capturas/barra_perfil.png" alt="Dropdown de usuario en la barra de navegación">
   </div>
-  <h4>Perfil de usuario — KPIs y actividad</h4>
+  <h4>Perfil de usuario: KPIs y actividad</h4>
   <div class="screenshot">
-    <img src="capturas/kpis_perfil.png" alt="Perfil con KPIs: 10 comparaciones, 11.42 euros ahorrados, 6 restaurantes">
+    <img src="capturas/kpis_perfil.png" alt="Perfil con KPIs: 10 comparaciónes, 11.42 euros ahorrados, 6 restaurantes">
   </div>
   <div class="screenshot" style="margin-top:12px;">
-    <img src="capturas/perfil_actividades.png" alt="Tab actividad con logros y ultimas comparaciones">
+    <img src="capturas/perfil_actividades.png" alt="Tab actividad con logros y ultimas comparaciónes">
   </div>
-  <h4>Perfil — Tab historial completo</h4>
+  <h4>Perfil: Tab historial completo</h4>
   <div class="screenshot">
-    <img src="capturas/perfil_historial.png" alt="Historial de 10 comparaciones con plataforma ganadora y ahorro">
+    <img src="capturas/perfil_historial.png" alt="Historial de 10 comparaciónes con plataforma ganadora y ahorro">
   </div>
-  <h4>Perfil — Configuracion de cuenta</h4>
+  <h4>Perfil: Configuración de cuenta</h4>
   <div class="screenshot">
-    <img src="capturas/perfil_configuracion.png" alt="Tab configuracion con edicion de nombre y zona de peligro">
+    <img src="capturas/perfil_configuración.png" alt="Tab configuración con edicion de nombre y zona de peligro">
   </div>
 </div>
 
@@ -896,9 +988,9 @@ CACHE_TTL_SECONDS=900</code></pre>
   <div class="chapter-label">Demo interactiva</div>
   <h2 class="section-title">Flujo de registro: de la app a Supabase</h2>
   <div class="section-divider"></div>
-  <p>Este carrusel muestra el flujo completo de registro de un nuevo usuario: desde el formulario en la aplicacion, hasta la aparicion del registro en la tabla <code>users</code> de Supabase, y la primera carga del perfil con estadisticas iniciales.</p>
+  <p>Este carrusel muestra el flujo completo de registro de un nuevo usuario: desde el formulario en la aplicación, hasta la aparicion del registro en la tabla <code>users</code> de Supabase, y la primera carga del perfil con estadísticas iniciales.</p>
   <div class="info-box">
-    <strong>Que muestra este flujo:</strong> el usuario rellena el formulario de registro en la app → el frontend hace <code>POST /api/v1/auth/register</code> → el backend valida, hashea la contrasena con bcrypt y persiste en Supabase → se devuelve un JWT → el usuario queda autenticado y su perfil es visible en tiempo real.
+    <strong>Que muestra este flujo:</strong> el usuario rellena el formulario de registro en la app → el frontend hace <code>POST /api/v1/auth/register</code> → el backend valida, hashea la contraseña con bcrypt y persiste en Supabase → se devuelve un JWT → el usuario queda autenticado y su perfil es visible en tiempo real.
   </div>
 
   <div class="carousel" id="regCarousel">
@@ -910,7 +1002,7 @@ CACHE_TTL_SECONDS=900</code></pre>
         <div class="carousel-caption">
           <div class="slide-num">Paso 1 de 4</div>
           <h4>Formulario de registro</h4>
-          <p>El usuario introduce nombre, apellido, email y contrasena. El frontend valida el formato y muestra el estado "Creando cuenta..." mientras espera la respuesta del backend.</p>
+          <p>El usuario introduce nombre, apellido, email y contraseña. El frontend valida el formato y muestra el estado "Creando cuenta..." mientras espera la respuesta del backend.</p>
         </div>
       </div>
 
@@ -920,7 +1012,7 @@ CACHE_TTL_SECONDS=900</code></pre>
         <div class="carousel-caption">
           <div class="slide-num">Paso 2 de 4</div>
           <h4>Registro en Supabase</h4>
-          <p>La tabla <code>users</code> en Supabase muestra el nuevo registro con UUID generado, email, password_hash (bcrypt) y timestamps de creacion. El registro <code>test@test.com</code> aparece resaltado en la ultima fila.</p>
+          <p>La tabla <code>users</code> en Supabase muestra el nuevo registro con UUID generado, email, password_hash (bcrypt) y timestamps de creación. El registro <code>test@test.com</code> aparece resaltado en la ultima fila.</p>
         </div>
       </div>
 
@@ -930,17 +1022,17 @@ CACHE_TTL_SECONDS=900</code></pre>
         <div class="carousel-caption">
           <div class="slide-num">Paso 3 de 4</div>
           <h4>Perfil del usuario</h4>
-          <p>Tras el registro, el usuario accede a su perfil. Las estadisticas parten en cero: 0 comparaciones, 0,00 euros ahorrados, 0 restaurantes distintos.</p>
+          <p>Tras el registro, el usuario accede a su perfil. Las estadísticas parten en cero: 0 comparaciónes, 0,00 euros ahorrados, 0 restaurantes distintos.</p>
         </div>
       </div>
 
       <!-- Slide 4: Historial con datos -->
       <div class="carousel-slide">
-        <img src="capturas/perfil_historial.png" alt="Tab historial con 10 comparaciones registradas">
+        <img src="capturas/perfil_historial.png" alt="Tab historial con 10 comparaciónes registradas">
         <div class="carousel-caption">
           <div class="slide-num">Paso 4 de 4</div>
-          <h4>Historial de comparaciones</h4>
-          <p>Cada vez que el usuario compara precios, el backend guarda la entrada en <code>search_history</code>. El tab Historial muestra las 10 comparaciones realizadas, la plataforma ganadora y el ahorro conseguido en cada pedido.</p>
+          <h4>Historial de comparaciónes</h4>
+          <p>Cada vez que el usuario compara precios, el backend guarda la entrada en <code>search_history</code>. El tab Historial muestra las 10 comparaciónes realizadas, la plataforma ganadora y el ahorro conseguido en cada pedido.</p>
         </div>
       </div>
 
@@ -955,12 +1047,12 @@ CACHE_TTL_SECONDS=900</code></pre>
 
 <!-- 12. DESPLIEGUE -->
 <div id="despliegue" class="section">
-  <div class="chapter-label">Capitulo 12</div>
-  <h2 class="section-title">Despliegue en Produccion</h2>
+  <div class="chapter-label">Capítulo 12</div>
+  <h2 class="section-title">Despliegue en Producción</h2>
   <div class="section-divider"></div>
   <h3>12.1 Frontend en Netlify</h3>
   <div class="info-box">
-    El frontend se despliega automaticamente en Netlify con cada <code>git push</code>. El plugin oficial <code>@netlify/plugin-nextjs</code> gestiona la compilacion y el enrutamiento de Next.js 14 App Router.
+    El frontend se despliega automáticamente en Netlify con cada <code>git push</code>. El plugin oficial <code>@netlify/plugin-nextjs</code> gestiona la compilacion y el enrutamiento de Next.js 14 App Router.
   </div>
   <div class="table-wrap">
     <table>
@@ -974,7 +1066,7 @@ CACHE_TTL_SECONDS=900</code></pre>
     </table>
   </div>
   <h3>12.2 Backend en Render</h3>
-  <p>El backend corre como web service Docker en Render. Render ejecuta healthchecks periodicos contra <code>GET /health</code> para detectar caidas automaticamente.</p>
+  <p>El backend corre como web service Docker en Render. Render ejecuta healthchecks periodicos contra <code>GET /health</code> para detectar caidas automáticamente.</p>
   <pre><code><span class="cm"># docker-compose.prod.yml</span>
 services:
   api:
@@ -984,7 +1076,7 @@ services:
   redis:
     image: redis:7-alpine
     restart: always</code></pre>
-  <h4>Docker Compose en ejecucion</h4>
+  <h4>Docker Compose en ejecución</h4>
   <div class="screenshot">
     <img src="capturas/docker_compose.png" alt="Docker compose arrancando servicios">
   </div>
@@ -995,7 +1087,7 @@ services:
     <img src="capturas/docker_compose3.png" alt="Docker compose logs completos">
   </div>
   <h3>12.3 Base de datos en Supabase</h3>
-  <p>PostgreSQL se gestiona en Supabase. La cadena de conexion se pasa como variable de entorno <code>DATABASE_URL</code> en Render. Se usa pgbouncer para reutilizar conexiones y no saturar el limite del plan gratuito.</p>
+  <p>PostgreSQL se gestiona en Supabase. La cadena de conexión se pasa como variable de entorno <code>DATABASE_URL</code> en Render. Se usa pgbouncer para reutilizar conexiónes y no saturar el limite del plan gratuito.</p>
   <h4>Panel principal de Netlify</h4>
   <div class="screenshot">
     <img src="capturas/netlify.png" alt="Panel Netlify">
@@ -1012,20 +1104,20 @@ services:
 
 <!-- 13. PRUEBAS -->
 <div id="pruebas" class="section">
-  <div class="chapter-label">Capitulo 13</div>
+  <div class="chapter-label">Capítulo 13</div>
   <h2 class="section-title">Pruebas</h2>
   <div class="section-divider"></div>
-  <p>Se incluye <code>test_integration.py</code> con 8 tests que validan los endpoints principales contra el servidor en ejecucion usando <code>httpx</code>.</p>
+  <p>Se incluye <code>test_integration.py</code> con 8 tests que validan los endpoints principales contra el servidor en ejecución usando <code>httpx</code>.</p>
   <div class="table-wrap">
     <table>
-      <thead><tr><th>Test</th><th>Endpoint</th><th>Validacion</th></tr></thead>
+      <thead><tr><th>Test</th><th>Endpoint</th><th>Validación</th></tr></thead>
       <tbody>
         <tr><td>test_health</td><td>GET /health</td><td>status == "ok"</td></tr>
         <tr><td>test_search_with_results</td><td>GET /search?q=mc</td><td>results.length > 0</td></tr>
         <tr><td>test_search_no_results</td><td>GET /search?q=xyzxyz</td><td>results.length == 0</td></tr>
         <tr><td>test_search_no_query</td><td>GET /search</td><td>HTTP 422</td></tr>
         <tr><td>test_search_limit</td><td>GET /search?q=&amp;limit=3</td><td>results.length menor o igual 3</td></tr>
-        <tr><td>test_compare_full</td><td>GET /compare/{id}</td><td>winner es el mas barato, total = suma de tarifas</td></tr>
+        <tr><td>test_compare_full</td><td>GET /compare/{id}</td><td>winner es el más barato, total = suma de tarifas</td></tr>
         <tr><td>test_compare_404</td><td>GET /compare/no-existe</td><td>HTTP 404</td></tr>
         <tr><td>test_compare_all</td><td>GET /compare/* x6</td><td>estructura valida en todos</td></tr>
       </tbody>
@@ -1044,38 +1136,52 @@ redis-cli ttl  "hd:compare:mcdonalds-gran-via-madrid"</code></pre>
   <div class="screenshot" style="margin-top:12px;">
     <img src="capturas/supabase_users_tabla.png" alt="Tabla users con UUIDs, emails y password hashes bcrypt">
   </div>
+  <h4>Tests del frontend (8/8 pasados contra producción)</h4>
+  <div class="screenshot">
+    <img src="capturas/test_front.png" alt="npx jest 8/8 tests pasados en verde">
+  </div>
 </div>
 
 <!-- 14. CONCLUSIONES -->
 <div id="conclusiones" class="section">
-  <div class="chapter-label">Capitulo 14</div>
+  <div class="chapter-label">Capítulo 14</div>
   <h2 class="section-title">Conclusiones</h2>
   <div class="section-divider"></div>
   <h3>14.1 Objetivos alcanzados</h3>
+  <p>HungryDeal demuestra que es técnicamente viable construir un comparador de precios de delivery que funciona con datos reales, sin depender de APIs públicas oficiales. Todos los objetivos planteados al inicio del proyecto han sido cubiertos:</p>
   <ul>
-    <li>Sistema full-stack completo con separacion clara de capas y principios SOLID.</li>
-    <li>El patron Adapter permite anadir nuevas plataformas sin modificar el nucleo del sistema.</li>
-    <li>La integracion real con la API interna de Just Eat Espana demuestra la viabilidad tecnica.</li>
-    <li>La cache Redis reduce la latencia de ~800 ms a ~15 ms para peticiones repetidas.</li>
-    <li>La aplicacion esta desplegada en produccion y es accesible publicamente.</li>
+    <li>Sistema full-stack completo con separación clara de capas y principios SOLID.</li>
+    <li>El patrón Adapter permite añadir nuevas plataformas sin modificar el núcleo del sistema: añadir el adapter de Just Eat no requirió tocar ni el comparador, ni los endpoints, ni el frontend.</li>
+    <li>La integración real con la API interna no documentada de Just Eat España demuestra la viabilidad técnica del enfoque.</li>
+    <li>La caché Redis reduce la latencia de respuesta de 1-2 segundos a menos de 50 ms en cache hit, haciendo el sistema usable en producción.</li>
+    <li>CI/CD automático mediante GitHub Actions garantiza que ningún cambio roto llega a producción.</li>
+    <li>La aplicación está desplegada y es accesible públicamente en <a href="https://hungrydeal.netlify.app" target="_blank">hungrydeal.netlify.app</a>.</li>
   </ul>
-  <h3>14.2 Trabajo futuro</h3>
+  <p>Desde el punto de vista académico, este proyecto ha permitido aplicar en un contexto real los conceptos de diseño de software estudiados durante el ciclo: patrones de diseño GoF, principios SOLID, arquitectura en capas y separación de responsabilidades. La diferencia respecto a un ejercicio de clase es que cada decisión tiene consecuencias reales: un bug en el adapter corta el servicio en producción; un test que no cubre un caso deja pasar un error al pipeline.</p>
+  <h3>14.2 Dificultades encontradas</h3>
   <ul>
-    <li>Integracion real con APIs de Uber Eats y Glovo mediante acuerdos de afiliacion.</li>
-    <li>Sistema de alertas: notificar cuando el precio de un restaurante favorito baja.</li>
-    <li>Aplicacion movil nativa con React Native reutilizando la misma API REST.</li>
-    <li>Analisis de tendencias de precios con historial temporal en una tabla <code>price_history</code>.</li>
+    <li><strong>Reverse engineering de la API de Just Eat:</strong> la API no está documentada y los headers necesarios se identificaron analizando el tráfico de red de la app móvil oficial.</li>
+    <li><strong>Compatibilidad de z-index con Leaflet:</strong> los componentes del mapa usan z-index de hasta 1000. Se resolvió con <code>isolation: isolate</code> en el contenedor del mapa.</li>
+    <li><strong>Rutas <code>@shared</code> en Netlify:</strong> el monorepo con <code>frontend/shared</code> fuera del directorio de Next.js causaba errores de build. Se resolvió moviendo los archivos a <code>frontend/web/lib/</code>.</li>
+  </ul>
+  <h3>14.3 Trabajo futuro</h3>
+  <p>La arquitectura basada en el patrón Adapter hace que añadir nuevas plataformas sea una tarea de implementación localizada, sin impacto sobre el resto del sistema. Las siguientes mejoras están priorizadas por impacto en el usuario:</p>
+  <ul>
+    <li>Adapter para Glovo y Uber Eats, completando la comparación entre las tres plataformas principales.</li>
+    <li>Sistema de alertas: notificación push cuando el precio de un restaurante favorito baja en alguna plataforma.</li>
+    <li>Aplicación móvil nativa con React Native reutilizando la misma API REST.</li>
+    <li>Análisis de tendencias de precios con historial temporal persistido en <code>price_history</code>.</li>
+    <li>Programa de afiliación: comisión por cada redirect que termina en pedido real.</li>
   </ul>
 
-  <div class="card" style="margin-top:40px;text-align:center;">
-    <p style="font-size:.85rem;color:var(--gray-500);margin-bottom:12px;">Esta misma memoria en version web</p>
-    <img src="../qr_memoria.png" alt="QR memoria web" style="width:100px;height:100px;border-radius:6px;" onerror="this.style.display='none'">
-    <p style="margin-top:8px;font-size:.8rem;color:var(--teal-700);">hungrydeal-memoria.netlify.app</p>
-  </div>
 </div>
 
-<div style="max-width:var(--content-max);margin:60px auto 0;padding:0 clamp(14px,4vw,40px) 40px;border-top:1px solid var(--gray-300);margin-top:40px;">
-  <p style="font-size:.75rem;color:var(--gray-500);text-align:center;">HungryDeal · Trabajo de Fin de Grado · Mayo 2026 · FastAPI · Next.js 14 · Supabase PostgreSQL · Redis · Netlify · Render</p>
+<div style="max-width:var(--content-max);margin:60px auto 0;padding:40px clamp(14px,4vw,40px);border-top:1px solid var(--gray-300);">
+  <p style="font-size:.8rem;color:var(--gray-700);text-align:center;font-weight:500;margin-bottom:6px;">Fernanda González Alvarenga &nbsp;·&nbsp; 2º DAM &nbsp;·&nbsp; Mayo 2026</p>
+  <p style="font-size:.72rem;color:var(--gray-500);text-align:center;">FastAPI &nbsp;·&nbsp; Next.js 14 &nbsp;·&nbsp; Supabase PostgreSQL &nbsp;·&nbsp; Redis &nbsp;·&nbsp; Netlify &nbsp;·&nbsp; Render</p>
+  <p style="font-size:.7rem;color:var(--teal-500);text-align:center;margin-top:8px;">
+    <a href="https://hungrydeal.netlify.app" style="color:var(--teal-700);text-decoration:none;font-weight:500;">hungrydeal.netlify.app</a>
+  </p>
 </div>
 
 </main>
