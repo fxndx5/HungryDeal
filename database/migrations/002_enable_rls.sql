@@ -1,13 +1,4 @@
--- ============================================================
--- Migracion 002: Habilitar Row Level Security (RLS)
--- Ejecutar en Supabase SQL Editor
---
--- El backend (FastAPI) conecta como 'postgres' que tiene
--- BYPASSRLS, por lo que estas politicas NO afectan al backend.
--- Solo aplican a conexiones via Supabase JS client (anon/authenticated).
--- ============================================================
-
--- ---- TABLA: users ----
+TABLA: users ----
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
 
 -- Cada usuario puede leer y actualizar su propio registro
@@ -22,11 +13,9 @@ CREATE POLICY "users: update own row"
   USING (auth.uid() = id)
   WITH CHECK (auth.uid() = id);
 
--- Solo el sistema (backend via postgres) puede insertar usuarios
--- (el INSERT lo hace el backend, no el cliente JS directamente)
 
 
--- ---- TABLA: restaurants ----
+TABLA: restaurants ----
 ALTER TABLE public.restaurants ENABLE ROW LEVEL SECURITY;
 
 -- Lectura publica para todos (incluso anonimos)
@@ -38,7 +27,7 @@ CREATE POLICY "restaurants: public read"
 -- Solo el backend (postgres/service_role) puede escribir
 
 
--- ---- TABLA: platform_prices ----
+TABLA: platform_prices ----
 ALTER TABLE public.platform_prices ENABLE ROW LEVEL SECURITY;
 
 -- Lectura publica para todos (incluso anonimos)
@@ -47,10 +36,9 @@ CREATE POLICY "platform_prices: public read"
   FOR SELECT
   USING (true);
 
--- Solo el backend (postgres/service_role) puede escribir
 
 
--- ---- TABLA: search_history ----
+TABLA: search_history ----
 ALTER TABLE public.search_history ENABLE ROW LEVEL SECURITY;
 
 -- Cada usuario ve solo su propio historial
@@ -69,5 +57,3 @@ CREATE POLICY "search_history: delete own"
   FOR DELETE
   USING (auth.uid() = user_id);
 
--- Nota: el backend usa postgres (BYPASSRLS) y puede leer/escribir
--- todo sin restricciones, independientemente de estas politicas.

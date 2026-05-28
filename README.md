@@ -1,107 +1,79 @@
 # HungryDeal
 
-Aplicación multiplataforma que compara precios de delivery entre **Uber Eats**, **Glovo** y **Just Eat**, mostrando el precio real total (producto + envío + tasas) para que el usuario elija la opción más barata.
+![HungryDeal logo](frontend/web/public/memoria/capturas/logo_hungrydeal.png)
 
-## Stack Tecnológico
+Comparador de precios de delivery en tiempo real entre Uber Eats, Glovo y Just Eat.
+Muestra el coste total real (producto + envío + tasas) para que el usuario elija la opción más barata.
 
-| Capa | Tecnología |
-|------|-----------|
-| Backend | Python 3.12, FastAPI, SQLAlchemy, Alembic, Playwright |
-| Frontend Web | Next.js 14 (App Router), TypeScript, Tailwind CSS |
-| Frontend Móvil | React Native, Expo, TypeScript |
-| Base de Datos | PostgreSQL 16 |
-| Contenedores | Docker, Docker Compose |
-| Autenticación | JWT |
+**Repositorio:** https://github.com/fxndx5/HungryDeal  
+**App en producción:** https://hungrydeal.netlify.app  
+**API:** https://hungrydeal-api.onrender.com/docs
 
-## Requisitos previos
+---
 
-- Docker y Docker Compose
+## Requisitos
+
 - Python 3.12+
 - Node.js 20+
-- npm o yarn
+- PostgreSQL 17 (o cuenta en Supabase)
+- Redis (opcional, para caché)
 
-## Levantar el proyecto en local
+---
 
-### 1. Clonar el repositorio y configurar variables de entorno
+## Instalación y ejecución
 
-```bash
-git clone <url-del-repo>
-cd Hungrydeal-code
-cp .env.example .env
-# Editar .env con tus valores reales
-```
+### Backend
 
-### 2. Levantar con Docker Compose
-
-```bash
-docker compose up --build
-```
-
-Esto levantará:
-- **PostgreSQL** en el puerto 5432
-- **Backend (FastAPI)** en el puerto 8000
-- **Frontend Web (Next.js)** en el puerto 3000
-
-### 3. Levantar sin Docker (desarrollo)
-
-**Backend:**
 ```bash
 cd backend
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
+source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+cp .env.example .env            # rellenar DATABASE_URL, SECRET_KEY, etc.
 uvicorn app.main:app --reload --port 8000
 ```
 
-**Frontend Web:**
+Documentación interactiva: http://localhost:8000/docs
+
+### Frontend web
+
 ```bash
 cd frontend/web
 npm install
 npm run dev
 ```
 
-**Frontend Móvil:**
+App disponible en: http://localhost:3000
+
+### Con Docker Compose
+
 ```bash
-cd frontend/mobile
-npm install
-npx expo start
+docker compose up --build
 ```
 
-## Estructura de carpetas
+Levanta PostgreSQL (5432), backend (8000) y frontend (3000).
+
+### Base de datos
+
+```bash
+psql -U postgres -d hungrydeal -f database/hungrydeal_database.sql
+```
+
+---
+
+## Estructura
 
 ```
 Hungrydeal-code/
-├── backend/                  # API REST con FastAPI
-│   ├── app/
-│   │   ├── api/routes/       # Endpoints de la API
-│   │   ├── adapters/         # Adaptadores para Uber Eats, Glovo, Just Eat
-│   │   ├── models/           # Modelos SQLAlchemy (ORM)
-│   │   ├── schemas/          # Esquemas Pydantic (validación)
-│   │   ├── services/         # Lógica de negocio
-│   │   ├── core/             # Configuración, seguridad, dependencias
-│   │   └── main.py           # Punto de entrada de FastAPI
-│   ├── tests/                # Tests del backend
-│   ├── requirements.txt
-│   └── Dockerfile
-├── frontend/
-│   ├── web/                  # Aplicación Next.js 14
-│   ├── mobile/               # Aplicación React Native + Expo
-│   └── shared/               # Código compartido entre web y móvil
-│       ├── api/              # Clientes HTTP compartidos
-│       └── types/            # Tipos TypeScript compartidos
-├── database/
-│   └── migrations/           # Scripts SQL y migraciones manuales
-├── docker-compose.yml
-├── .env.example
-└── .gitignore
+├── backend/                  # API REST — FastAPI + Python 3.12
+│   └── app/
+│       ├── adapters/         # Patrón Adapter: JustEatAdapter, MockAdapter
+│       ├── api/routes/       # Endpoints: /auth, /search, /compare, /users
+│       ├── core/             # Configuración, base de datos, caché Redis
+│       ├── models/           # Modelos SQLAlchemy
+│       ├── schemas/          # Schemas Pydantic
+│       └── services/         # Lógica de negocio
+├── frontend/web/             # Next.js 14 + TypeScript + Tailwind CSS
+├── frontend/shared/          # Tipos y cliente HTTP compartidos
+└── database/                 # Script SQL y migraciones
 ```
-
-## Documentación de la API
-
-Con el backend corriendo, accede a la documentación interactiva:
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
-
-## Licencia
-
-Este proyecto es privado y de uso interno.

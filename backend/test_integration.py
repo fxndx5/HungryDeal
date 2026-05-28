@@ -1,25 +1,6 @@
-"""
-test_integration.py
---------------------
-Tests de integración para los endpoints principales de HungryDeal.
-
-Requiere el servidor levantado:
-    cd backend
-    uvicorn app.main:app --host 0.0.0.0 --port 8000
-
-Ejecutar:
-    python test_integration.py
-
-O con pytest (requiere pytest + httpx):
-    pip install pytest pytest-asyncio httpx --break-system-packages
-    pytest test_integration.py -v
-
-Cubre:
-  GET /health
-  GET /api/v1/search
-  GET /api/v1/compare/{restaurant_id}
-  GET /api/v1/compare/{restaurant_id} — 404
-"""
+# Tests de integración para los endpoints principales de HungryDeal.
+# Requiere el servidor levantado: uvicorn app.main:app --host 0.0.0.0 --port 8000
+# Ejecutar: python test_integration.py  |  pytest test_integration.py -v
 
 import asyncio
 import sys
@@ -29,15 +10,12 @@ import httpx
 
 BASE_URL = os.getenv("TEST_BASE_URL", "http://localhost:8000")
 
-# ─── Helpers ──────────────────────────────────────────────────────────────────
 
-def ok(msg: str):   print(f"  PASS  {msg}")
-def fail(msg: str): print(f"  FAIL  {msg}"); sys.exit(1)
+def ok(msg: str):    print(f"  PASS  {msg}")
+def fail(msg: str):  print(f"  FAIL  {msg}"); sys.exit(1)
 def section(t: str): print(f"\n{'='*60}\n  {t}\n{'='*60}")
 def info(msg: str):  print(f"  INFO  {msg}")
 
-
-# ─── /health ──────────────────────────────────────────────────────────────────
 
 async def test_health(client: httpx.AsyncClient):
     section("1. GET /health")
@@ -53,8 +31,6 @@ async def test_health(client: httpx.AsyncClient):
     ok(f"Servidor activo — versión {data['version']} — env {data.get('env', 'N/A')}")
 
 
-# ─── /search ──────────────────────────────────────────────────────────────────
-
 async def test_search_con_resultados(client: httpx.AsyncClient):
     section("2. GET /api/v1/search?q=McDonald — resultados esperados")
     r = await client.get("/api/v1/search", params={"q": "McDonald"})
@@ -62,7 +38,6 @@ async def test_search_con_resultados(client: httpx.AsyncClient):
     assert r.status_code == 200, f"Esperaba 200, recibió {r.status_code}: {r.text}"
     data = r.json()
 
-    # Estructura de la respuesta
     assert "results" in data, "Falta campo 'results'"
     assert "total"   in data, "Falta campo 'total'"
     assert "query"   in data, "Falta campo 'query'"
@@ -70,7 +45,6 @@ async def test_search_con_resultados(client: httpx.AsyncClient):
     assert data["total"] >= 1, "Debe haber al menos 1 resultado para 'McDonald'"
     assert data["query"] == "McDonald", "El campo 'query' debe reflejar la búsqueda"
 
-    # Estructura de cada restaurante
     r0 = data["results"][0]
     for campo in ("id", "name", "platforms"):
         assert campo in r0, f"Falta campo '{campo}' en el resultado"
@@ -118,8 +92,6 @@ async def test_search_limit(client: httpx.AsyncClient):
     ok(f"Límite respetado — devolvió {len(data['results'])} resultado(s)")
 
 
-# ─── /compare ─────────────────────────────────────────────────────────────────
-
 async def test_compare_ok(client: httpx.AsyncClient):
     section("6. GET /api/v1/compare/mcdonalds-gran-via-madrid — comparación completa")
     r = await client.get("/api/v1/compare/mcdonalds-gran-via-madrid")
@@ -127,16 +99,13 @@ async def test_compare_ok(client: httpx.AsyncClient):
     assert r.status_code == 200, f"Esperaba 200, recibió {r.status_code}: {r.text}"
     data = r.json()
 
-    # Estructura raíz
     for campo in ("restaurant", "comparison", "winner", "savings"):
         assert campo in data, f"Falta campo raíz '{campo}'"
 
-    # Restaurante
     rest = data["restaurant"]
     assert rest["id"] == "mcdonalds-gran-via-madrid"
     assert rest["name"], "El restaurante debe tener nombre"
 
-    # Comparación
     comparison = data["comparison"]
     assert isinstance(comparison, list), "'comparison' debe ser lista"
     assert len(comparison) >= 1, "Debe haber al menos 1 plataforma en la comparación"
@@ -144,7 +113,6 @@ async def test_compare_ok(client: httpx.AsyncClient):
     platforms_encontradas = {p["platform"] for p in comparison}
     info(f"Plataformas en respuesta: {platforms_encontradas}")
 
-    # Estructura de cada entrada de precio
     for p in comparison:
         for campo in ("platform", "product_price", "delivery_fee", "service_fee", "total", "available"):
             assert campo in p, f"Falta campo '{campo}' en plataforma '{p.get('platform')}'"
@@ -157,13 +125,11 @@ async def test_compare_ok(client: httpx.AsyncClient):
                 f"({p['product_price']} + {p['delivery_fee']} + {p['service_fee']})"
             )
 
-    # Ganador y ahorro
     plataformas_disponibles = [p for p in comparison if p["available"]]
     if plataformas_disponibles:
         assert data["winner"] in {p["platform"] for p in plataformas_disponibles}, (
             f"El ganador '{data['winner']}' debe ser una plataforma disponible"
         )
-        # El ganador debe ser la plataforma con el total más bajo
         totales = {p["platform"]: p["total"] for p in plataformas_disponibles}
         ganador_esperado = min(totales, key=lambda k: totales[k])
         assert data["winner"] == ganador_esperado, (
@@ -219,8 +185,6 @@ async def test_compare_todos_los_restaurantes_mock(client: httpx.AsyncClient):
     ok(f"Todos los restaurantes mock responden correctamente ({len(slugs)}/{len(slugs)})")
 
 
-# ─── Main ─────────────────────────────────────────────────────────────────────
-
 async def main():
     print(f"\n{'='*60}")
     print(f"  HungryDeal — Tests de Integración")
@@ -228,35 +192,28 @@ async def main():
     print(f"{'='*60}")
 
     async with httpx.AsyncClient(base_url=BASE_URL, timeout=15.0) as client:
-        # Verificar que el servidor está levantado antes de empezar
         try:
             health = await client.get("/health")
             if health.status_code != 200:
                 print(f"\n  ERROR: El servidor no responde en {BASE_URL}")
-                print(f"         Levanta el servidor antes de ejecutar los tests:")
                 print(f"         cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000")
                 sys.exit(1)
         except httpx.ConnectError:
             print(f"\n  ERROR: No se puede conectar a {BASE_URL}")
-            print(f"         Levanta el servidor con:")
             print(f"         cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000")
             sys.exit(1)
 
         await test_health(client)
-
-        # Tests de búsqueda
         await test_search_con_resultados(client)
         await test_search_sin_resultados(client)
         await test_search_query_vacia(client)
         await test_search_limit(client)
-
-        # Tests de comparación
         await test_compare_ok(client)
         await test_compare_restaurante_inexistente(client)
         await test_compare_todos_los_restaurantes_mock(client)
 
     print(f"\n{'='*60}")
-    print(f"  TODOS LOS TESTS DE INTEGRACIÓN PASARON ✓")
+    print(f"  TODOS LOS TESTS DE INTEGRACIÓN PASARON")
     print(f"{'='*60}\n")
 
 

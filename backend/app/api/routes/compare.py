@@ -1,17 +1,4 @@
-"""
-app/api/routes/compare.py
---------------------------
-Endpoint de comparación de precios de un restaurante.
-
-GET /api/v1/compare/{restaurant_id}
-
-Para un restaurante dado, consulta las 3 plataformas en paralelo,
-normaliza los precios y devuelve la comparación ordenada con el ganador.
-
-Caché: los precios se cachean 15 minutos en Redis (CACHE_TTL_SECONDS en Settings).
-La clave es "compare:{restaurant_id}". Si Redis no está disponible, la app
-sigue funcionando sin caché (graceful degradation).
-"""
+# Endpoint GET /api/v1/compare/{restaurant_id}, comparación de precios con caché Redis
 
 import logging
 from decimal import Decimal
@@ -39,8 +26,7 @@ settings = get_settings()
 
 router = APIRouter(prefix="/api/v1", tags=["compare"])
 
-# ── Dependencia de usuario OPCIONAL (no lanza 401 si no hay token) ──────────
-
+# Dependencia de usuario opcional: no lanza 401 si no hay token
 _optional_bearer = HTTPBearer(auto_error=False)
 
 
@@ -48,11 +34,7 @@ async def get_optional_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(_optional_bearer),
     db: AsyncSession = Depends(get_db),
 ) -> Optional[User]:
-    """
-    Resuelve el usuario autenticado SI se envía token válido.
-    Si no hay token o es inválido, devuelve None (no lanza error).
-    Permite que /compare funcione tanto para anónimos como para registrados.
-    """
+    # Permite que /compare funcione para usuarios anónimos y autenticados
     if not credentials:
         return None
     user_id = decode_access_token(credentials.credentials)
@@ -62,49 +44,22 @@ async def get_optional_user(
     return result.scalar_one_or_none()
 
 
-# ---------------------------------------------------------------------------
-# Dependency: comparador con adapters activos
-# ---------------------------------------------------------------------------
-
 def _get_comparator() -> PriceComparator:
-    """
-    Crea el PriceComparator con los adapters activos.
-
-    - just_eat  → JustEatAdapter real (llama a api.just-eat.es)
-    - uber_eats → MockAdapter (adapter real pendiente)
-    - glovo     → MockAdapter (adapter real pendiente)
-
-    Si JustEatAdapter falla en runtime, safe_get_price() del base adapter
-    captura el error y devuelve available=False sin romper la comparación.
-    """
+    # just_eat usa adapter real; uber_eats y glovo usan mock hasta implementar sus adapters
     return PriceComparator(adapters=[
         MockAdapter(platform="uber_eats"),
         MockAdapter(platform="glovo"),
-        JustEatAdapter(),               # ← adapter real de Just Eat ES
+        JustEatAdapter(),
     ])
 
 
-# Helper: info del restaurante
-
 async def _get_restaurant_info(restaurant_id: str) -> dict | None:
-    """
-    Obtiene los datos básicos del restaurante.
-
-    En desarrollo: consulta el índice en memoria del mock.
-    En producción: hará SELECT a la tabla restaurants de Supabase.
-    """
     return _RESTAURANT_BY_ID.get(restaurant_id)
 
-
-# Helper: clave de caché para un restaurante
 
 def _cache_key(restaurant_id: str) -> str:
     return f"compare:{restaurant_id}"
 
-
-# ---------------------------------------------------------------------------
-# Endpoint
-# ---------------------------------------------------------------------------
 
 @router.get(
     "/compare/{restaurant_id}",
@@ -123,16 +78,7 @@ async def compare_prices(
     current_user: Optional[User] = Depends(get_optional_user),
     db: AsyncSession = Depends(get_db),
 ) -> ComparisonResponse:
-    """
-    Compara el coste total de pedir en un restaurante en todas las plataformas.
-
-    Flujo:
-    1. Verificar que el restaurante existe.
-    2. Intentar leer resultado desde caché Redis (TTL 15 min).
-    3. Si no hay caché: consultar adapters en paralelo, normalizar, guardar en Redis.
-    4. Si hay usuario autenticado: guardar en search_history.
-    """
-    # 1. Verificar que el restaurante existe
+    # Flujo: verificar restaurante → caché → adapters → normalizar → guardar historial
     restaurant_info = await _get_restaurant_info(restaurant_id)
     if not restaurant_info:
         raise HTTPException(
@@ -140,7 +86,6 @@ async def compare_prices(
             detail=f"Restaurante '{restaurant_id}' no encontrado",
         )
 
-    # 2. Intentar leer desde caché Redis
     cache_key = _cache_key(restaurant_id)
     cached = await cache.get(cache_key)
 
@@ -148,7 +93,6 @@ async def compare_prices(
         logger.debug("Cache HIT para '%s'", restaurant_id)
         response = ComparisonResponse(**cached)
     else:
-        # 3. Cache MISS → llamar a los adapters
         logger.debug("Cache MISS para '%s', consultando adapters", restaurant_id)
 
         comparator = _get_comparator()
@@ -164,10 +108,8 @@ async def compare_prices(
                 detail="Error al obtener los precios. Inténtalo de nuevo.",
             ) from exc
 
-        # Normalizar precios (recalcular totales, redondear)
         normalized = normalize_all(result.prices)
 
-        # Construir respuesta
         restaurant = RestaurantSchema(
             id=restaurant_id,
             name=restaurant_info["name"],
@@ -192,7 +134,7 @@ async def compare_prices(
             for p in normalized
         ]
 
-        # Ordenar: primero disponibles (por precio), luego no disponibles
+        # Primero disponibles ordenadas por precio, luego no disponibles
         comparison.sort(key=lambda p: (not p.available, p.total if p.available else 999))
 
         response = ComparisonResponse(
@@ -202,7 +144,6 @@ async def compare_prices(
             savings=result.savings,
         )
 
-        # Guardar en caché Redis (falla silenciosamente si Redis no está)
         saved = await cache.set(
             cache_key,
             response.model_dump(),
@@ -215,10 +156,8 @@ async def compare_prices(
                 settings.CACHE_TTL_SECONDS,
             )
 
-    # 4. Guardar en historial si hay usuario autenticado
     if current_user is not None:
         try:
-            # Extraer winner y savings de la respuesta (viene de caché o fresca)
             winner = response.winner
             savings_val = response.savings
             entry = SearchHistory(

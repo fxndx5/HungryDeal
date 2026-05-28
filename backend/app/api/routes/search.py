@@ -1,16 +1,4 @@
-"""
-app/api/routes/search.py
-------------------------
-Endpoint de búsqueda de restaurantes.
-
-GET /api/v1/search?q=McDonald's&city=Madrid
-
-Consulta todas las plataformas en paralelo (via PriceComparator),
-deduplica los resultados por restaurante y los devuelve agregados.
-
-En desarrollo/MVP usa los adapters mock.
-En producción se sustituirán por adapters reales (JustEatAdapter, etc.).
-"""
+# Endpoint GET /api/v1/search — búsqueda de restaurantes en todas las plataformas
 
 import logging
 from fastapi import APIRouter, Query, HTTPException, status
@@ -24,30 +12,13 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1", tags=["search"])
 
 
-# ---------------------------------------------------------------------------
-# Dependency: construir el comparador con los adapters activos
-# ---------------------------------------------------------------------------
-
 def _get_comparator() -> PriceComparator:
-    """
-    Crea el PriceComparator con los adapters disponibles.
-
-    Pendiente (Sprint 3): inyectar adapters reales por variable de entorno:
-        if settings.USE_REAL_ADAPTERS:
-            return PriceComparator([JustEatAdapter(), GlovoAdapter(), ...])
-        else:
-            return PriceComparator([MockAdapter(...), ...])
-    """
     return PriceComparator(adapters=[
         MockAdapter(platform="uber_eats"),
         MockAdapter(platform="glovo"),
         MockAdapter(platform="just_eat"),
     ])
 
-
-# ---------------------------------------------------------------------------
-# Helper: convertir RestaurantGroup a RestaurantSchema
-# ---------------------------------------------------------------------------
 
 def _to_schema(group: RestaurantGroup) -> RestaurantSchema:
     return RestaurantSchema(
@@ -61,10 +32,6 @@ def _to_schema(group: RestaurantGroup) -> RestaurantSchema:
         platforms=group.platforms,
     )
 
-
-# ---------------------------------------------------------------------------
-# Endpoint
-# ---------------------------------------------------------------------------
 
 @router.get(
     "/search",
@@ -96,13 +63,6 @@ async def search_restaurants(
         description="Número máximo de resultados a devolver",
     ),
 ) -> SearchResponse:
-    """
-    Busca restaurantes en todas las plataformas de delivery.
-
-    - Consulta todos los adapters en paralelo (asyncio.gather).
-    - Deduplica por id de restaurante.
-    - Devuelve resultados con las plataformas donde está cada uno.
-    """
     comparator = _get_comparator()
 
     try:
@@ -114,7 +74,6 @@ async def search_restaurants(
             detail="Error al realizar la búsqueda. Inténtalo de nuevo.",
         ) from exc
 
-    # Aplicar límite
     results = [_to_schema(g) for g in groups[:limit]]
 
     return SearchResponse(

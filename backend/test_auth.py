@@ -1,35 +1,15 @@
-"""
-Script para verificar que la conexion a Supabase y el sistema de auth
-funcionan correctamente. Ejecutar desde la carpeta backend/:
-
-    cd backend
-    python test_auth.py
-
-Prueba las siguientes operaciones en orden:
-  1 Conexion a la BD
-  2registro de un usuario de prueba
-  3Login con ese usuario
-  4verificacion del token JWT
-  5consulta de /auth/me
-  6 ntento de login con contrasena incorrecta (deb fallar con 401)
-"""
+# Verifica la conexión a Supabase y el sistema de autenticación.
+# Ejecutar desde la carpeta backend/: python test_auth.py
 
 import asyncio
 import sys
 import os
 import httpx
 
-# --------------------------------------------------------------------------
-# Configuracion del test
-# --------------------------------------------------------------------------
-
 BASE_URL = os.getenv("TEST_BASE_URL", "http://localhost:8000")
 TEST_EMAIL = "test_demo@hungrydeal.es"
 TEST_PASSWORD = "Demo1234!"
 
-# --------------------------------------------------------------------------
-# Helpers
-# --------------------------------------------------------------------------
 
 def ok(msg: str):
     print(f"  PASS  {msg}")
@@ -43,9 +23,6 @@ def section(title: str):
     print(f"  {title}")
     print('='*50)
 
-# --------------------------------------------------------------------------
-# Tests
-# --------------------------------------------------------------------------
 
 async def test_health(client: httpx.AsyncClient):
     section("1. Health check")
@@ -53,7 +30,7 @@ async def test_health(client: httpx.AsyncClient):
     assert r.status_code == 200, f"Status {r.status_code}"
     data = r.json()
     assert data["status"] == "ok"
-    ok(f"Servidor activo — version {data['version']} — env {data['env']}")
+    ok(f"Servidor activo — versión {data['version']} — env {data['env']}")
 
 
 async def test_register(client: httpx.AsyncClient) -> str:
@@ -64,11 +41,10 @@ async def test_register(client: httpx.AsyncClient) -> str:
     })
 
     if r.status_code == 409:
-        # Ya existe — hacemos login directamente
         print(f"  INFO  El usuario '{TEST_EMAIL}' ya existe en la BD — saltando al login")
         return ""
 
-    assert r.status_code == 201, f"Esperaba 201, recibio {r.status_code}: {r.text}"
+    assert r.status_code == 201, f"Esperaba 201, recibió {r.status_code}: {r.text}"
     data = r.json()
     assert "access_token" in data
     assert data["user"]["email"] == TEST_EMAIL
@@ -83,7 +59,7 @@ async def test_login(client: httpx.AsyncClient) -> str:
         "email": TEST_EMAIL,
         "password": TEST_PASSWORD,
     })
-    assert r.status_code == 200, f"Esperaba 200, recibio {r.status_code}: {r.text}"
+    assert r.status_code == 200, f"Esperaba 200, recibió {r.status_code}: {r.text}"
     data = r.json()
     assert "access_token" in data
     assert data["user"]["email"] == TEST_EMAIL
@@ -93,11 +69,11 @@ async def test_login(client: httpx.AsyncClient) -> str:
 
 
 async def test_me(client: httpx.AsyncClient, token: str):
-    section("4. GET /auth/me (token valido)")
+    section("4. GET /auth/me (token válido)")
     r = await client.get("/api/v1/auth/me", headers={
         "Authorization": f"Bearer {token}"
     })
-    assert r.status_code == 200, f"Esperaba 200, recibio {r.status_code}: {r.text}"
+    assert r.status_code == 200, f"Esperaba 200, recibió {r.status_code}: {r.text}"
     data = r.json()
     assert data["email"] == TEST_EMAIL
     ok(f"Usuario autenticado: {data['email']}")
@@ -107,51 +83,50 @@ async def test_me(client: httpx.AsyncClient, token: str):
 async def test_me_sin_token(client: httpx.AsyncClient):
     section("5. GET /auth/me sin token (debe dar 403)")
     r = await client.get("/api/v1/auth/me")
-    assert r.status_code in (401, 403), f"Esperaba 401/403, recibio {r.status_code}"
+    assert r.status_code in (401, 403), f"Esperaba 401/403, recibió {r.status_code}"
     ok(f"Rechazo correcto: {r.status_code} — {r.json()}")
 
 
 async def test_login_password_incorrecta(client: httpx.AsyncClient):
-    section("6. Login con contrasena incorrecta (debe dar 401)")
+    section("6. Login con contraseña incorrecta (debe dar 401)")
     r = await client.post("/api/v1/auth/login", json={
         "email": TEST_EMAIL,
         "password": "contrasena_INCORRECTA_999",
     })
-    assert r.status_code == 401, f"Esperaba 401, recibio {r.status_code}: {r.text}"
+    assert r.status_code == 401, f"Esperaba 401, recibió {r.status_code}: {r.text}"
     ok(f"Rechazo correcto: {r.status_code} — {r.json()['detail']}")
 
 
 async def test_token_invalido(client: httpx.AsyncClient):
-    section("7. Token invalido o manipulado (debe dar 401)")
+    section("7. Token inválido o manipulado (debe dar 401)")
     r = await client.get("/api/v1/auth/me", headers={
         "Authorization": "Bearer token.falso.manipulado"
     })
-    assert r.status_code == 401, f"Esperaba 401, recibio {r.status_code}"
+    assert r.status_code == 401, f"Esperaba 401, recibió {r.status_code}"
     ok(f"Rechazo correcto: {r.status_code} — {r.json()['detail']}")
 
 
 async def test_search(client: httpx.AsyncClient):
-    section("8. Busqueda de restaurantes (no requiere auth)")
+    section("8. Búsqueda de restaurantes (no requiere auth)")
     r = await client.get("/api/v1/search", params={"q": "McDonald"})
     assert r.status_code == 200, f"Status {r.status_code}: {r.text}"
     data = r.json()
     assert data["total"] >= 1
-    ok(f"Busqueda OK — {data['total']} resultados para 'McDonald'")
+    ok(f"Búsqueda OK — {data['total']} resultados para 'McDonald'")
     for res in data["results"]:
         print(f"       {res['name']} — plataformas: {res['platforms']}")
 
 
 async def test_compare(client: httpx.AsyncClient):
-    section("9. Comparacion de precios (no requiere auth)")
+    section("9. Comparación de precios (no requiere auth)")
     r = await client.get("/api/v1/compare/mcdonalds-gran-via-madrid")
     assert r.status_code == 200, f"Status {r.status_code}: {r.text}"
     data = r.json()
     assert data["winner"] is not None
-    ok(f"Comparacion OK — ganador: {data['winner']} — ahorro: {data['savings']} EUR")
+    ok(f"Comparación OK — ganador: {data['winner']} — ahorro: {data['savings']} EUR")
     for p in data["comparison"]:
-        estado = "disponible" if p["available"] else "no disponible"
         if p["available"]:
-            print(f"       {p['platform']:12} total: {p['total']:.2f} EUR ({estado})")
+            print(f"       {p['platform']:12} total: {p['total']:.2f} EUR (disponible)")
 
 
 async def test_put_me(client: httpx.AsyncClient, token: str):
@@ -171,7 +146,7 @@ async def test_put_me(client: httpx.AsyncClient, token: str):
 async def test_put_me_sin_token(client: httpx.AsyncClient):
     section("11. PUT /users/me sin token (debe dar 401/403)")
     r = await client.put("/api/v1/users/me", json={"first_name": "Hacker"})
-    assert r.status_code in (401, 403), f"Esperaba 401/403, recibio {r.status_code}"
+    assert r.status_code in (401, 403), f"Esperaba 401/403, recibió {r.status_code}"
     ok(f"Rechazo correcto: {r.status_code}")
 
 
@@ -182,7 +157,7 @@ async def test_compare_con_auth_guarda_historial(client: httpx.AsyncClient, toke
         headers={"Authorization": f"Bearer {token}"},
     )
     assert r.status_code == 200, f"Status {r.status_code}: {r.text}"
-    ok("Comparacion autenticada OK — se debio guardar en search_history")
+    ok("Comparación autenticada OK — se debió guardar en search_history")
 
 
 async def test_historial_vacio_o_con_datos(client: httpx.AsyncClient, token: str):
@@ -206,31 +181,24 @@ async def test_historial_vacio_o_con_datos(client: httpx.AsyncClient, token: str
 async def test_historial_sin_token(client: httpx.AsyncClient):
     section("14. GET /users/me/history sin token (debe dar 401/403)")
     r = await client.get("/api/v1/users/me/history")
-    assert r.status_code in (401, 403), f"Esperaba 401/403, recibio {r.status_code}"
+    assert r.status_code in (401, 403), f"Esperaba 401/403, recibió {r.status_code}"
     ok(f"Rechazo correcto: {r.status_code}")
 
 
-# --------------------------------------------------------------------------
-# Main
-# --------------------------------------------------------------------------
-
 async def check_server_running():
-    """Comprueba que el servidor esta arrancado antes de lanzar los tests."""
     try:
         async with httpx.AsyncClient(timeout=3.0) as c:
             await c.get(f"{BASE_URL}/health")
     except (httpx.ConnectError, httpx.TimeoutException):
         print(f"""
 {'='*50}
-  ERROR: El servidor no esta corriendo en {BASE_URL}
+  ERROR: El servidor no está corriendo en {BASE_URL}
 {'='*50}
 
-  Arranca el backend primero con uno de estos comandos:
-
-  Opcion A — Docker Compose (recomendado):
+  Opción A — Docker Compose:
     docker compose up
 
-  Opcion B — manual:
+  Opción B — manual:
     cd backend
     pip install -r requirements.txt
     uvicorn app.main:app --reload
@@ -253,10 +221,8 @@ async def main():
 
         token = await test_register(client)
         if not token:
-            #el usuario ya existia, hcemos login
             token = await test_login(client)
         else:
-            # uuario nuevo, verificamos el logn tambien
             await test_login(client)
 
         await test_me(client, token)

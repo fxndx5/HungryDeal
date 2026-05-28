@@ -1,12 +1,6 @@
-/**
- * __tests__/api.test.ts
- * ----------------------
- * Tests de integracion para la API de HungryDeal.
- * Apunta a produccion (Render). El servidor puede tardar hasta 60 s
- * en despertar si lleva inactivo — el timeout global esta ajustado.
- *
- * Ejecutar con: npx jest
- */
+// Tests de integración para la API de HungryDeal.
+// Apunta a producción (Render). El servidor puede tardar hasta 60 s en despertar si lleva inactivo.
+// Ejecutar con: npx jest
 
 // Timeout global de 90 s por test (Render cold-start puede tardar 60 s)
 jest.setTimeout(90_000)
@@ -20,7 +14,6 @@ let savedToken = ''
 
 describe('HungryDeal API', () => {
 
-  // ── Health ──────────────────────────────────────────────────────
   test('GET /health — servidor activo', async () => {
     const res = await fetch(`${BASE_URL}/health`)
     expect(res.status).toBe(200)
@@ -29,7 +22,6 @@ describe('HungryDeal API', () => {
     expect(data.version).toBeDefined()
   })
 
-  // ── Registro ────────────────────────────────────────────────────
   test('POST /auth/register — crea usuario con nombre y apellido', async () => {
     const res = await fetch(`${BASE_URL}/api/v1/auth/register`, {
       method: 'POST',
@@ -50,8 +42,7 @@ describe('HungryDeal API', () => {
     savedToken = data.access_token
   })
 
-  // ── Login ────────────────────────────────────────────────────────
-  test('POST /auth/login — devuelve token valido', async () => {
+  test('POST /auth/login — devuelve token válido', async () => {
     const res = await fetch(`${BASE_URL}/api/v1/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -63,8 +54,7 @@ describe('HungryDeal API', () => {
     savedToken = data.access_token
   })
 
-  // ── Autenticacion ────────────────────────────────────────────────
-  test('GET /auth/me — token valido devuelve usuario', async () => {
+  test('GET /auth/me — token válido devuelve usuario', async () => {
     const res = await fetch(`${BASE_URL}/api/v1/auth/me`, {
       headers: { Authorization: `Bearer ${savedToken}` },
     })
@@ -78,7 +68,7 @@ describe('HungryDeal API', () => {
     expect(res.status).toBe(401)
   })
 
-  test('POST /auth/login — contrasena incorrecta devuelve 401', async () => {
+  test('POST /auth/login — contraseña incorrecta devuelve 401', async () => {
     const res = await fetch(`${BASE_URL}/api/v1/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -87,7 +77,6 @@ describe('HungryDeal API', () => {
     expect(res.status).toBe(401)
   })
 
-  // ── Busqueda ─────────────────────────────────────────────────────
   test('GET /search?q=McDonald — devuelve resultados', async () => {
     const res = await fetch(`${BASE_URL}/api/v1/search?q=McDonald`)
     expect(res.status).toBe(200)
@@ -96,7 +85,6 @@ describe('HungryDeal API', () => {
     expect(Array.isArray(data.results)).toBe(true)
   })
 
-  // ── Comparacion ──────────────────────────────────────────────────
   test('GET /compare/mcdonalds-gran-via-madrid — devuelve ganador', async () => {
     const res = await fetch(`${BASE_URL}/api/v1/compare/mcdonalds-gran-via-madrid`)
     expect(res.status).toBe(200)

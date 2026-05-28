@@ -1,13 +1,4 @@
-"""
-app/api/routes/users.py
-------------------------
-Endpoints del perfil y actividad del usuario autenticado.
-
-PUT /api/v1/users/me          →  UserOut   (editar nombre/apellido)
-GET /api/v1/users/me/history  →  HistoryResponse
-
-Todos los endpoints requieren token JWT válido (Bearer).
-"""
+# Endpoints de perfil e historial del usuario autenticado
 
 from decimal import Decimal
 from fastapi import APIRouter, Depends, Query
@@ -36,10 +27,6 @@ async def update_me(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> UserOut:
-    """
-    Actualiza los campos editables del perfil.
-    Solo se modifican los campos que se envían (None = no tocar).
-    """
     if body.first_name is not None:
         current_user.first_name = body.first_name.strip() or None
     if body.last_name is not None:
@@ -68,15 +55,7 @@ async def get_my_history(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> HistoryResponse:
-    """
-    Historial paginado de comparaciones.
-
-    - JOIN con restaurants para obtener el nombre.
-    - Stats calculadas en una segunda query (agregación).
-    - Ordenado por searched_at DESC (más reciente primero).
-    """
-
-    # ── 1. Historial paginado con nombre del restaurante ──────────────────────
+    # Historial paginado con JOIN para obtener nombre del restaurante
     history_q = (
         select(
             SearchHistory,
@@ -103,7 +82,7 @@ async def get_my_history(
         for row in rows
     ]
 
-    # ── 2. Stats agregadas (toda la historia, no solo la página actual) ───────
+    # Estadísticas sobre todo el historial, no solo la página actual
     stats_q = select(
         func.count(SearchHistory.id).label("total_comparisons"),
         func.coalesce(func.sum(SearchHistory.savings), Decimal("0")).label("total_savings"),
@@ -118,7 +97,6 @@ async def get_my_history(
         unique_restaurants=stats_row.unique_restaurants,
     )
 
-    # ── 3. Total de registros (para paginación) ───────────────────────────────
     count_q = select(func.count(SearchHistory.id)).where(
         SearchHistory.user_id == current_user.id
     )

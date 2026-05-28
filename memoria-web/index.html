@@ -304,6 +304,8 @@
   <a href="#despliegue">12. Despliegue</a>
   <a href="#pruebas">13. Pruebas</a>
   <a href="#conclusiones">14. Conclusiones</a>
+  <a href="#diseno-visual">15. Diseño visual</a>
+  <a href="#bibliografia">16. Bibliografía</a>
 </nav>
 
 <main>
@@ -1174,6 +1176,107 @@ redis-cli ttl  "hd:compare:mcdonalds-gran-via-madrid"</code></pre>
     <li>Programa de afiliación: comisión por cada redirect que termina en pedido real.</li>
   </ul>
 
+</div>
+
+<!-- 15. DISEÑO VISUAL -->
+<div id="diseno-visual" class="section">
+  <div class="chapter-label">Capítulo 15</div>
+  <h2 class="section-title">Diseño visual: paleta de colores y tipografía</h2>
+  <div class="section-divider"></div>
+
+  <h3>15.1 Paleta de colores</h3>
+  <p>El sistema de colores de HungryDeal se construyó alrededor de una paleta teal (verde azulado) que no es habitual en el sector del delivery, dominado por rojos y naranjas. La decisión fue deliberada: diferenciarse visualmente de Glovo, Uber Eats y Just Eat desde el primer vistazo, comunicar confianza y ahorro antes de que el usuario lea una sola palabra.</p>
+  <p>Cada color cumple un rol funcional concreto dentro del sistema de diseño:</p>
+
+  <div style="overflow-x:auto;margin:24px 0;">
+    <table style="width:100%;border-collapse:collapse;font-size:.85rem;">
+      <thead>
+        <tr style="background:var(--teal-800);color:var(--white);">
+          <th style="padding:10px 14px;text-align:left;width:110px;">Color</th>
+          <th style="padding:10px 14px;text-align:left;width:130px;">Nombre</th>
+          <th style="padding:10px 14px;text-align:left;width:180px;">Uso principal</th>
+          <th style="padding:10px 14px;text-align:left;">Justificación</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--gray-300);">
+          <td style="padding:10px 14px;"><span style="display:inline-block;width:70px;height:28px;border-radius:4px;background:#0f2e2e;border:1px solid var(--gray-300);"></span></td>
+          <td style="padding:10px 14px;font-weight:600;color:var(--gray-900);">#0f2e2e<br><span style="font-weight:400;color:var(--gray-500);">Verde noche</span></td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Fondo del sidebar</td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Transmite profundidad y calma, aporta el contraste máximo con el blanco del contenido. Refuerza la identidad oscura de la marca sin caer en el negro puro.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-300);background:var(--gray-100);">
+          <td style="padding:10px 14px;"><span style="display:inline-block;width:70px;height:28px;border-radius:4px;background:#2D6F6F;border:1px solid var(--gray-300);"></span></td>
+          <td style="padding:10px 14px;font-weight:600;color:var(--gray-900);">#2D6F6F<br><span style="font-weight:400;color:var(--gray-500);">Teal primario</span></td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Botones, enlaces, navbar, badges</td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Color de marca de HungryDeal. El verde azulado se asocia a ahorro y confianza, y diferencia la aplicación visualmente de los tonos rojizos de Glovo y Uber Eats.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-300);">
+          <td style="padding:10px 14px;"><span style="display:inline-block;width:70px;height:28px;border-radius:4px;background:#4d9090;border:1px solid var(--gray-300);"></span></td>
+          <td style="padding:10px 14px;font-weight:600;color:var(--gray-900);">#4d9090<br><span style="font-weight:400;color:var(--gray-500);">Teal medio</span></td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Hover, iconos activos</td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Variante aclarada del primario para estados interactivos. Mantiene coherencia cromática al pasar el ratón sin perder contraste con el fondo.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-300);background:var(--gray-100);">
+          <td style="padding:10px 14px;"><span style="display:inline-block;width:70px;height:28px;border-radius:4px;background:#b0d4d4;border:1px solid var(--gray-300);"></span></td>
+          <td style="padding:10px 14px;font-weight:600;color:var(--gray-900);">#b0d4d4<br><span style="font-weight:400;color:var(--gray-500);">Teal claro</span></td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Textos secundarios en sidebar</td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Lo suficientemente claro para no competir con el texto principal sobre fondo oscuro, pero con saturación suficiente para mantener la identidad de marca.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-300);">
+          <td style="padding:10px 14px;"><span style="display:inline-block;width:70px;height:28px;border-radius:4px;background:#F2F7F7;border:1px solid var(--gray-300);"></span></td>
+          <td style="padding:10px 14px;font-weight:600;color:var(--gray-900);">#F2F7F7<br><span style="font-weight:400;color:var(--gray-500);">Fondo página</span></td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Background general</td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Casi blanco con toque verdoso que unifica el fondo con la paleta teal. Más suave que el blanco puro y reduce la fatiga visual en sesiones largas.</td>
+        </tr>
+        <tr style="border-bottom:1px solid var(--gray-300);background:var(--gray-100);">
+          <td style="padding:10px 14px;"><span style="display:inline-block;width:70px;height:28px;border-radius:4px;background:#111827;border:1px solid var(--gray-300);"></span></td>
+          <td style="padding:10px 14px;font-weight:600;color:var(--gray-900);">#111827<br><span style="font-weight:400;color:var(--gray-500);">Gris oscuro</span></td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Texto principal</td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Color de cuerpo del sistema Tailwind. Alta legibilidad sobre fondos claros sin el contraste duro del negro absoluto.</td>
+        </tr>
+        <tr>
+          <td style="padding:10px 14px;"><span style="display:inline-block;width:70px;height:28px;border-radius:4px;background:#FFD700;border:1px solid var(--gray-300);"></span></td>
+          <td style="padding:10px 14px;font-weight:600;color:var(--gray-900);">#FFD700<br><span style="font-weight:400;color:var(--gray-500);">Amarillo acento</span></td>
+          <td style="padding:10px 14px;color:var(--gray-700);">Badge ganador, estrella de ahorro</td>
+          <td style="padding:10px 14px;color:var(--gray-700);">El amarillo dorado indica el mejor precio con un significado cultural inmediato: oro = primer puesto. Se usa solo en el badge ganador para que destaque sin sobrecargar la interfaz.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>15.2 Tipografía</h3>
+  <p>La tipografía principal de la aplicación es <strong>Inter</strong>, una fuente de pantalla diseñada específicamente para interfaces digitales. Su geometría neutra y su excelente legibilidad en tamaños pequeños la hacen idónea para los precios y etiquetas de la comparación. La escala tipográfica sigue los valores de Tailwind CSS: 12px para etiquetas de plataforma, 14px para texto de soporte, 16px para cuerpo, 20px para subtítulos y 24-32px para encabezados.</p>
+  <p>Para los bloques de código técnico se usa <strong>JetBrains Mono</strong>, una fuente monoespaciada con ligaduras que mejora la lectura de fragmentos Python y TypeScript. En los elementos decorativos de esta memoria web se usa <strong>Caveat</strong>, una fuente manuscrita que aporta un toque artesanal a los títulos de sección, contrastando con la sobriedad de Inter en el cuerpo.</p>
+
+  <h3>15.3 Iconografía y componentes</h3>
+  <p>Los iconos proceden de la librería <strong>Lucide React</strong>, una colección SVG con trazo uniforme de 1.5px que combina de forma natural con Inter. Se usan 14 iconos en total: <code>Search</code>, <code>MapPin</code>, <code>ChevronDown</code> y <code>Star</code> son los más frecuentes. Todos se renderizan a 20px por defecto y heredan el color del texto del componente padre, garantizando coherencia en estados hover y focus sin estilos adicionales.</p>
+  <p>Los botones primarios usan el teal primario (#2D6F6F) con radio de 8px. Los badges de plataforma ganadora usan el amarillo acento (#FFD700) con texto oscuro para máximo contraste WCAG AA. Las tarjetas de restaurante tienen sombra sutil (<code>shadow-sm</code>) y borde de 1px en gris claro (#D1D5DB) para separar sin fraccionar visualmente la interfaz.</p>
+</div>
+
+<!-- 16. BIBLIOGRAFÍA -->
+<div id="bibliografia" class="section">
+  <div class="chapter-label">Capítulo 16</div>
+  <h2 class="section-title">Bibliografía y referencias</h2>
+  <div class="section-divider"></div>
+
+  <ol style="line-height:2;font-size:.9rem;color:var(--gray-700);padding-left:1.4rem;">
+    <li>pytest Development Team (2024). <em>pytest: helps you write better programs.</em> <a href="https://docs.pytest.org/en/stable/" target="_blank" style="color:var(--teal-700);">https://docs.pytest.org/en/stable/</a></li>
+    <li>Docker Inc. (2024). <em>Docker documentation: Compose file reference.</em> <a href="https://docs.docker.com/compose/compose-file/" target="_blank" style="color:var(--teal-700);">https://docs.docker.com/compose/compose-file/</a></li>
+    <li>GitHub (2024). <em>GitHub Actions documentation: Workflow syntax.</em> <a href="https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions" target="_blank" style="color:var(--teal-700);">https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions</a></li>
+    <li>Jones, M., Bradley, J., Sakimura, N. (2015). <em>JSON Web Token (JWT). RFC 7519.</em> Internet Engineering Task Force. <a href="https://datatracker.ietf.org/doc/html/rfc7519" target="_blank" style="color:var(--teal-700);">https://datatracker.ietf.org/doc/html/rfc7519</a></li>
+    <li>Richardson, L., Ruby, S. (2007). <em>RESTful Web Services.</em> O'Reilly Media.</li>
+    <li>Fielding, R. T. (2000). <em>Architectural Styles and the Design of Network-based Software Architectures.</em> Doctoral dissertation, University of California, Irvine.</li>
+    <li>Tiangolo, S. (2024). <em>FastAPI documentation.</em> <a href="https://fastapi.tiangolo.com" target="_blank" style="color:var(--teal-700);">https://fastapi.tiangolo.com</a></li>
+    <li>Vercel (2024). <em>Next.js 14 App Router documentation.</em> <a href="https://nextjs.org/docs" target="_blank" style="color:var(--teal-700);">https://nextjs.org/docs</a></li>
+    <li>SQLAlchemy (2024). <em>Async I/O (asyncio) documentation.</em> <a href="https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html" target="_blank" style="color:var(--teal-700);">https://docs.sqlalchemy.org/en/20/orm/extensions/asyncio.html</a></li>
+    <li>Redis (2024). <em>Redis documentation.</em> <a href="https://redis.io/docs" target="_blank" style="color:var(--teal-700);">https://redis.io/docs</a></li>
+    <li>Supabase (2024). <em>Supabase documentation.</em> <a href="https://supabase.com/docs" target="_blank" style="color:var(--teal-700);">https://supabase.com/docs</a></li>
+    <li>Netlify (2024). <em>Next.js on Netlify.</em> <a href="https://docs.netlify.com/frameworks/next-js/overview/" target="_blank" style="color:var(--teal-700);">https://docs.netlify.com/frameworks/next-js/overview/</a></li>
+    <li>Render (2024). <em>Deploy a FastAPI App.</em> <a href="https://render.com/docs/deploy-fastapi" target="_blank" style="color:var(--teal-700);">https://render.com/docs/deploy-fastapi</a></li>
+    <li>Gamma, E., Helm, R., Johnson, R., Vlissides, J. (1994). <em>Design Patterns: Elements of Reusable Object-Oriented Software.</em> Addison-Wesley.</li>
+    <li>Martin, R. C. (2017). <em>Clean Architecture: A Craftsman's Guide to Software Structure and Design.</em> Prentice Hall.</li>
+  </ol>
 </div>
 
 <div style="max-width:var(--content-max);margin:60px auto 0;padding:40px clamp(14px,4vw,40px);border-top:1px solid var(--gray-300);">
