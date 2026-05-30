@@ -1,0 +1,10 @@
+{
+    "python.defaultInterpreterPath": "C:\\Python314\\python.exe",
+    "python.terminal.activateEnvironment": true,
+    "terminal.integrated.env.windows": {
+        "PYTHONPATH": "${workspaceFolder}\\backend"
+    },
+    "[python]": {
+        "editor.formatOnSave": true
+    }
+}

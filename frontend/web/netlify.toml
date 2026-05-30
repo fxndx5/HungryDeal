@@ -1,0 +1,11 @@
+[build]
+  command   = "npm install --legacy-peer-deps && npm run build"
+  publish   = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_FLAGS    = "--legacy-peer-deps"
+  NEXT_PUBLIC_API_URL = "https://hungrydeal.onrender.com"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
