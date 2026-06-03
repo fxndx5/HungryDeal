@@ -187,19 +187,6 @@
   h3 { }
   .diagram-caption { color: var(--teal-700); font-style: normal; font-weight: 500; font-size: .78rem; }
 
-  /* ── RESPONSIVE MEJORAS ── */
-  @media (max-width: 900px) {
-    .carousel-btn { width: 44px; height: 44px; font-size: 1.2rem; }
-    .cover-logo { width: 160px; }
-  }
-  @media (max-width: 480px) {
-    .carousel-btn { width: 40px; height: 40px; }
-    .cover-logo { width: 130px; }
-    .nav-logo-img { width: 90px; }
-    .tech-card { padding: 10px 12px; }
-    .stat-num { font-size: 1.6rem; }
-  }
-
   /* CAROUSEL */
   .carousel { position: relative; overflow: hidden; border-radius: 10px; margin: 20px 0; background: var(--white); border: 1px solid var(--gray-300); }
   .carousel-track { display: flex; transition: transform .4s ease; }
@@ -221,7 +208,7 @@
   .carousel-placeholder p { font-size: .8rem; color: var(--gray-500); margin: 0; }
 
   /* HAMBURGER */
-  .hamburger { display: none; position: fixed; top: 14px; left: 14px; z-index: 200; background: var(--teal-800); border: none; border-radius: 8px; width: 42px; height: 42px; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.25); }
+  .hamburger { display: none; position: fixed; top: 14px; left: 14px; z-index: 200; background: var(--teal-800); border: none; border-radius: 8px; width: 44px; height: 44px; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; box-shadow: 0 2px 8px rgba(0,0,0,.25); touch-action: manipulation; }
   .hamburger span { display: block; width: 20px; height: 2px; background: white; border-radius: 2px; transition: all .25s; }
   .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .hamburger.open span:nth-child(2) { opacity: 0; }
@@ -229,41 +216,135 @@
   .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 99; }
   .sidebar-overlay.show { display: block; }
 
+  /* ── RESPONSIVE: Tablet + Mobile (≤ 900px) ── */
   @media (max-width: 900px) {
+    /* Sidebar */
     nav#sidebar { transform: translateX(-100%); transition: transform .3s ease; }
     nav#sidebar.open { transform: translateX(0); z-index: 150; }
     main { margin-left: 0; width: 100%; max-width: 100vw; overflow-x: hidden; }
     .hamburger { display: flex; }
-    .cover { padding: 70px 20px 36px; }
+
+    /* Cover */
+    .cover { padding: 72px clamp(16px, 5vw, 32px) 40px; }
     .cover-inner { grid-template-columns: 1fr; gap: 20px; }
-    .cover-title { font-size: 2rem; word-break: break-word; }
-    .cover-qr img { width: 90px; height: 90px; }
-    .section { padding: 40px 16px 0; }
-    .stats-row { grid-template-columns: 1fr 1fr; }
-    pre { font-size: .7rem; padding: 12px 14px; max-width: calc(100vw - 32px); white-space: pre-wrap; word-break: break-all; }
-    code { font-size: .78em; word-break: break-word; }
+    .cover-title { font-size: clamp(1.6rem, 5.5vw, 2.4rem); word-break: break-word; }
+    .cover-subtitle { font-size: clamp(.9rem, 2.5vw, 1.1rem); }
+    .cover-logo { width: clamp(120px, 28vw, 180px); }
+    .cover-qr { display: flex; align-items: center; gap: 14px; }
+    .cover-qr img { width: 72px; height: 72px; }
+    .cover-qr p { font-size: .65rem; text-align: left; margin: 0; }
+    .cover-badge { font-size: .72rem; padding: 4px 10px; }
+
+    /* Layout */
+    .section { padding: clamp(28px, 5vw, 48px) clamp(14px, 4vw, 24px) 0; }
+
+    /* Typography */
+    h2.section-title { font-size: clamp(1.25rem, 4vw, 1.55rem); word-break: break-word; }
+    h3 { font-size: 1rem; word-break: break-word; }
+    p, li { word-break: break-word; overflow-wrap: break-word; }
+
+    /* Stats */
+    .stats-row { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .stat-box { padding: 16px 14px; }
+    .stat-num { font-size: 1.7rem; }
+
+    /* Tech grid */
     .tech-grid { grid-template-columns: 1fr 1fr; }
-    h2.section-title { font-size: 1.45rem; word-break: break-word; }
-    h3 { word-break: break-word; }
-    p, li { word-break: break-word; }
-    .table-wrap { font-size: .75rem; max-width: calc(100vw - 32px); }
-    table { min-width: auto; }
-    .diagram { padding: 12px; }
-    .diagram svg { max-width: 100%; height: auto; }
-    .card { padding: 16px; }
+    .tech-card { padding: 12px 14px; }
+
+    /* Cards & Info */
+    .card { padding: 16px 18px; }
     .info-box { padding: 12px 14px; }
+
+    /* Code blocks */
+    pre { font-size: .7rem; padding: 12px 14px; max-width: calc(100vw - 32px); overflow-x: auto; white-space: pre; word-break: normal; -webkit-overflow-scrolling: touch; }
+    code { font-size: .78em; word-break: break-word; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; max-width: calc(100vw - 32px); font-size: .78rem; -webkit-overflow-scrolling: touch; }
+    .table-wrap table { min-width: 480px; }
+
+    /* Diagrams */
+    .diagram { padding: 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .diagram svg { max-width: 100%; height: auto; display: block; }
+
+    /* Screenshots */
+    .screenshot { padding: 6px; }
+    .screenshot img { border-radius: 4px; }
+
+    /* Carousel */
+    .carousel-btn { width: 44px; height: 44px; font-size: 1.1rem; touch-action: manipulation; }
+    .carousel-caption { padding: 12px 16px; }
+    .carousel-controls { gap: 12px; }
+
+    /* Nav logo */
+    .nav-logo-img { width: 100px; }
   }
-  @media (max-width: 480px) {
-    .stats-row { grid-template-columns: 1fr; }
-    .tech-grid { grid-template-columns: 1fr; }
-    .cover-title { font-size: 1.7rem; }
-    .cover-subtitle { font-size: .95rem; }
+
+  /* ── RESPONSIVE: Tablet medio (≤ 768px) ── */
+  @media (max-width: 768px) {
+    .cover { padding: 70px 18px 36px; }
+    .cover-title { font-size: clamp(1.5rem, 5vw, 2rem); }
+    .cover-meta { gap: 6px; }
+    .section { padding: 32px 16px 0; }
+    .stats-row { gap: 10px; }
+    .stat-num { font-size: 1.6rem; }
+    thead th, tbody td { padding: 8px 10px; font-size: .8rem; }
+  }
+
+  /* ── RESPONSIVE: Móvil (≤ 600px) ── */
+  @media (max-width: 600px) {
+    /* Cover */
+    .cover { padding: 68px 16px 32px; }
+    .cover-title { font-size: 1.65rem; }
+    .cover-subtitle { font-size: .88rem; }
+    .cover-qr img { width: 58px; height: 58px; }
+    .cover-qr p { display: none; }
+    .cover-meta { gap: 5px; }
+    .cover-badge { font-size: .68rem; padding: 3px 8px; }
+
+    /* Layout */
     .section { padding: 28px 14px 0; }
+
+    /* Stats: columna única con diseño horizontal compacto */
+    .stats-row { grid-template-columns: 1fr; gap: 8px; }
+    .stat-box { display: flex; align-items: center; gap: 14px; text-align: left; padding: 14px 16px; }
+    .stat-num { font-size: 1.75rem; line-height: 1; flex-shrink: 0; }
+    .stat-label { font-size: .76rem; margin-top: 0; }
+
+    /* Tech: columna única */
+    .tech-grid { grid-template-columns: 1fr; gap: 8px; }
+    .tech-card { padding: 11px 14px; }
+
+    /* Typography */
+    h2.section-title { font-size: 1.3rem; }
+    h3 { font-size: .95rem; margin: 22px 0 8px; }
+    p, li { font-size: .87rem; }
+
+    /* Code */
     pre { font-size: .65rem; padding: 10px 12px; max-width: calc(100vw - 28px); }
     .table-wrap { max-width: calc(100vw - 28px); font-size: .72rem; }
-    h2.section-title { font-size: 1.3rem; }
+    .table-wrap table { min-width: 420px; }
+
+    /* Carousel */
+    .carousel-btn { width: 40px; height: 40px; font-size: .95rem; }
     .carousel-caption { padding: 10px 14px; }
-    .carousel-controls { padding: 10px; }
+    .carousel-caption h4 { font-size: .88rem; }
+    .carousel-controls { padding: 10px; gap: 10px; }
+
+    /* Nav */
+    .nav-logo-img { width: 90px; }
+    .cover-logo { width: 130px; }
+  }
+
+  /* ── RESPONSIVE: Móvil pequeño (≤ 400px) ── */
+  @media (max-width: 400px) {
+    .cover-title { font-size: 1.4rem; }
+    .cover-qr { display: none; }
+    .section { padding: 24px 12px 0; }
+    h2.section-title { font-size: 1.2rem; }
+    pre { font-size: .6rem; }
+    .stat-num { font-size: 1.55rem; }
   }
 </style>
 </head>
@@ -364,7 +445,13 @@
   <p>El mercado de delivery de comida en España mueve más de 2.500 millones de euros anuales. Uber Eats, Glovo y Just Eat compiten por los mismos restaurantes y usuarios, pero con estructuras de precios diferentes y en muchos casos opacas. La tarifa de servicio varia entre el 5% y el 15% del valor del pedido y raramente aparece destacada en la interfaz hasta el momento de confirmar el pago.</p>
   <p>Esta asimetria de información perjudica al consumidor: quien pide con frecuencia podria ahorrar entre 2 y 6 euros por pedido eligiendo la plataforma correcta.</p>
   <h3>1.2 Motivación</h3>
-  <p>El proyecto nace de la observacion directa de este problema. La solución debe: (a) obtener precios reales de cada plataforma para un restaurante especifico, (b) calcular el coste total incluyendo todos los cargos, (c) presentar la comparación de forma clara y accionable, y (d) recordar las comparaciónes pasadas para mostrar tendencias al usuario.</p>
+  <p>El proyecto nace de la observacion directa de este problema. La solución debe:</p>
+  <ul>
+    <li>Obtener precios reales de cada plataforma para un restaurante especifico</li>
+    <li>Calcular el coste total incluyendo todos los cargos</li>
+    <li>Presentar la comparación de forma clara y accionable</li>
+    <li>Recordar las comparaciones pasadas para mostrar tendencias al usuario</li>
+  </ul>
   <h3>1.3 Alcance</h3>
   <div class="info-box">
     <strong>Plataformas cubiertas:</strong> Uber Eats (mock API), Glovo (mock API), Just Eat España (API interna real en <code>api.just-eat.es</code>). La integración real de Uber Eats y Glovo requeriria acuerdos comerciales fuera del alcance académico de este TFG.
@@ -1188,7 +1275,7 @@ redis-cli ttl  "hd:compare:mcdonalds-gran-via-madrid"</code></pre>
   <p>El sistema de colores de HungryDeal se construyó alrededor de una paleta teal (verde azulado) que no es habitual en el sector del delivery, dominado por rojos y naranjas. La decisión fue deliberada: diferenciarse visualmente de Glovo, Uber Eats y Just Eat desde el primer vistazo, comunicar confianza y ahorro antes de que el usuario lea una sola palabra.</p>
   <p>Cada color cumple un rol funcional concreto dentro del sistema de diseño:</p>
 
-  <div style="overflow-x:auto;margin:24px 0;">
+  <div style="overflow-x:auto;margin:24px 0;-webkit-overflow-scrolling:touch;">
     <table style="width:100%;border-collapse:collapse;font-size:.85rem;">
       <thead>
         <tr style="background:var(--teal-800);color:var(--white);">

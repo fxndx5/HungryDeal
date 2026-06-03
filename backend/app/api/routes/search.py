@@ -1,5 +1,3 @@
-# Endpoint GET /api/v1/search — búsqueda de restaurantes en todas las plataformas
-
 import logging
 from fastapi import APIRouter, Query, HTTPException, status
 

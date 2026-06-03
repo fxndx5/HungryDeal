@@ -116,7 +116,7 @@ export function MapView({ restaurants }: MapViewProps) {
   return (
     <div
       ref={containerRef}
-      style={{ height: '480px', width: '100%', borderRadius: '16px', overflow: 'hidden' }}
+      style={{ height: 'clamp(260px, 45vw, 480px)', width: '100%', borderRadius: '16px', overflow: 'hidden' }}
     />
   )
 }

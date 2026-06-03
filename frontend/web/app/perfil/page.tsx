@@ -210,7 +210,7 @@ function PerfilContent() {
 
       {/* ── Banner ── */}
       <div
-        className="h-44 w-full relative"
+        className="h-28 sm:h-44 w-full relative"
         style={{ background: 'linear-gradient(135deg, #1d4949 0%, #2D6F6F 60%, #4d9090 100%)' }}
       >
         <div
@@ -386,7 +386,7 @@ function PerfilContent() {
                     <h2 className="font-semibold text-slate-700 mb-4">Registro de actividad</h2>
 
                     {stats.total_comparisons > 0 ? (
-                      <div className="grid grid-cols-3 gap-4 mb-6">
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
                         <ActivityCard
                           icon={
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -506,7 +506,7 @@ function PerfilContent() {
                     <h2 className="font-semibold text-slate-700 mb-5">Configuracion de la cuenta</h2>
                     <form onSubmit={handleSaveConfig} className="space-y-5 max-w-md">
 
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-slate-700 mb-1">Nombre</label>
                           <input

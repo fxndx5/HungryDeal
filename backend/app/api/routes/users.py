@@ -1,5 +1,3 @@
-# Endpoints de perfil e historial del usuario autenticado
-
 from decimal import Decimal
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -55,7 +53,6 @@ async def get_my_history(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> HistoryResponse:
-    # Historial paginado con JOIN para obtener nombre del restaurante
     history_q = (
         select(
             SearchHistory,
@@ -82,7 +79,6 @@ async def get_my_history(
         for row in rows
     ]
 
-    # Estadísticas sobre todo el historial, no solo la página actual
     stats_q = select(
         func.count(SearchHistory.id).label("total_comparisons"),
         func.coalesce(func.sum(SearchHistory.savings), Decimal("0")).label("total_savings"),

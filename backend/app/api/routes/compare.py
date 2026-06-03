@@ -1,5 +1,3 @@
-# Endpoint GET /api/v1/compare/{restaurant_id}, comparación de precios con caché Redis
-
 import logging
 from decimal import Decimal
 from typing import Optional
@@ -26,7 +24,6 @@ settings = get_settings()
 
 router = APIRouter(prefix="/api/v1", tags=["compare"])
 
-# Dependencia de usuario opcional: no lanza 401 si no hay token
 _optional_bearer = HTTPBearer(auto_error=False)
 
 
@@ -34,7 +31,6 @@ async def get_optional_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(_optional_bearer),
     db: AsyncSession = Depends(get_db),
 ) -> Optional[User]:
-    # Permite que /compare funcione para usuarios anónimos y autenticados
     if not credentials:
         return None
     user_id = decode_access_token(credentials.credentials)
@@ -45,7 +41,7 @@ async def get_optional_user(
 
 
 def _get_comparator() -> PriceComparator:
-    # just_eat usa adapter real; uber_eats y glovo usan mock hasta implementar sus adapters
+    # uber y glovo son mock de momento
     return PriceComparator(adapters=[
         MockAdapter(platform="uber_eats"),
         MockAdapter(platform="glovo"),
@@ -134,7 +130,6 @@ async def compare_prices(
             for p in normalized
         ]
 
-        # Primero disponibles ordenadas por precio, luego no disponibles
         comparison.sort(key=lambda p: (not p.available, p.total if p.available else 999))
 
         response = ComparisonResponse(

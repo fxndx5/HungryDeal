@@ -143,7 +143,7 @@ export default function HomePage() {
       {/* ── CATEGORIAS ── */}
       <section className="max-w-5xl mx-auto px-4 pt-10 pb-6">
         <h2 className="text-xl font-bold text-slate-800 mb-4">Explora por tipo de comida</h2>
-        <div className="grid grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
           {CATEGORIES_DISPLAY.map((cat) => (
             <Link
               key={cat.label}

@@ -5,12 +5,11 @@ from typing import Optional
 
 @dataclass
 class PlatformPrice:
-    # Precio normalizado de una plataforma para un restaurante
-    platform: str           # "uber_eats" | "glovo" | "just_eat"
+    platform: str
     product_price: float
     delivery_fee: float
     service_fee: float
-    total: float            # precio final = product + delivery + service
+    total: float
     url: str
     available: bool = True
     error: Optional[str] = field(default=None, repr=False)
@@ -22,8 +21,7 @@ class PlatformPrice:
 
 @dataclass
 class RestaurantResult:
-    # Resultado de búsqueda de un restaurante en una plataforma concreta
-    id: str           # slug único: "mcd-gran-via-madrid"
+    id: str
     name: str
     platform: str
     address: Optional[str] = None
@@ -31,12 +29,10 @@ class RestaurantResult:
     image_url: Optional[str] = None
     latitude: Optional[float] = None
     longitude: Optional[float] = None
-    platform_restaurant_id: Optional[str] = None  # ID interno de la plataforma
+    platform_restaurant_id: Optional[str] = None
 
 
 class DeliveryAdapter(ABC):
-    # Interfaz común para todos los adapters de plataformas de delivery
-
     PLATFORM_NAME: str = ""
 
     @abstractmethod
@@ -56,7 +52,6 @@ class DeliveryAdapter(ABC):
         restaurant_id: str,
         item_id: Optional[str] = None,
     ) -> PlatformPrice:
-        # Wrapper que captura cualquier excepción y devuelve available=False
         try:
             return await self.get_price(restaurant_id, item_id)
         except Exception as exc:

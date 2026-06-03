@@ -1,16 +1,3 @@
-"""
-get_user_uuid.py
-----------------
-Obtiene el UUID del usuario test@test.com y genera el SQL
-para insertar historial de demo directamente en Supabase.
-
-Uso:
-  python get_user_uuid.py
-
-Luego copia el SQL que imprime y pegalo en:
-  Supabase → SQL Editor → New query → Run
-"""
-
 import requests
 import base64
 import json
@@ -22,9 +9,8 @@ PASSWORD = "test123"
 
 
 def decode_jwt_payload(token: str) -> dict:
-    """Decodifica el payload del JWT sin verificar firma."""
     payload_b64 = token.split(".")[1]
-    # Añadir padding si falta
+    # el base64 pide relleno si es corto
     payload_b64 += "=" * (-len(payload_b64) % 4)
     return json.loads(base64.b64decode(payload_b64))
 
@@ -49,7 +35,7 @@ def get_token() -> str:
         print("Login OK")
         return token
 
-    # Si no existe, registrar
+    # si no existe pues registrar
     print("Registrando usuario ...")
     r2 = requests.post(f"{BASE_URL}/api/v1/auth/register",
                        json={"email": EMAIL, "password": PASSWORD,
@@ -79,7 +65,7 @@ def generate_sql(user_uuid: str) -> str:
 
     rows = []
     for i, (name, rest_id, platform, savings) in enumerate(entries):
-        # Fechas variadas en los ultimos 30 dias
+        # fechas distintas pa que no sean todas iguales
         interval = f"{i * 3} days"
         rows.append(
             f"  (gen_random_uuid(), '{user_uuid}', "

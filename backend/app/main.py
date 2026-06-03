@@ -15,7 +15,6 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Inicializar base de datos
     try:
         async with engine.begin() as conn:
             if settings.APP_ENV == "development":
@@ -24,12 +23,10 @@ async def lifespan(app: FastAPI):
     except Exception as exc:
         logger.warning("BD no disponible al arrancar: %s", exc)
 
-    # Inicializar Redis (falla silenciosamente si no está disponible)
     await cache.connect(settings.REDIS_URL)
 
     yield
 
-    # Cerrar conexiones al apagar
     await cache.disconnect()
     await engine.dispose()
 

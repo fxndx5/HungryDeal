@@ -1,5 +1,3 @@
-# Adapter para la API interna de Just Eat España
-
 import logging
 from typing import Optional
 
@@ -22,9 +20,9 @@ _HEADERS = {
     "x-je-platform": "web",
 }
 
-_DEFAULT_POSTCODE = "28013"   # Madrid centro (Gran Vía / Sol)
+_DEFAULT_POSTCODE = "28013"  # postcode de madrid
 
-# Mapa slug HungryDeal → ID interno Just Eat, obtenido explorando la API
+# los ids internos del just eat
 _SLUG_TO_JE_ID: dict[str, str] = {
     "mcdonalds-gran-via-madrid":  "mcdonaldsgranviamadrid",
     "mcdonalds-sol-madrid":       "mcdonaldspuertadelsolmadrid",
@@ -40,8 +38,6 @@ _SLUG_TO_JE_ID: dict[str, str] = {
 
 
 class JustEatAdapter(DeliveryAdapter):
-    # Adapter real para Just Eat España. Si la API falla, safe_get_price() devuelve available=False.
-
     PLATFORM_NAME = "just_eat"
 
     def __init__(self, timeout: float = 8.0) -> None:
@@ -52,7 +48,6 @@ class JustEatAdapter(DeliveryAdapter):
         query: str,
         location: str = _DEFAULT_POSTCODE,
     ) -> list[RestaurantResult]:
-        # Si location no es un código postal numérico, usar Madrid por defecto
         postcode = location if location.isdigit() else _DEFAULT_POSTCODE
 
         async with httpx.AsyncClient(
@@ -88,7 +83,6 @@ class JustEatAdapter(DeliveryAdapter):
         restaurant_id: str,
         item_id: Optional[str] = None,
     ) -> PlatformPrice:
-        # product_price = pedido mínimo, delivery_fee = coste envío, service_fee = tarifa fija
         je_id = _SLUG_TO_JE_ID.get(restaurant_id)
         if not je_id:
             je_id = await self._resolve_id(restaurant_id)
@@ -153,7 +147,7 @@ class JustEatAdapter(DeliveryAdapter):
         )
 
     async def _resolve_id(self, slug: str) -> Optional[str]:
-        # Búsqueda dinámica por nombre cuando el slug no está en el mapa estático
+        # buscar por nombre si no esta en el mapa
         name_query = slug.replace("-", " ").replace("madrid", "").strip()
         try:
             results = await self.search(name_query)
