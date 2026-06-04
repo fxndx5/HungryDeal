@@ -9,9 +9,17 @@ const PLATFORM_BADGES: Record<string, { label: string; classes: string }> = {
 
 interface RestaurantCardProps {
   restaurant: Restaurant
+  minPrice?: number
+  savings?: { amount: number; platform: string }
 }
 
-export function RestaurantCard({ restaurant }: RestaurantCardProps) {
+const PLATFORM_NAMES: Record<string, string> = {
+  uber_eats: 'Uber Eats',
+  glovo: 'Glovo',
+  just_eat: 'Just Eat',
+}
+
+export function RestaurantCard({ restaurant, minPrice, savings }: RestaurantCardProps) {
   return (
     <Link
       href={`/compare/${restaurant.id}`}
@@ -19,7 +27,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
                  hover:shadow-card-hover hover:border-brand-300
                  transition-all duration-200 p-5 group"
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-start justify-between gap-4">
         <div className="flex-1 min-w-0">
           <h2 className="font-bold text-slate-800 text-lg group-hover:text-brand-600
                          transition-colors truncate">
@@ -49,9 +57,20 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
           </div>
         </div>
 
-        <div className="flex-shrink-0 text-slate-300 group-hover:text-brand-400 text-xl
-                        transition-colors mt-1">
-          &rarr;
+        <div className="flex-shrink-0 flex flex-col items-end gap-1.5">
+          {minPrice !== undefined && (
+            <span className="bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full whitespace-nowrap">
+              desde {minPrice.toFixed(2)} &euro;
+            </span>
+          )}
+          {savings && (
+            <span className="bg-brand-50 text-brand-700 text-xs font-semibold px-2 py-0.5 rounded-full whitespace-nowrap text-right">
+              ahorra {savings.amount.toFixed(2)} &euro; en {PLATFORM_NAMES[savings.platform] ?? savings.platform}
+            </span>
+          )}
+          <span className="text-slate-300 group-hover:text-brand-400 text-xl transition-colors mt-0.5">
+            &rarr;
+          </span>
         </div>
       </div>
     </Link>

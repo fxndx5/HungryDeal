@@ -6,11 +6,6 @@ import { MOCK_RESTAURANTS, MOCK_SUMMARIES } from '@/lib/mock-data'
 import { searchRestaurants } from '@shared/api/search'
 import type { Restaurant } from '@shared/types'
 
-const PLATFORM_NAMES: Record<string, string> = {
-  uber_eats: 'Uber Eats',
-  glovo: 'Glovo',
-  just_eat: 'Just Eat',
-}
 
 export async function generateMetadata({
   searchParams,
@@ -117,19 +112,12 @@ export default async function SearchPage({
             {MOCK_RESTAURANTS.map((restaurant) => {
               const summary = MOCK_SUMMARIES.find((s) => s.restaurant_id === restaurant.id)
               return (
-                <div key={restaurant.id} className="relative">
-                  <RestaurantCard restaurant={restaurant} />
-                  {summary && (
-                    <div className="absolute top-4 right-10 flex flex-col items-end gap-1 pointer-events-none">
-                      <span className="bg-green-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                        desde {summary.min_price.toFixed(2)} &euro;
-                      </span>
-                      <span className="bg-brand-50 text-brand-700 text-xs font-semibold px-2 py-0.5 rounded-full">
-                        ahorra hasta {summary.max_savings.toFixed(2)} &euro; en {PLATFORM_NAMES[summary.winner_platform]}
-                      </span>
-                    </div>
-                  )}
-                </div>
+                <RestaurantCard
+                  key={restaurant.id}
+                  restaurant={restaurant}
+                  minPrice={summary?.min_price}
+                  savings={summary ? { amount: summary.max_savings, platform: summary.winner_platform } : undefined}
+                />
               )
             })}
           </div>
